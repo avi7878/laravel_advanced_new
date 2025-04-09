@@ -1,0 +1,152 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+/* User routes =========================================================================== */
+
+Route::get('cron/schedule/run', function () {
+    $artisan = new \Illuminate\Support\Facades\Artisan();
+    $artisan::call("schedule:run");
+    return $artisan::output();
+})->name('cron/schedule/run');
+
+
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/', '\App\Http\Controllers\FrontController@index')->name('home');
+    Route::get('page/{slug}', '\App\Http\Controllers\FrontController@page')->name('page');
+    Route::get('contact', '\App\Http\Controllers\FrontController@contact')->name('contact');
+    Route::post('contact-process', '\App\Http\Controllers\FrontController@contactProcess')->name('contact-process');
+
+    Route::get('account/register', '\App\Http\Controllers\AccountController@register')->name('account/register');
+    Route::post('account/register-process', '\App\Http\Controllers\AccountController@registerProcess')->name('account/register-process');
+
+    Route::get('login', '\App\Http\Controllers\AuthController@login')->name('login');
+    Route::post('login-process', '\App\Http\Controllers\AuthController@loginProcess')->name('login-process');
+    Route::get('logout', '\App\Http\Controllers\AuthController@logout')->name('logout');
+    
+    Route::get('auth/login-otp', '\App\Http\Controllers\AuthController@loginOtp')->name('auth/login-otp');
+    Route::post('auth/login-otp-process', '\App\Http\Controllers\AuthController@loginOtpProcess')->name('auth/login-otp-process');
+    Route::get('auth/password-forgot', '\App\Http\Controllers\AuthController@passwordForgot')->name('auth/password-forgot');
+    Route::post('auth/password-forgot-process', '\App\Http\Controllers\AuthController@passwordForgotProcess')->name('auth/password-forgot-process');
+    
+    Route::get('auth/verify', '\App\Http\Controllers\AuthController@verify')->name('auth/verify');
+    Route::post('auth/verify-process', '\App\Http\Controllers\AuthController@verifyProcess')->name('auth/verify-process');
+    Route::post('auth/resend-otp', '\App\Http\Controllers\AuthController@resendOTP')->name('auth/resend-otp');
+    
+    Route::get('oauth/login/{type}', '\App\Http\Controllers\AuthController@socialLogin')->name('oauth/login');
+    Route::get('oauth/callback/{type}', '\App\Http\Controllers\AuthController@socialLoginCallback')->name('oauth/callback');
+});
+
+Route::group(['middleware' => ['web', 'user']], function () {
+    Route::get('dashboard', '\App\Http\Controllers\AccountController@dashboard')->name('dashboard');
+    
+    Route::get('account/update', '\App\Http\Controllers\AccountController@update')->name('account/update');
+    Route::post('account/save', '\App\Http\Controllers\AccountController@save')->name('account/save');
+    Route::get('account/image', '\App\Http\Controllers\AccountController@image')->name('account/image');
+    Route::post('account/image-save', '\App\Http\Controllers\AccountController@imageSave')->name('account/image-save');
+    Route::post('account/image-delete', '\App\Http\Controllers\AccountController@imageDelete')->name('account/image-delete');
+    Route::get('account/password-change', '\App\Http\Controllers\AccountController@passwordChange')->name('account/password-change');
+    Route::post('account/password-change-process', '\App\Http\Controllers\AccountController@passwordChangeProcess')->name('account/password-change-process');
+    Route::get('account/tfa', '\App\Http\Controllers\AccountController@tfa')->name('account/tfa');
+    Route::post('account/tfa-status-change', '\App\Http\Controllers\AccountController@tfaStatusChange')->name('account/tfa-status-change');
+    Route::post('account/revoke-all', '\App\Http\Controllers\AccountController@revokeAll')->name('account/revoke-all');
+    
+    Route::get('account/device', '\App\Http\Controllers\AccountController@device')->name('account/device');
+    Route::post('account/device-list', '\App\Http\Controllers\AccountController@deviceList')->name('account/device-list');
+    Route::post('account/device-logout', '\App\Http\Controllers\AccountController@deviceLogout')->name('account/device-logout');
+
+    Route::get('account/activity', '\App\Http\Controllers\AccountController@activity')->name('account/activity');
+    Route::post('account/activity-list', '\App\Http\Controllers\AccountController@activityList')->name('account/activity-list');
+});
+
+
+/* Admin routes =========================================================================== */
+Route::group(['prefix' => 'admin', 'middleware' => 'web'], function () {
+    Route::get('auth/login', '\App\Http\Controllers\Admin\AuthController@login')->name('admin/auth/login');
+    Route::post('auth/login-process', '\App\Http\Controllers\Admin\AuthController@loginProcess')->name('admin/auth/login-process');
+    Route::get('auth/logout', '\App\Http\Controllers\Admin\AuthController@logout')->name('admin/auth/logout');
+
+    Route::get('auth/tfa-verify', '\App\Http\Controllers\Admin\AuthController@tfaVerify')->name('admin/auth/tfa-verify');
+    Route::post('auth/tfa-verify-process', '\App\Http\Controllers\Admin\AuthController@tfaVerifyProcess')->name('admin/auth/tfa-verify-process');
+    Route::post('auth/tfa-resend-otp', '\App\Http\Controllers\Admin\AuthController@tfaResendOTP')->name('admin/auth/tfa-resend-otp');
+
+    Route::get('auth/password-forgot', '\App\Http\Controllers\Admin\AuthController@passwordForgot')->name('admin/auth/password-forgot');
+    Route::post('auth/password-forgot-process', '\App\Http\Controllers\Admin\AuthController@passwordForgotProcess')->name('admin/auth/password-forgot-process');
+    Route::post('auth/resend-otp', '\App\Http\Controllers\Admin\AuthController@resendOtp')->name('admin/auth/resend-otp');
+});
+
+Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function () {
+    Route::get('dashboard', '\App\Http\Controllers\Admin\SiteController@dashboard')->name('admin/dashboard');
+    Route::post('site/get-chart-user', '\App\Http\Controllers\Admin\SiteController@getChartUser')->name('admin/site/get-chart-user');
+    
+    Route::get('account/tfa', '\App\Http\Controllers\Admin\AccountController@tfa')->name('admin/account/tfa');
+    Route::post('account/tfa-status-change', '\App\Http\Controllers\Admin\AccountController@tfaStatusChange')->name('admin/account/tfa-status-change');
+    Route::post('account/revoke-all', '\App\Http\Controllers\AccountController@revokeAll')->name('account/revoke-all');
+
+    Route::get('account/update', '\App\Http\Controllers\Admin\AccountController@update')->name('admin/account/update');
+    Route::post('account/save', '\App\Http\Controllers\Admin\AccountController@save')->name('admin/account/save');
+    Route::get('account/image', '\App\Http\Controllers\Admin\AccountController@image')->name('admin/account/image');
+    Route::post('account/image-save', '\App\Http\Controllers\Admin\AccountController@imageSave')->name('admin/account/image-save');
+    Route::post('account/image-delete', '\App\Http\Controllers\Admin\AccountController@deleteImage')->name('admin/account/image-delete');
+    Route::get('account/password-change', '\App\Http\Controllers\Admin\AccountController@passwordChange')->name('admin/account/password-change');
+    Route::post('account/password-change-process', '\App\Http\Controllers\Admin\AccountController@changePasswordProcess')->name('admin/account/password-change-process');
+
+    Route::get('account/device', '\App\Http\Controllers\Admin\AccountController@device')->name('admin/account/device');
+    Route::any('account/device-list', '\App\Http\Controllers\Admin\AccountController@deviceList')->name('admin/account/device-list');
+    Route::any('account/device-logout', '\App\Http\Controllers\Admin\AccountController@deviceLogout')->name('admin/account/device-logout');
+
+    Route::get('account/activity', '\App\Http\Controllers\Admin\AccountController@activity')->name('admin/account/activity');
+    Route::any('account/activity-list', '\App\Http\Controllers\Admin\AccountController@logList')->name('admin/account/activity-list');
+
+    Route::get('users', '\App\Http\Controllers\Admin\UserController@index')->name('admin/user');
+    Route::any('user/list', '\App\Http\Controllers\Admin\UserController@list')->name('admin/user/list');
+    Route::get('user/create', '\App\Http\Controllers\Admin\UserController@create')->name('admin/user/create');
+    Route::get('user/update', '\App\Http\Controllers\Admin\UserController@update')->name('admin/user/update');
+    Route::post('user/save', '\App\Http\Controllers\Admin\UserController@save')->name('admin/user/save');
+    Route::get('user/view', '\App\Http\Controllers\Admin\UserController@view')->name('admin/user/view');
+    Route::post('user/delete', '\App\Http\Controllers\Admin\UserController@delete')->name('admin/user/delete');
+    Route::post('user/change_status', '\App\Http\Controllers\Admin\UserController@changeStatus')->name('admin/user/change_status');
+
+    Route::get('admin', '\App\Http\Controllers\Admin\AdminController@index')->name('admin/admin');
+    Route::post('admin/list', '\App\Http\Controllers\Admin\AdminController@list')->name('admin/admin/list');
+    Route::get('admin/create', '\App\Http\Controllers\Admin\AdminController@create')->name('admin/admin/create');
+    Route::get('admin/update', '\App\Http\Controllers\Admin\AdminController@update')->name('admin/admin/update');
+    Route::post('admin/save', '\App\Http\Controllers\Admin\AdminController@save')->name('admin/admin/save');
+    Route::get('admin/view', '\App\Http\Controllers\Admin\AdminController@view')->name('admin/admin/view');
+    Route::post('admin/delete', '\App\Http\Controllers\Admin\AdminController@delete')->name('admin/admin/delete');
+    Route::post('admin/status-save', '\App\Http\Controllers\Admin\AdminController@statusSave')->name('admin/admin/status-save');
+
+    Route::get('seo/meta', '\App\Http\Controllers\Admin\SeoController@index')->name('admin/seo/meta');
+    Route::post('seo/list', '\App\Http\Controllers\Admin\SeoController@list')->name('admin/seo/list');
+    Route::get('seo/create', '\App\Http\Controllers\Admin\SeoController@create')->name('admin/seo/create');
+    Route::get('seo/update', '\App\Http\Controllers\Admin\SeoController@update')->name('admin/seo/update');
+    Route::post('seo/save', '\App\Http\Controllers\Admin\SeoController@save')->name('admin/seo/save');
+    Route::post('seo/delete', '\App\Http\Controllers\Admin\SeoController@delete')->name('admin/seo/delete');
+    Route::get('seo/sitemap-update', '\App\Http\Controllers\Admin\SeoController@sitemapUpdate')->name('admin/seo/sitemap-update');
+
+    Route::get('pages', '\App\Http\Controllers\Admin\PageController@index')->name('admin/page');
+    Route::get('page/list', '\App\Http\Controllers\Admin\PageController@list')->name('admin/page/list');
+    Route::get('page/update', '\App\Http\Controllers\Admin\PageController@update')->name('admin/page/update');
+    Route::post('page/save', '\App\Http\Controllers\Admin\PageController@save')->name('admin/page/save');
+    Route::post('page/save-image', '\App\Http\Controllers\Admin\PageController@saveImage')->name('admin/page/save-image');
+
+    Route::get('setting/update', '\App\Http\Controllers\Admin\SettingController@update')->name('admin/setting/update');
+    Route::post('setting/save', '\App\Http\Controllers\Admin\SettingController@save')->name('admin/setting/save');
+    Route::post('setting/save-logo', '\App\Http\Controllers\Admin\SettingController@saveLogo')->name('admin/setting/save-logo');
+    Route::get('setting/cache-clear', '\App\Http\Controllers\Admin\SettingController@cacheClear')->name('admin/setting/cache-clear');
+    Route::post('setting/mailprocess', '\App\Http\Controllers\Admin\SettingController@mailprocess')->name('admin/setting/mailprocess');
+
+    Route::get('activity', '\App\Http\Controllers\Admin\AccountActivityController@index')->name('admin/activity');
+    Route::post('activity/list', '\App\Http\Controllers\Admin\AccountActivityController@list')->name('admin/activity/list');
+
+    Route::get('device', '\App\Http\Controllers\Admin\DeviceController@index')->name('admin/device');
+    Route::post('device/list', '\App\Http\Controllers\Admin\DeviceController@list')->name('admin/device/list');
+    Route::post('device/logout', '\App\Http\Controllers\Admin\DeviceController@logout')->name('admin/device/logout');
+
+    Route::get('email-template','\App\Http\Controllers\Admin\EmailTemplateController@index')->name('admin/email-template');
+    Route::get('email-template/list', '\App\Http\Controllers\Admin\EmailTemplateController@list')->name('admin/email-template/list');
+    Route::get('email-template/update', '\App\Http\Controllers\Admin\EmailTemplateController@update')->name('admin/email-template/update');
+    Route::get('email-template/view', '\App\Http\Controllers\Admin\EmailTemplateController@view')->name('admin/email-template/view');
+    Route::post('email-template/save', '\App\Http\Controllers\Admin\EmailTemplateController@save')->name('admin/email-template/save');
+    Route::post('email-template/save-file', '\App\Http\Controllers\Admin\EmailTemplateController@saveFile')->name('admin/email-template/save-file');
+});

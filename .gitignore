@@ -1,0 +1,50 @@
+# Laravel Specific
+.env
+.env.*        # For .env.testing, .env.staging, etc.
+.phpunit.result.cache
+/.phpunit.cache
+/storage/*.key
+/public/storage
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/node_modules
+/public/upload
+/public/theme
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/bootstrap/cache
+/vendor
+
+# Node & Frontend
+/node_modules/
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+
+# IDEs & Editors
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+/.fleet
+/.idea
+/.vscode
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.lock
+
+#extra
+*.zip
