@@ -70,17 +70,3 @@
     </div>
 </div>
 @endsection
-
-
-@push('scripts')
-<script type="text/javascript">
-    documentReady(function() {
-        $('.ajax-form').validate({
-            submitHandler: function(form) {
-                app.ajaxForm(form);
-            }
-        });
-    });
-</script>
-@endpush
-

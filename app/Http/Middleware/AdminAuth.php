@@ -38,10 +38,8 @@ class AdminAuth
              }
              if(session('verify_tfa')){
                  if ($request->ajax()) {
-                    //  dd(21);
                      return Response::make("unauthorized");
                  } else {
-                    // dd(22);
                      return redirect('admin/auth/verify?type=tfa');
                  }
              }

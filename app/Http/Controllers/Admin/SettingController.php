@@ -6,7 +6,6 @@ use App\Helpers\General;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use DateTimeZone;
 
 /**
  * Class SettingController
@@ -52,16 +51,16 @@ class SettingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'key' => 'required|string',
-            'image'=>'file|mimes:png|max:1024'
+            'image' => 'file|mimes:png|max:1024'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 0, 'message' => $this->general->getError($validator)]);
         }
-        $key=$request->input('key');
-        $fileName = $this->general->uploadFile($request->file('image'), 'setting',$key);
+        $key = $request->input('key');
+        $fileName = $this->general->uploadFile($request->file('image'), 'setting', $key);
         if ($fileName) {
-            $setting = Setting::where('key', 'app_'.$key)->first();
+            $setting = Setting::where('key', 'app_' . $key)->first();
             if ($setting) {
                 if ($setting->value) {
                     $this->general->deleteFile($setting->value, 'setting');

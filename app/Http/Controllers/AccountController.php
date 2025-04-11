@@ -39,7 +39,7 @@ class AccountController extends Controller
      */
     public function passwordChange()
     {
-        return view('account.change_password',['model' => auth()->user()]);
+        return view('account.change_password', ['model' => auth()->user()]);
     }
 
     /**
@@ -100,7 +100,7 @@ class AccountController extends Controller
     public function tfaStatusChange()
     {
         $user = auth()->user();
-        $status_tfa=!$user->getData()->status_tfa;
+        $status_tfa = !$user->getData()->status_tfa;
         $user->setData(['status_tfa' => $status_tfa]);
         $user->save();
         return response()->json(['status' => 1, 'next' => 'refresh', 'message' => $status_tfa ? 'Two Factor Authentication is enabled' : 'Two Factor Authentication is disabled']);
@@ -115,7 +115,7 @@ class AccountController extends Controller
     {
         return response()->json((new AccountService())->revokeAll2FADevices(auth()->user()));
     }
-    
+
 
     /**
      * Display the device management view.
@@ -124,7 +124,7 @@ class AccountController extends Controller
      */
     public function device()
     {
-        return view('account/device',['model' => auth()->user()]);
+        return view('account/device', ['model' => auth()->user()]);
     }
 
     /**
@@ -158,7 +158,7 @@ class AccountController extends Controller
      */
     public function userActivity()
     {
-        return view('account/user_activity',['model' => auth()->user()]);
+        return view('account/user_activity', ['model' => auth()->user()]);
     }
 
     /**
@@ -171,6 +171,7 @@ class AccountController extends Controller
     {
         return response()->json((new UserActivity())->list($request->all(), auth()->id()));
     }
+
 
     
 }

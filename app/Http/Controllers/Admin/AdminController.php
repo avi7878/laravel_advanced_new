@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Log;
 use App\Models\Device;
-
+use App\Models\UserActivity;
 
 class AdminController extends Controller
 {
@@ -94,7 +93,7 @@ class AdminController extends Controller
     public function view(Request $request)
     {
         $id = $request->input('id');
-        $logData = Log::where('user_id', $id)
+        $logData = UserActivity::where('user_id', $id)
             ->orderBy('id', 'desc')
             ->limit(10)
             ->get();
@@ -107,4 +106,3 @@ class AdminController extends Controller
         return view('admin/admin/view', compact('model', 'logData', 'deviceData'));
     }
 }
-    

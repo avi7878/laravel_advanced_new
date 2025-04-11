@@ -21,7 +21,7 @@ Register Your Account
                     <!-- /Logo -->
                     <h4 class="mb-1 pt-2" style="text-align: center;">Welcome to {{ Config::get('setting.app_name') }}</h4>
                     <p class="mb-4" style="text-align: center;">Create your account</p>
-                    <form class="mb-3 ajax-form" action="{{route('site/register-process')}}" method="POST">
+                    <form class="mb-3" action="{{route('site/register-process')}}" method="POST" id="ajax-form">
                         @csrf
                         <div class="mb-3">
                             <label for="username" class="form-label">First Name <span class="star">*</span></label>
@@ -84,7 +84,7 @@ Register Your Account
 @push('scripts')
 <script>
     documentReady(function() {
-        $('.ajax-form').validate({
+        $('#ajax-form').validate({
             rules: 
             {
                 email: {

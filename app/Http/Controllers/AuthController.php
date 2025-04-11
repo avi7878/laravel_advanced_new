@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Laravel\Socialite\Facades\Socialite;
-
 use App\Models\User;
 use App\Services\AuthService;
 use App\Services\TfaService;
@@ -111,9 +108,7 @@ class AuthController extends Controller
      */
     public function verify(Request $request)
     {
-
         $type = $request->get('type');
-
         $code = $request->get('code', '');
         return view('auth/verify', compact('type', 'code'));
     }
@@ -126,7 +121,7 @@ class AuthController extends Controller
      */
     public function verifyProcess(Request $request)
     {
-        return response()->json((new TfaService())->verifyProcess($request->only(['otp', 'type', 'code', 'skip_tfa'])));
+        return response()->json((new TfaService())->verifyProcess($request->only(['otp', 'skip_tfa'])));
     }
 
     /**
@@ -153,7 +148,7 @@ class AuthController extends Controller
      */
     public function socialLogin(Request $request)
     {
-        return Socialite::driver($request->route('type'))->redirect();
+        return \Laravel\Socialite\Facades\Socialite::driver($request->route('type'))->redirect();
     }
 
     /**
@@ -164,7 +159,7 @@ class AuthController extends Controller
      */
     public function socialLoginCallback(string $type): RedirectResponse
     {
-        $socialUser = Socialite::driver($type)->stateless()->user();
+        $socialUser = \Laravel\Socialite\Facades\Socialite::driver($type)->stateless()->user();
         $user = (new User())->where('email', $socialUser->email)->first();
         Auth::login($user);
         return redirect($this->general->authRedirectUrl(config('setting.login_redirect_url')));

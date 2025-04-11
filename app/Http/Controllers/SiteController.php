@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Services\AccountService;
-use App\Services\AuthService;
 use Illuminate\Http\Request;
 
 /**
@@ -15,17 +13,7 @@ use Illuminate\Http\Request;
  */
 class SiteController extends Controller
 {
-    /**
-     * Display the user dashboard.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function dashboard()
-    {  
-        return view('site/dashboard');
-    }
 
-    
     /**
      * Show the registration form.
      *
@@ -46,5 +34,48 @@ class SiteController extends Controller
     {
         return response()->json((new AccountService())->registerProcess($request->all()));
     }
-    
+
+    /**
+     * Show the TFA verification page.
+     *
+     * @return View
+     */
+    public function verifyAccount(Request $request)
+    {
+        $code = $request->get('code', '');
+        return view('site.veriify_account', compact('code'));
+    }
+
+    /** 
+     * Process TFA OTP verification.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function verifyAccountProcess(Request $request)
+    {
+        return response()->json((new AccountService())->verifyAccountProcess($request->only(['otp', 'code'])));
+    }
+
+    /**
+     * Display the password forgot view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function passwordForgot()
+    {
+        return view('site.password_forgot');
+    }
+
+    /**
+     * Process password forgot request.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function passwordForgotProcess(Request $request)
+    {
+
+        return (new AccountService())->passwordForgotProcess($request->only(['email', 'otp', 'password', 'password_confirm', 'step']));
+    }
 }

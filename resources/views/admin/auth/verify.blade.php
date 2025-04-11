@@ -19,11 +19,7 @@ Login with Otp
         </div>
         <!-- /Logo -->
         <h4 class="mb-1 pt-2">
-          @if($type=='tfa')
           Two Step Verification 💬
-          @elseif($type=='email')
-          Verify Your Email
-          @endIf
         </h4>
         <p class="text-start mb-4">
           OTP is sent on your Email Address.
@@ -32,26 +28,20 @@ Login with Otp
         <p class="mb-0 fw-semibold">Type your 6 digit OTP</p>
         <form class="ajax-form" action="{{route('auth/verify-process')}}" method="post">
           {{ csrf_field() }}
-          <input type="hidden" name="type" value="{{$type}}">
-          <input type="hidden" name="code" value="{{$code}}">
           <div class="mb-3">
             <label class="form-label">OTP</label>
             <input name="otp" type="number" class="form-control" required maxlength="6" minlength="6" autofocus />
           </div>
-          @if($type=='tfa')
           <div class="mb-3">
-              <div class="form-check" style="display: flex;justify-content: space-between;">
-                <input class="form-check-input" type="checkbox" id="skip_tfa" name="skip_tfa" value="1" checked />
-                <label class="form-check-label" for="skip_tfa" style="padding-right: 95px;"> Ignore this device next time </label>
-              </div>
+            <div class="form-check" style="display: flex;justify-content: space-between;">
+              <input class="form-check-input" type="checkbox" id="skip_tfa" name="skip_tfa" value="1" checked />
+              <label class="form-check-label" for="skip_tfa" style="padding-right: 95px;"> Ignore this device next time </label>
             </div>
-            @endIf
+          </div>
           <button class="btn btn-primary d-grid w-100 mb-3">Submit</button>
-          @if($type=='tfa')
           <div class="form-group mb-8">
-              <a href="{{route('logout')}}" class="btn btn-default d-grid w-100 noroute">Logout</a>
-            </div>
-            @endIf
+            <a href="{{route('logout')}}" class="btn btn-default d-grid w-100 noroute">Logout</a>
+          </div>
           <div class="text-center">
             Didn't get the code?
             <a href="javascript:void(0)" onclick="resendOtp()" id="resend-otp-link">Resend</a>
@@ -68,12 +58,15 @@ Login with Otp
   $(document).ready(function() {
     $('.ajax-form').validate({
       submitHandler: function(form) {
-          app.ajaxForm(form);
+        app.ajaxForm(form);
       }
     });
   });
-  function resendOtp(){
-    app.ajaxPost('{{ route('auth/resend-otp') }}',{type:'{{$type}}',code:'{{$code}}'})
+
+  function resendOtp() {
+    app.ajaxPost("{{ route('auth/resend-otp') }}", {
+      type: 'tfa'
+    })
   }
 </script>
 @endpush

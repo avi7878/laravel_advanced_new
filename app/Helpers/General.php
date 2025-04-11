@@ -91,9 +91,9 @@ class General
      *
      * @return array|null
      */
-    public function getMetaTags()
+    public function getMetaData()
     {
-        return (new \App\Models\SeoMeta())->getMetaTags();
+        return (new \App\Models\SeoMeta())->getMetaData();
     }
 
     /**
@@ -186,13 +186,14 @@ class General
         return $result; // Return raw data without decoding
     }
 
-    public function getIpLocation(){
+    public function getIpLocation()
+    {
         $ipData = $this->getIpInfo(); // Get raw data
-        if($ipData){
+        if ($ipData) {
             return $ipData->city . ', ' . $ipData->region . ', ' . $ipData->country;
-        }else{
+        } else {
             return '';
-        }   
+        }
     }
 
     public function getIpInfo($ip = '')

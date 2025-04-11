@@ -416,7 +416,7 @@
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                <form action="{{ route('admin/setting/mailprocess') }}" id="ajax-form" method="POST" onsubmit="event.preventDefault()">
+                <form action="{{ route('admin/setting/mailprocess') }}" id="mail-test-form" method="POST" onsubmit="event.preventDefault()">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Mail</h5>
@@ -451,7 +451,7 @@
                     app.ajaxForm(form);
                 }
             })
-            $('#ajax-form').validate({
+            $('#mail-test-form').validate({
                 submitHandler: function(form) {
                     app.ajaxForm(form);
                 }

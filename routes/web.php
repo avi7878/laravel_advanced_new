@@ -19,16 +19,16 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('register', '\App\Http\Controllers\SiteController@register')->name('register');
     Route::post('site/register-process', '\App\Http\Controllers\SiteController@registerProcess')->name('site/register-process');
+    Route::get('site/verify-account', '\App\Http\Controllers\SiteController@verifyAccount')->name('site/site/verify-account');
+    Route::post('site/verify-account-process', '\App\Http\Controllers\SiteController@verifyAccountProcess')->name('site/site/verify-account-process');
+    Route::get('site/password-forgot', '\App\Http\Controllers\SiteController@passwordForgot')->name('site/password-forgot');
+    Route::post('site/password-forgot-process', '\App\Http\Controllers\SiteController@passwordForgotProcess')->name('site/password-forgot-process');
 
     Route::get('login', '\App\Http\Controllers\AuthController@login')->name('login');
     Route::post('login-process', '\App\Http\Controllers\AuthController@loginProcess')->name('login-process');
     Route::get('logout', '\App\Http\Controllers\AuthController@logout')->name('logout');
-    
     Route::get('auth/login-otp', '\App\Http\Controllers\AuthController@loginOtp')->name('auth/login-otp');
     Route::post('auth/login-otp-process', '\App\Http\Controllers\AuthController@loginOtpProcess')->name('auth/login-otp-process');
-    Route::get('auth/password-forgot', '\App\Http\Controllers\AuthController@passwordForgot')->name('auth/password-forgot');
-    Route::post('auth/password-forgot-process', '\App\Http\Controllers\AuthController@passwordForgotProcess')->name('auth/password-forgot-process');
-    
     Route::get('auth/verify', '\App\Http\Controllers\AuthController@verify')->name('auth/verify');
     Route::post('auth/verify-process', '\App\Http\Controllers\AuthController@verifyProcess')->name('auth/verify-process');
     Route::post('auth/resend-otp', '\App\Http\Controllers\AuthController@resendOTP')->name('auth/resend-otp');
@@ -36,6 +36,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('oauth/login/{type}', '\App\Http\Controllers\AuthController@socialLogin')->name('oauth/login');
     Route::get('oauth/callback/{type}', '\App\Http\Controllers\AuthController@socialLoginCallback')->name('oauth/callback');
 });
+
 
 Route::group(['middleware' => ['web', 'user']], function () {
     Route::get('dashboard', '\App\Http\Controllers\SiteController@dashboard')->name('dashboard');
@@ -69,10 +70,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'web'], function () {
     Route::get('auth/tfa-verify', '\App\Http\Controllers\Admin\AuthController@tfaVerify')->name('admin/auth/tfa-verify');
     Route::post('auth/tfa-verify-process', '\App\Http\Controllers\Admin\AuthController@tfaVerifyProcess')->name('admin/auth/tfa-verify-process');
     Route::post('auth/tfa-resend-otp', '\App\Http\Controllers\Admin\AuthController@tfaResendOTP')->name('admin/auth/tfa-resend-otp');
-
-    Route::get('auth/password-forgot', '\App\Http\Controllers\Admin\AuthController@passwordForgot')->name('admin/auth/password-forgot');
-    Route::post('auth/password-forgot-process', '\App\Http\Controllers\Admin\AuthController@passwordForgotProcess')->name('admin/auth/password-forgot-process');
     Route::post('auth/resend-otp', '\App\Http\Controllers\Admin\AuthController@resendOtp')->name('admin/auth/resend-otp');
+
+    Route::get('site/password-forgot', '\App\Http\Controllers\Admin\SiteController@passwordForgot')->name('admin/site/password-forgot');
+    Route::post('site/password-forgot-process', '\App\Http\Controllers\Admin\SiteController@passwordForgotProcess')->name('admin/site/password-forgot-process');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function () {

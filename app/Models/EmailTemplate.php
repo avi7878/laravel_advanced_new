@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Helpers\Pagination;
-use App\Helpers\General;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;

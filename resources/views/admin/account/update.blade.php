@@ -18,7 +18,7 @@ Profile
       <h5 class="mb-0">Profile</h5>
     </div>
     <div class="card-body">
-      <form action="admin/account/save" method="post" class="ajax-form">
+      <form action="admin/account/save" method="post" id="ajax-form">
         {{ csrf_field() }}
         <div class="mb-3">
           <label class="body" for="basic-default-fullname">First Name <span class="star">*</span></label>
@@ -43,7 +43,7 @@ Profile
 @push('scripts')
 <script type="text/javascript">
   documentReady(function() {
-    $('.ajax-form').validate({
+    $('#ajax-form').validate({
       submitHandler: function(form) {
         app.ajaxForm(form);
       }

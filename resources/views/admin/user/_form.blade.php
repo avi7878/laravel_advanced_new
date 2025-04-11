@@ -3,7 +3,7 @@
         color: red;
     }
 </style>
-<form class="ajax-form" method="post" action="{{ route('admin/user/save') }}" enctype="multipart/form-data" id="ajax-form">
+<form method="post" action="{{ route('admin/user/save') }}" enctype="multipart/form-data" id="ajax-form">
     @csrf
     <input type="hidden" name="id" value="{{ @$model->id }}">
     <input type="hidden" name="pass" value="{{ @$model->password }}">

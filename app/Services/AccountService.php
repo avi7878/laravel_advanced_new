@@ -65,15 +65,124 @@ class AccountService
         (new UserActivity())->add($user->id, 3);
 
         if (config('setting.user_email_verify')) {
-            (new \App\Services\TfaService())->sendOTP($user, 'Verify_email');
+            (new TfaService())->sendOTP($user, 'Verify_email');
             $token = base64_encode($user->email);
-            return ['status' => 1, 'message' => 'Thank you for registration, Please verify your email.', 'next' => 'redirect', 'url' => 'auth/verify?type=email&token=' . $token];
+            return ['status' => 1, 'message' => 'Thank you for registration, Please verify your email.', 'next' => 'redirect', 'url' => 'site/verify-account?token=' . $token];
         } else {
             Auth::guard()->login($user);
             (new Device())->login($user->id, 0);
             (new UserActivity())->add($user->id, 1);
         }
         return ['status' => 1, 'message' => 'Thank you for registration', 'next' => 'redirect', 'url' => config('setting.login_redirect_url')];
+    }
+
+    /**
+     * Verify the OTP process.
+     *
+     * @param array $postData The post data containing the OTP and other details.
+     * @return array The result of the OTP verification process.
+     */
+    public function verifyAccountProcess(array $postData): array
+    {
+        $general = new General();
+        if ($general->rateLimit('verify_tfa')) {
+            return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
+        }
+
+        $validator = Validator::make($postData, [
+            'otp' => 'required|digits:6',
+            'code' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return ['status' => 0, 'message' => $validator->errors()->first()];
+        }
+        $tfaService=(new TfaService());
+        $email = $tfaService->decryptCode($postData['code']);
+        $user = User::where('email', $email)->first();
+
+        if ($user->status == 0) {
+            return ['status' => 0, 'message' => 'Your Account is blocked'];
+        }
+        $userData = $user->getData();
+        if ($userData->otp_failed >= config('setting.login_max_attempt')) {
+            return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
+        }
+        $result = $tfaService->checkOtp($postData['otp'], $userData->otp);
+        if (!$result['status']) {
+            $user->updateData(['otp_failed' => $userData->otp_failed + 1]);
+            return $result;
+        }
+
+        $user->setData(['email_verified' => 1, 'otp' => '']);
+        $user->save();
+        return ['status' => 1, 'message' => 'OTP verified successfully.', 'next' => 'redirect', 'url' => 'login'];
+    }
+
+    /**
+     * Process the password forgot.
+     *
+     * @param array $postData
+     * @param int $type
+     * @return array
+     */
+    public function passwordForgotProcess($postData)
+    {
+        $general = new General();
+        if ($general->rateLimit('password_forgot')) {
+            return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
+        }
+        $step = $postData['step'];
+        if ($step == 1 && $general->recaptchaFails()) {
+            return ['status' => 0, 'message' => 'Please complete the captcha.'];
+        }
+
+        $validationRules = ['email' => 'required|email'];
+        if ($step == 2) {
+            $validationRules['otp'] = 'required';
+        }
+        if ($step == 3) {
+            $validationRules['otp'] = 'required';
+            $validationRules['password'] = [
+                'required',
+                $general->passwordType()
+            ];
+            $validationRules['password_confirm'] = 'required|same:password';
+        }
+
+        $validator = Validator::make($postData, $validationRules);
+        if ($validator->fails()) {
+            return ['status' => 0, 'message' => $validator->errors()->first()];
+        }
+
+        $user = User::where('email', $postData['email'])->first();
+        if (!$user) {
+            return ['status' => 0, 'message' => 'Email Not Valid'];
+        }
+        $userData = $user->getData();
+        $tfaService = new TfaService();
+        if ($step == 1) {
+            $tfaService->sendOTP($user, 'forgot_password');
+            return ['status' => 1, 'message' => 'Otp sent successfully', 'next' => 'step_2'];
+        }
+
+        if ($userData->otp_failed >= config('setting.login_max_attempt')) {
+            return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
+        }
+        $result = $tfaService->checkOtp($postData['otp'], $userData->otp);
+        if (!$result['status']) {
+            $user->updateData(['otp_failed', $userData->otp_failed + 1]);
+            return $result;
+        }
+
+        if ($step == 2) {
+            return ['status' => 1, 'message' => 'Otp is valid', 'next'  => 'step_3'];
+        } else {
+            $user->update([
+                'password' => $this->encryptPassword($postData['password']),
+                'data' => $user->setData(['otp', '']),
+            ]);
+            return ['status' => 1, 'message' => 'Password reset successfully. You can now log in', 'next' => 'redirect', 'url' => 'login'];
+        }
     }
 
     /**

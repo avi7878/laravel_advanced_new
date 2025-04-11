@@ -1,10 +1,4 @@
-<style>
-     .star{
-        color: red;
-    }
-</style>
-
-<form class="ajax-form" method="post" action="admin/email-template/save" id="ajax-form">
+<form method="post" action="admin/email-template/save" id="ajax-form">
     @csrf
     <input type="hidden" name="id" value="{{ @$model->id }}">
     <div class="col-md-12">
@@ -43,13 +37,7 @@ documentReady(function() {
     app.loadScript('https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js', function() {
         initEditorFull($('#summernote'),'admin/email-template/save-file');
     });
-    // $('.ajax-form').validate({
-    //     submitHandler: function(form) {
-    //         var postData = new FormData(form);
-    //         app.ajaxFileRequest($(form).attr("action"), postData);
-    //     }
-    // });
-    
+ 
     jQuery.validator.addMethod("alphaOnly", function(value, element) {
             return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
         }, "Please enter only alphabetic characters");

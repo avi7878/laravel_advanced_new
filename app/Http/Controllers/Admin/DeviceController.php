@@ -46,7 +46,7 @@ class DeviceController extends Controller
      * @return JsonResponse
      */
     public function logout(Request $request): JsonResponse
-    {   
+    {
         (new Device())->forceLogout($request->input('id'));
 
         return response()->json(['status' => 1, 'message' => 'Device Logout Successfully', 'next' => 'reload']);

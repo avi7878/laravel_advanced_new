@@ -12,7 +12,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     echo 'reload';
   }
 } else {
-  $metaTags = $general->getMetaTags();
+  $metaData = $general->getMetaData();
   ?>
   <!DOCTYPE html>
   <html lang="{{ Config::get('app.locale') }}" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="theme/assets/" data-template="vertical-menu-template">
@@ -21,8 +21,10 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <meta charset="utf-8" />
     <base href="{{URL::to('/')}}/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    @if($metaTags)
-    {!! $metaTags !!}
+    @if($metaData['title'])
+    <title>{{$metaData['title']}}</title>
+    <meta name="keywords" content="{{$metaData['keyword']}}">
+    <meta name="description" content="{{$metaData['description']}}">
     @else
     <title>@yield('title') | {{config('setting.app_name')}}</title>
     @endif
@@ -49,7 +51,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <link rel="stylesheet" href="theme/assets/vendor/libs/typeahead-js/typeahead.css" />
     <!-- Vendor -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.css" integrity="sha512-Of+yU7HlIFqXQcG8Usdd67ejABz27o7CRB1tJCvzGYhTddCi4TZLVhh9tGaJCwlrBiodWCzAx+igo9oaNbUk5A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        
+
     <!-- Page CSS -->
     <!-- Page -->
     <link rel="stylesheet" href="theme/assets/vendor/css/pages/page-auth.css" />
@@ -69,6 +71,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
       var CSRF_TOKEN = "{{ Session::token() }}";
       var dataTableObj = false;
       var documentReadyFunctions = [];
+
       function documentReady(fn) {
         documentReadyFunctions.push(fn);
       }
@@ -101,7 +104,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <!-- Page JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.9/sweetalert2.min.js" integrity="sha512-42SOMmTiQryVFk+kJc8Mk1YCoPYvTSX1KCz7sZOGGFcBzytpPLeKuF6AOOQvln5zrUBDjJqshCdMGYRVC/BsYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        
+
     <script src="assets/js/common.js"></script>
     <script src="assets/js/pjax.js"></script>
     <script src="assets/js/app.js"></script>

@@ -28,7 +28,7 @@ class UserAuth
             }
         }else{
             if(session('verify_tfa')){
-                return redirect('auth/verify?type=tfa');
+                return redirect('auth/verify');
             }
         }
 

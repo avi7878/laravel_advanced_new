@@ -33,11 +33,11 @@ class Pagination
 
         // Set pagination limits and offsets
         $query->offset($result['offset'])->limit($result['limit']);
-        
+
         $response['data'] = $query->get();
         $response['recordsFiltered'] = $response['recordsTotal'];
         $response['draw'] = $result['draw'];
-        
+
         return $response;
     }
 
@@ -168,4 +168,3 @@ class Pagination
         return '<div class="pagination-load-more" style="display:none"><button class="btn btn-default page-link" data-page="' . ($page + 1) . '">Load More</button></div>';
     }
 }
-

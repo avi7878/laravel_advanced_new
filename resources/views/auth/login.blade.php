@@ -78,16 +78,20 @@ Login To Your Account
           <form id="login-otp-form" action="{{ route('auth/login-otp-process') }}" method="POST" style="display: none;">
             {{ csrf_field() }}
             <input type="hidden" name="step" id="step" value="1">
-            <div class="mb-6 email-block">
-              <label for="email" class="form-label">Email <span class="star">*</span></label>
-              <input type="email" required class="form-control" id="email" name="email" placeholder="Enter your email" autofocus value="{{ old('email') }}" />
-              <div class="col-12 recaptcha-block">
-                {{view('common/recaptcha')}}
+            <div id="email-block">
+              <div class="mb-6 ">
+                <label for="email" class="form-label">Email <span class="star">*</span></label>
+                <input type="email" required class="form-control" id="email" name="email" placeholder="Enter your email" autofocus value="{{ old('email') }}" />
+                <div class="col-12">
+                  {{view('common/recaptcha')}}
+                </div>
               </div>
             </div>
-            <div class="mb-6 otp-block" style="display: none;">
-              <label class="form-label">OTP <span class="star">*</span></label>
-              <input type="text" class="form-control" name="otp" placeholder="Enter your otp" autofocus value="" />
+            <div id="otp-block" style="display: none;">
+              <div class="mb-6">
+                <label class="form-label">OTP <span class="star">*</span></label>
+                <input type="text" class="form-control" name="otp" placeholder="Enter your otp" autofocus value="" />
+              </div>
             </div>
             <div class="mb-6">
               <button type="submit" class="btn btn-primary d-grid w-100">Submit</button>
@@ -151,8 +155,8 @@ Login To Your Account
                 type: "success"
               }).then(function() {
                 if (response.next == 'step_2') {
-                  $('.otp-block').show();
-                  $('.email-block').hide();
+                  $('#otp-block').show();
+                  $('#email-block').hide();
                   $('#step').val('2');
                 }
                 if (response.next == 'redirect') {

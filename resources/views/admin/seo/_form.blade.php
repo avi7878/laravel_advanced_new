@@ -1,5 +1,5 @@
 
-<form class="ajax-form" method="post" action="admin/seo/save" enctype="multipart/form-data" id="ajax-form">
+<form method="post" action="admin/seo/save" enctype="multipart/form-data" id="ajax-form">
     @csrf
     <input type="hidden" name="id" value="{{ @$model->id }}">
     <div class="row">

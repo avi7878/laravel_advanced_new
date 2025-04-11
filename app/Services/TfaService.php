@@ -130,12 +130,8 @@ class TfaService
         if ($validator->fails()) {
             return ['status' => 0, 'message' => $validator->errors()->first()];
         }
-        if ($postData['type'] == 'tfa') {
-            $user = auth()->user();
-        } else {
-            $email = $this->decryptCode($postData['code']);
-            $user = User::where('email', $email)->first();
-        }
+        
+        $user = auth()->user();
 
         if ($user->status == 0) {
             return ['status' => 0, 'message' => 'Your Account is blocked'];
@@ -149,28 +145,25 @@ class TfaService
             $user->updateData(['otp_failed' => $userData->otp_failed + 1]);
             return $result;
         }
-        if ($postData['type'] == 'tfa') {
-            if (@$postData['skip_tfa']) {
-                $ignoredDevices = explode(',', $userData->ignore_tfa_device);
-                $token = $_COOKIE[config('setting.app_uid') . '_token'] ?? null;
-                if ($token && !in_array($token, $ignoredDevices)) {
-                    $ignoredDevices[] = $token;
-                    $ignoredDevices = array_filter($ignoredDevices);
-                    $ignoredDevices = array_unique($ignoredDevices);
-                    $user->setData(['ignore_tfa_device' => implode(',', $ignoredDevices)]);
-                }
+
+        if (@$postData['skip_tfa']) {
+            $ignoredDevices = explode(',', $userData->ignore_tfa_device);
+            $token = $_COOKIE[config('setting.app_uid') . '_token'] ?? null;
+            if ($token && !in_array($token, $ignoredDevices)) {
+                $ignoredDevices[] = $token;
+                $ignoredDevices = array_filter($ignoredDevices);
+                $ignoredDevices = array_unique($ignoredDevices);
+                $user->setData(['ignore_tfa_device' => implode(',', $ignoredDevices)]);
             }
-            Session::forget('verify_tfa');
         }
-        if ($postData['type'] == 'email') {
-            $user->setData(['email_verified' => 1]);
-        }
+        Session::forget('verify_tfa');
+        
         $user->setData(['otp' => '']);
         $user->save();
         $redirectUrl = config('setting.login_redirect_url');
-        if ($postData['type'] == 'email') {
-            $redirectUrl = 'login';
-        }
         return ['status' => 1, 'message' => 'OTP verified successfully.', 'next' => 'redirect', 'url' => $redirectUrl];
     }
+
+
+    
 }

@@ -3,7 +3,6 @@
 Forgot Password
 @endsection
 @section('content')
-
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner py-6">
@@ -11,7 +10,7 @@ Forgot Password
                 <div class="card-body">
                     <!-- Logo -->
                     <div class="app-brand justify-content-center mb-6">
-                        <a href="admin/auth/password-forgot" class="app-brand-link">
+                        <a href="auth/password-forgot" class="app-brand-link">
                             <span class="app-brand-logo demo">
                                 <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 200%;">
                             </span>
@@ -22,7 +21,7 @@ Forgot Password
                     <h4 class="mb-1">Forgot Password</h4>
                     <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
                     {{ view('common/message_alert') }}
-                    <form id="ajax-form" action="{{ route('admin/auth/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
+                    <form id="ajax-form" action="{{ route('site/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
                         {{ csrf_field() }}
                         <input type="hidden" name="step" id="step" value="1">
                         <div id="email-block">
@@ -61,7 +60,7 @@ Forgot Password
                     </form>
                     <br>
                     <div class="text-center">
-                        <a href="{{ route('admin/auth/login') }}" class="d-flex justify-content-center">
+                        <a href="{{ route('auth/login') }}" class="d-flex justify-content-center">
                             <i class="ti ti-chevron-left scaleX-n1-rtl"></i>
                             Back to login
                         </a>
@@ -71,65 +70,64 @@ Forgot Password
             </div>
         </div>
     </div>
-</div>
-<!-- /.login-box -->
-@endsection
-@push('scripts')
-<script>
-    documentReady(function() {
-        $('#ajax-form').validate({
-            rules: {
-                email: {
-                    required: true,
-                    email: true
+    <!-- /.login-box -->
+    @endsection
+    @push('scripts')
+    <script>
+        documentReady(function() {
+            $('#ajax-form').validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
                 },
-            },
-            messages: {
-                email: {
-                    required: "Please Enter Your Email.",
-                    email: "Please enter a valid email address."
+                messages: {
+                    email: {
+                        required: "Please Enter Your Email.",
+                        email: "Please enter a valid email address."
+                    },
                 },
-            },
-            submitHandler: function(form) {
-                app.ajaxForm(form, function(response) {
-                    if ($('#step').val() == '1') {
-                        try {
-                            grecaptcha.reset();
-                        } catch (e) {}
-                    }
-                    if (response.status) {
-                        if (response.message) {
-                            app.showConfirmationPopup({
-                                title: "",
-                                text: response.message,
-                                type: "success"
-                            }).then(function() {
-                                if (response.next == 'step_2') {
-                                    $('#otp-block').show();
-                                    $('#email-block').hide();
-                                    $('#step').val('2');
-                                } else if (response.next == 'step_3') {
-                                    $('#password-block').show();
-                                    $('#otp-block').hide();
-                                    $('#step').val('3');
-                                } else if (response.next == 'redirect') {
-                                    window.location.href = response.url;
-                                }
-                            });
+                submitHandler: function(form) {
+                    app.ajaxForm(form, function(response) {
+                        if ($('#step').val() == '1') {
+                            try {
+                                grecaptcha.reset();
+                            } catch (e) {}
                         }
-                    } else if (response.message) {
-                        app.showMessage(response.message, "error");
-                    }
-                });
-            }
+                        if (response.status) {
+                            if (response.message) {
+                                app.showConfirmationPopup({
+                                    title: "",
+                                    text: response.message,
+                                    type: "success"
+                                }).then(function() {
+                                    if (response.next == 'step_2') {
+                                        $('#otp-block').show();
+                                        $('#email-block').hide();
+                                        $('#step').val('2');
+                                    } else if (response.next == 'step_3') {
+                                        $('#password-block').show();
+                                        $('#otp-block').hide();
+                                        $('#step').val('3');
+                                    } else if (response.next == 'redirect') {
+                                        window.location.href = response.url;
+                                    }
+                                });
+                            }
+                        } else if (response.message) {
+                            app.showMessage(response.message, "error");
+                        }
+                    });
+                }
+            })
         })
-    })
 
-    function resendOtp(email) {
-        app.ajaxPost("{{ route('admin/auth/resend-otp') }}", {
-            type: 'forgot_password',
-            code: btoa(email)
-        })
-    }
-</script>
-@endpush
+        function resendOtp(email) {
+            app.ajaxPost("{{ route('auth/resend-otp') }}", {
+                type: 'forgot_password',
+                code: btoa(email)
+            })
+        }
+    </script>
+    @endpush

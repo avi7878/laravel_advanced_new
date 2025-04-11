@@ -33,7 +33,6 @@ class SendEmail implements ShouldQueue
      */
     public function handle(): void
     {
-        //
         $to = $this->to;
         $subject = $this->subject;
         try {
@@ -42,7 +41,7 @@ class SendEmail implements ShouldQueue
                 $m->to($to)->subject($subject);
             });
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Email Failed : ' . $to . ' : ' . $subject.' Error : '.$e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Email Failed : ' . $to . ' : ' . $subject . ' Error : ' . $e->getMessage());
         }
     }
 }

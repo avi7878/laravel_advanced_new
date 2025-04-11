@@ -11,6 +11,16 @@ use Illuminate\Http\Request;
 class AccountController extends Controller
 {
     /**
+     * Display the user dashboard.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function dashboard()
+    {
+        return view('site/dashboard');
+    }
+    
+    /**
      * Display the account update form.
      *
      * @param Request $request
@@ -19,7 +29,7 @@ class AccountController extends Controller
     public function update(Request $request)
     {
         $model = auth()->user();
-        
+
         return view('admin/account/update', compact('model'));
     }
 
@@ -95,7 +105,7 @@ class AccountController extends Controller
         return view('admin/auth/tfa', ['user' => auth()->user()]);
     }
 
-        /**
+    /**
      * Toggle TFA status.
      *
      * @return JsonResponse
@@ -170,4 +180,6 @@ class AccountController extends Controller
     {
         return response()->json((new UserActivity())->list($request->all(), auth()->id()));
     }
+
+    
 }

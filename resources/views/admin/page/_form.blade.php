@@ -1,4 +1,4 @@
-<form class="ajax-form" method="post" action="admin/page/save">
+<form id="ajax-form" method="post" action="admin/page/save">
     @csrf
     <input type="hidden" name="id" value="{{ @$model->id }}">
     <div class="col-md-12">
@@ -24,7 +24,7 @@ documentReady(function() {
     app.loadScript('https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js', function() {
         initEditorFull($('#summernote'),'admin/page/save-file');
     });
-    $('.ajax-form').validate({
+    $('#ajax-form').validate({
         submitHandler: function(form) {
             var postData = new FormData(form);
             app.ajaxFileRequest($(form).attr("action"), postData);

@@ -1,8 +1,9 @@
 <?php
 if (isset($_GET['partial']) && $_GET['partial']) {
     if (isset($_GET['layout']) && $_GET['layout'] == 'main') {
+        $metaData = $general->getMetaData();
 ?>
-        <div id="main-content" data-title="@yield('title') | {{config('setting.app_name')}}">
+        <div id="main-content" data-title="@php if($metaData['title']){echo $metaData['title'];}else{ @endphp@yield('title') | {{config('setting.app_name')}}@php }@endphp">
             {{ view('common/message_alert') }}
             @stack('styles')
             @yield('content')
@@ -13,7 +14,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         echo 'reload';
     }
 } else {
-    $metaTags = $general->getMetaTags();
+    $metaData = $general->getMetaData();
     $sessionUser = false;
     if (!auth()->guest()) {
         $sessionUser = auth()->user();
@@ -21,14 +22,15 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     ?>
     <!DOCTYPE html>
     <html lang="{{ Config::get('app.locale') }}" class="dark-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="theme/assets/" data-template="horizontal-menu-template">
-
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
         <base href="{{ URL::to('/') }}/">
         <meta http-equiv="Content-Language" content="{{ Config::get('app.locale') }}">
-        @if($metaTags)
-        {!! $metaTags !!}
+        @if($metaData['title'])
+        <title>{{$metaData['title']}}</title>
+        <meta name="keywords" content="{{$metaData['keyword']}}">
+        <meta name="description" content="{{$metaData['description']}}">
         @else
         <title>@yield('title') | {{config('setting.app_name')}}</title>
         @endif
@@ -95,11 +97,14 @@ if (isset($_GET['partial']) && $_GET['partial']) {
                         {{ view('layouts/component/main_sidebar') }}
                         <!-- / Menu -->
                         <!-- Content -->
-                        <div class="container-xxl flex-grow-1 container-p-y" id="main-container" data-layout="main">
-                            <div id="main-content" data-title="@yield('title') | {{config('setting.app_name')}}">
-                                {{ view('common/message_alert') }}
-                                @yield('content')
+                        <div class="container-xxl flex-grow-1 container-p-y" >
+                            <div id="main-container" data-layout="main">
+                                <div id="main-content" data-title="@php if($metaData['title']){echo $metaData['title'];}else{ @endphp@yield('title') | {{config('setting.app_name')}}@php }@endphp">
+                                    {{ view('common/message_alert') }}
+                                    @yield('content')
+                                </div>
                             </div>
+
                         </div>
                         <!--/ Content -->
                         <!-- Footer -->

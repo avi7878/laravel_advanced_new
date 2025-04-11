@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Device;
-use App\Models\Log;
 use App\Models\User;
+use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -88,7 +88,7 @@ class UserController extends Controller
     public function view(Request $request)
     {
         $id = $request->input('id');
-        $logData = Log::where('user_id', $id)
+        $logData = UserActivity::where('user_id', $id)
             ->orderBy('id', 'desc')
             ->limit(10)
             ->get();
@@ -152,7 +152,7 @@ class UserController extends Controller
     public function revokeAll()
     {
         $model = Auth::user();
-        $model->updateData(['ignore_tfa_device','']);
+        $model->updateData(['ignore_tfa_device', '']);
         return response()->json(['status' => 1, 'message' => 'Your devices revoked successfully.']);
     }
 }

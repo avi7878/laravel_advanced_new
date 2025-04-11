@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\JsonResponse;   
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use App\Services\AuthService;
@@ -43,14 +42,14 @@ class AuthController extends Controller
      */
     public function loginProcess(Request $request): RedirectResponse
     {
-       
+
         $result = (new AuthService())->loginProcess($request->only(['email', 'password']), 0);
         if (!$result['status']) {
             return redirect()->back()->with('error', $result['message'])->withInput();
         }
         return redirect($this->general->authRedirectUrl('admin/dashboard'))->with('success', $result['message']);
     }
-    
+
 
     /**
      * Log out the authenticated user and clear session data.
@@ -65,28 +64,8 @@ class AuthController extends Controller
         }
         return redirect('admin/auth/login')->withCookie(cookie()->forget(config('setting.app_uid') . '_user_token'));
     }
+
     
-    /**
-     * Display the password forgot view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function passwordForgot()
-    {
-        return view('admin.auth.password_forgot');
-    }
-    
-    /**
-     * Process password forgot request.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function passwordForgotProcess(Request $request)
-    {
-       
-        return (new AuthService())->passwordForgotProcess($request->only(['email','otp','password','password_confirm','step']),0);
-    }
     // ----------------- Two-Factor Authentication (TFA) Methods -------------------
 
     /**
@@ -96,11 +75,11 @@ class AuthController extends Controller
      */
     public function verify(Request $request)
     {
-      
-        $type=$request->get('type');
-       
-        $code=$request->get('code','');
-        return view('admin/auth/verify',compact('type','code'));
+
+        $type = $request->get('type');
+
+        $code = $request->get('code', '');
+        return view('admin/auth/verify', compact('type', 'code'));
     }
 
     /** 
@@ -111,7 +90,7 @@ class AuthController extends Controller
      */
     public function verifyProcess(Request $request)
     {
-        return response()->json((new TfaService())->verifyProcess($request->only(['otp','type','code','skip_tfa'])));
+        return response()->json((new TfaService())->verifyProcess($request->only(['otp', 'type', 'code', 'skip_tfa'])));
     }
 
     /**
@@ -121,9 +100,9 @@ class AuthController extends Controller
      */
     public function resendOTP(Request $request)
     {
-        return response()->json((new TfaService())->resendOTP($request->only(['type','code'])));
+        return response()->json((new TfaService())->resendOTP($request->only(['type', 'code'])));
     }
-    
+
     // ------------------- Two-Factor Authentication (TFA) Methods -------------------
 
 

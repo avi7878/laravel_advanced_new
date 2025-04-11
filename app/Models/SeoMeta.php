@@ -26,9 +26,9 @@ class SeoMeta extends Model
     /**
      * Retrieve meta tags for the current route's URL.
      *
-     * @return string The meta tags for the current route's URL.
+     * @return array The meta tags for the current route's URL.
      */
-    public function getMetaTags(): ?string
+    public function getMetaData(): ?array
     {
         $currentUrl = Route::current()?->getName();
         if (!$currentUrl) {
@@ -38,22 +38,25 @@ class SeoMeta extends Model
         $cacheKey = 'seo_meta_' . $currentUrl;
         $metaData = Cache::get($cacheKey);
 
-        if (!$metaData) {
-            $siteMeta = self::where('url', $currentUrl)->first();
-            if ($siteMeta && $siteMeta->title) {
-                $metaData = [
-                    'title' => $siteMeta->title,
-                    'keyword' => $siteMeta->keyword,
-                    'description' => $siteMeta->description,
-                ];
-                Cache::put($cacheKey, $metaData, 86400); // Cache for 1 day
-            }
-        }
-
         if ($metaData) {
-            return '<title>'.$metaData['title'].'</title><meta name="keywords" content="'.$metaData['keyword'].'"><meta name="description" content="'.$metaData['description'].'">';
+            return $metaData;
         }
-        return '';
+        $siteMeta = self::where('url', $currentUrl)->first();
+        if ($siteMeta) {
+            $metaData = [
+                'title' => $siteMeta->title,
+                'keyword' => $siteMeta->keyword,
+                'description' => $siteMeta->description,
+            ];
+        }else{
+            $metaData =[
+                'title' => '',
+                'keyword' => '',
+                'description' => '',
+            ];
+        }
+        Cache::put($cacheKey, $metaData, 86400); // Cache for 1 day
+        return $metaData;
     }
 
     /**

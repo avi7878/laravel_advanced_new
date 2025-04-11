@@ -1,9 +1,9 @@
 <style>
-     .star{
+    .star {
         color: red;
     }
 </style>
-<form class="ajax-form" method="post" action="{{ route('admin/admin/save') }}" enctype="multipart/form-data" id="ajax-form">
+<form method="post" action="{{ route('admin/admin/save') }}" enctype="multipart/form-data" id="ajax-form">
     @csrf
     <input type="hidden" name="id" value="{{ @$model->id }}">
     <input type="hidden" name="pass" value="{{ @$model->password }}">
@@ -47,39 +47,39 @@
                     <div class="mb-3">
                         <label class="body" for="basic-icon-default-fullname">Status</label>
                         <div class="input-group input-group-merge">
-                            
+
                             <select class="form-control" name="status" aria-label="Status">
                                 <option value="1" <?php
                                                     if (@$model->status == 1) {
                                                         echo 'selected';
                                                     } ?>>Active</option>
                                 <option value="0" <?php if (@$model->status == 0) {
-                                    echo 'selected';
-                                } ?>>Inactive</option>
+                                                        echo 'selected';
+                                                    } ?>>Inactive</option>
                             </select>
-                            
+
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6"><br>
-    <?php if (!empty(@$model->image)) { ?>
-      
-        <img src="{{ $general->getFileUrl(@$model->image,'profile') }}" style="width:100px;height:100px" class="img-fluid" id="image"><br>
+        <?php if (!empty(@$model->image)) { ?>
+
+            <img src="{{ $general->getFileUrl(@$model->image,'profile') }}" style="width:100px;height:100px" class="img-fluid" id="image"><br>
         <?php } else { ?>
-         <img src="{{ $general->getNoFile() }}" class="img-fluid" style="width:100px;height:100px" id="image"><br>
-     <?php  } ?>
-     <div class="form-group">
-         <label class="body">Image</label><br><br>
-         <div class="custom-file">
-             <input type="file" class="form-control custom-file-input" accept="image/*" name="image" onchange="previewImage(this,'#image')"><br> 
-         </div>
-     </div>
- </div>
+            <img src="{{ $general->getNoFile() }}" class="img-fluid" style="width:100px;height:100px" id="image"><br>
+        <?php  } ?>
+        <div class="form-group">
+            <label class="body">Image</label><br><br>
+            <div class="custom-file">
+                <input type="file" class="form-control custom-file-input" accept="image/*" name="image" onchange="previewImage(this,'#image')"><br>
+            </div>
+        </div>
+    </div>
     <div class="col-md-12">
         <div class="mb-3">
             <label class="body" for="basic-icon-default-fullname">Permission</label>
@@ -92,12 +92,14 @@
                         <h4 style="margin-bottom: 0%;">{{ $permissionList['title'] }}</h4>
                     </label>
                     <div class="checkbox-items">
-                        <?php if(isset($permissionList['list']) && $permissionList['list']){foreach ($permissionList['list'] as $permission) { ?>
-                            <label>
-                                <input onchange="if(this.checked){$(this).closest('.checkbox-block').find('.checkbox-parent').prop('checked',true);}" class="checkbox-child" type="checkbox" name="permission[]" value="{{ $permission['key'] }}" <?php echo in_array($permission['key'], explode(',', @$model->permission)) ? 'checked' : ''; ?> />
-                                {{ $permission['title'] }}
-                            </label><br />
-                        <?php }} ?>
+                        <?php if (isset($permissionList['list']) && $permissionList['list']) {
+                            foreach ($permissionList['list'] as $permission) { ?>
+                                <label>
+                                    <input onchange="if(this.checked){$(this).closest('.checkbox-block').find('.checkbox-parent').prop('checked',true);}" class="checkbox-child" type="checkbox" name="permission[]" value="{{ $permission['key'] }}" <?php echo in_array($permission['key'], explode(',', @$model->permission)) ? 'checked' : ''; ?> />
+                                    {{ $permission['title'] }}
+                                </label><br />
+                        <?php }
+                        } ?>
                     </div>
                 </div>
             <?php } ?>
@@ -121,7 +123,7 @@
                     required: true,
                     alphaOnly: true,
                     minlength: 2
-                }, 
+                },
                 last_name: {
                     required: true,
                     alphaOnly: true,
@@ -136,7 +138,7 @@
                 first_name: {
                     required: "Please enter the first name",
                     minlength: "Please enter at least 2 characters"
-                }, 
+                },
                 last_name: {
                     required: "Please enter the last name",
                     minlength: "Please enter at least 2 characters"
@@ -146,16 +148,12 @@
             submitHandler: function(form) {
                 app.ajaxFileForm(form);
             },
-            
+
             errorPlacement: function(error, element) {
                 // Place the error message under the input field
                 error.insertAfter(element.closest('.mb-3'));
             },
         });
-
-        // function previewImage(file) {
-        //     // Implement code to display preview of selected image
-        // }
     });
 </script>
 

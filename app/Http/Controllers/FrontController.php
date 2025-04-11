@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Page;
-use App\Models\Email_Template;
 
 class FrontController extends Controller
 {
@@ -32,11 +31,6 @@ class FrontController extends Controller
         return view('front.page', compact('page'));
     }
 
-    public function email_template(Request $request)
-    {
-        $email = Email_Template::where('title', $request->title)->firstOrFail();
-        return view('front.email_template', compact('email'));
-    }
 
     /**
      * Display the contact page.
@@ -58,5 +52,4 @@ class FrontController extends Controller
     {
         return response()->json((new \App\Services\GeneralService())->contactProcess($request->only(['name', 'email', 'subject', 'message'])));
     }
-  
 }
