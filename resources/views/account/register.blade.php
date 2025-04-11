@@ -3,11 +3,6 @@
 Register Your Account
 @endsection
 @section('content')
-<style>
-    .star{
-        color: red;
-    }
-</style>
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner py-4">

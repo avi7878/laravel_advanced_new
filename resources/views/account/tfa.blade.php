@@ -8,7 +8,7 @@ $user = auth()->user();
 <div class="row">
     <div class="col-md-12">
         <div class="row">
-            @include('account/account_block')
+            {{ view('account/component/account_block') }}
         </div>
         <div class="col-lg-12 col-md-12">
             <div class="edit-profile_wrapper">

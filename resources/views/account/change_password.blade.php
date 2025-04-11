@@ -3,10 +3,7 @@
 Change password
 @endsection
 @section('content')
-
-<?= view('account/account_block',compact('data')); ?>
-
-
+{{ view('account/component/account_block',compact('data')); }}
 <div class="card mb-4">
     <h5 class="card-header">Change Password</h5>
     <div class="card-body">

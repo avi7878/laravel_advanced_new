@@ -3,16 +3,8 @@
 Log
 @endsection
 @section('content')
-
-
-
 <!-- Content -->
-<?= view('account/account_block'); ?>
-
-
-
-
-
+{{ view('account/component/account_block'); }}
 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Log /</span> List</h4>
 <!-- Ajax Sourced Server-side -->
 <div class="card">

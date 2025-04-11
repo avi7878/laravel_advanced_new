@@ -159,8 +159,7 @@ class AuthController extends Controller
      */
     public function tfaStatusChange()
     {
-        $result = (new TfaService())->tfaStatusChange(auth()->user());
-        return response()->json($result);
+        return response()->json((new TfaService())->tfaStatusChange(auth()->user()));
     }
 
     /**
@@ -180,11 +179,7 @@ class AuthController extends Controller
      */
     public function tfaSendOTP(): JsonResponse
     {
-        $result = (new TfaService())->sendOTP(auth()->user());
-        if (is_array($result) && !$result['status']) {
-            return response()->json(['status' => 0, 'message' => $result['message']]);
-        }
-        return response()->json(['status' => 1, 'message' => 'OTP sent successfully']);
+        return response()->json((new TfaService())->sendOTP(auth()->user()));
     }
     
     

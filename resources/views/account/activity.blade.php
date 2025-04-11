@@ -3,16 +3,8 @@
 Log
 @endsection
 @section('content')
-
-
-
 <!-- Content -->
-<?= view('account/account_block'); ?>
-
-
-
-
-
+<?= view('account/component/account_block'); ?>
 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Log /</span> List</h4>
 <!-- Ajax Sourced Server-side -->
 <div class="card">
@@ -37,11 +29,11 @@ Log
 @endsection
 @push('scripts')
 <script>
-      app.addCSS([
-    'theme/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css',
-    'theme/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css'
-  ])
-  app.addJS(['theme/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js']);
+    app.addCSS([
+        'theme/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css',
+        'theme/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css'
+    ])
+    app.addJS(['theme/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js']);
     documentReady(function() {
         datatableObj = $('#data-table').DataTable({
             ajax: {
@@ -49,7 +41,7 @@ Log
                 method: 'post',
                 dataSrc: 'data',
                 data: {
-                '_token': CSRF_TOKEN
+                    '_token': CSRF_TOKEN
                 },
             },
             columns: [
@@ -85,4 +77,3 @@ Log
     });
 </script>
 @endpush
-

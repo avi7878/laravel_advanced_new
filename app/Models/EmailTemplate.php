@@ -64,11 +64,11 @@ class EmailTemplate extends Model
     /**
      * Generates action links based on user permissions for each row.
      *
-     * @param object $row The row data.
-     * @param \Illuminate\Contracts\Auth\Authenticatable|null $sessionUser The authenticated user.
+     * @param \App\Models\EmailTemplate $row The row data.
+     * @param \App\Models\User $sessionUser The authenticated user.
      * @return string The generated HTML action links.
      */
-    protected function generateActionLinks(object $row, $sessionUser): string
+    protected function generateActionLinks($row, $sessionUser): string
     {
         $actionLinks = '';
 
@@ -94,17 +94,13 @@ class EmailTemplate extends Model
      */
     public function store(array $postData): array
     {
-        $general = new General();
 
         $rules = [
             'title' => 'required|string|max:255',
             'subject' => 'required|string|max:255',
             'body' => 'required|string'
         ];
-
         $validator = Validator::make($postData, $rules);
-
-
         if ($validator->fails()) {
             return [
                 'status' => 0,
@@ -134,16 +130,30 @@ class EmailTemplate extends Model
         ];
     }
 
-    public function getEmailTemplate($key, $data = [])
+    /**
+     * Retrieves a specific email template by its key and parses it with provided data.
+     *
+     * @param string $key The key of the email template.
+     * @param array $data The data to replace in the template.
+     * @return array The parsed subject and body of the email.
+     */
+    public function getEmailTemplate($key, $data = []): array
     {
         $template = $this->where('key', $key)->first();
         return $this->parseTemplate($template, $data);
     }
 
-    public function parseTemplate($template, $data = [])
+    /**
+     * Parses the email template and replaces placeholders with actual data.
+     *
+     * @param object $template The email template object.
+     * @param array $data The data to replace in the template.
+     * @return array The parsed subject and body of the email.
+     */
+    public function parseTemplate($template, $data = []): array
     {
         if (!$template) {
-            return '';
+            return ['subject' => '', 'body' => ''];
         }
         $body = $template->body;
         if ($data) {
@@ -154,8 +164,8 @@ class EmailTemplate extends Model
         $body = str_replace('{{app_name}}', config('app.name'), $body);
         $template->subject = str_replace('{{app_name}}', config('app.name'), $template->subject);
 
-        $body = view('email/template', ['subject' => $template->subject,'body' => $body])->render();
+        //add header footer 
+        $body = view('email/template', ['subject' => $template->subject, 'body' => $body])->render();
         return ['subject' => $template->subject, 'body' => $body];
-
     }
 }

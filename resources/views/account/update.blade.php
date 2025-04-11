@@ -3,15 +3,7 @@
 Profile
 @endsection
 @section('content')
-<?= view('account/account_block',compact('data')); ?>
-<style>
-  .swal2-container.swal2-center.swal2-shown {
-    z-index: 9999;
-  }
-   .star{
-        color: red;
-    }
-</style>
+{{ view('account/component/account_block',compact('data')); }}
 <div class="col-xl">
   <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -30,9 +22,9 @@ Profile
         </div>
         <div class="mb-3">
           <label class="body" for="basic-default-email">Email <span class="star">*</span></label>
-         
-            <input type="email" value="{{ $data->email }}" name="email" class="form-control" id="email" placeholder="Enter Email" required="required">
-        
+
+          <input type="email" value="{{ $data->email }}" name="email" class="form-control" id="email" placeholder="Enter Email" required="required">
+
         </div>
         <button type="submit" class="btn btn-primary text-white" style="background-color:#685dd8;">Submit</button>
       </form>

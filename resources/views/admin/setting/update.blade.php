@@ -106,10 +106,11 @@
                                                     <label class="body">Timezone</label>
                                                     <select class="form-control" value="{{ config('setting.timezone') }}"
                                                         name="timezone">
-                                                        @foreach ($timezonelist as $timezone)
-                                                            <option value="{{ $timezone }}"
-                                                                <?= config('app.timezone') == $timezone ? 'selected' : '' ?>>
-                                                                {{ $timezone }}</option>
+                                                        @foreach ($timezonelist as $tzkey => $timezone)
+                                                            <option value="{{ $tzkey }}"
+                                                                {{ config('app.timezone') == $tzkey ? 'selected' : '' }}>
+                                                                {{ $timezone }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>

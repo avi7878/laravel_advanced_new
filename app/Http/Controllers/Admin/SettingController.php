@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\General;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +26,7 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         $setting = $this->general->getAllSettings();
-        $timezonelist = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+        $timezonelist = (new General())->getTimezooneList();
 
         return view('admin/setting/update', ['setting' => $setting, 'timezonelist' => $timezonelist]);
     }
