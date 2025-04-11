@@ -157,8 +157,8 @@ class AuthService
 
         if ($userData->status_tfa == 1) {
             if (!in_array(@$_COOKIE[config("setting.app_uid") . '_token'], explode(',', $userData->ignore_tfa_device))) {
-                session(['tfa_verify' => 1]);
-                (new \App\Services\TfaService())->sendOTP($user ,'login_otp');
+                session(['verify_tfa' => 1]);
+                (new \App\Services\TfaService())->sendOTP($user ,'otp');
             }
         }
 
@@ -208,7 +208,7 @@ class AuthService
         $general = new General();
         $tfaService = new TfaService();
         if($step==1){
-            $tfaService->sendOTP($user , 'login_otp');
+            $tfaService->sendOTP($user , 'otp');
             return ['status'=>1,'message' => 'Otp sent successfully','next'=>'step_2'];
         }
         if($userData->otp_failed>=config('setting.login_max_attempt')){

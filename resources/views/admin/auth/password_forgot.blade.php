@@ -1,4 +1,4 @@
-@extends('admin.layouts.blank')
+@extends('layouts.blank')
 @section('title')
 Forgot  Password
 @endsection
@@ -7,17 +7,12 @@ Forgot  Password
     .star{
         color: red;
     }
-    .authentication-inner {
-    max-width: 460px;
-    margin: auto;
-   }
 </style>
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner py-6">
-            <!-- Forgot Password -->
             <div class="card">
-                <div class="card-body" >
+                <div class="card-body">
                     <!-- Logo -->
                     <div class="app-brand justify-content-center mb-6">
                         <a href="auth/password-forgot" class="app-brand-link">
@@ -28,34 +23,29 @@ Forgot  Password
                         </a>
                     </div>
                     <!-- /Logo -->
-                    <h4 class="mb-1">Forgot Password? 🔒</h4>
-                      <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
+                    <h4 class="mb-1" >Forgot Password</h4>
+                    <p class="mb-6" >Enter your email and we'll send you instructions to reset your password</p>
                       {{ view('common/message_alert') }}
-                    <form class="ajax-form" action="{{ route('admin/auth/password-forgot-process') }}" method="POST">
+                    <form class="ajax-form" action="{{ route('auth/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
                         {{ csrf_field() }}
                         <input type="hidden" name="step" id="step" value="1">
-                        <div class="mb-0 email-block">
+                        <div class="mb-6 email-block">
                             <label class="form-label">Email <span class="star">*</span></label>
                             <input id="email" type="email" class="form-control" name="email" placeholder="Enter your email" autofocus value="" />
                             <div class="col-12 recaptcha-block">
                                 {{view('common/recaptcha')}}
                             </div>
-                            <button type="submit" class="btn btn-primary d-grid w-100">Send OTP</button>
                         </div>
-
-                        <div class="mb-0 otp-block" style="display: none;">
+                        <div class="mb-6 otp-block" style="display: none;">
                             <label class="form-label">OTP <span class="star">*</span></label>
                             <input type="text" class="form-control" name="otp" placeholder="Enter your otp" autofocus value="" />
-                            <div class="mb-6 text-center">
+                            <div class="text-center">
                                 <br>
                                 Didn't get the code?
-                                <a href="javascript:void(0)" onclick="resendOtp()" id="resend-otp-link">Resend</a>
-
+                                <a href="javascript:void(0)" onclick="resendOtp($('#email').val())" id="resend-otp-link">Resend</a>
                             </div>
-                            <button type="submit" class="btn btn-primary d-grid w-100">Login</button>
                         </div>
-
-                        <div class="mb-0 password-block" style="display: none;">
+                        <div class="mb-6 password-block" style="display: none;">
                             <div class="mb-6 ">
                                 <label class="form-label">Password <span class="star">*</span></label>
                                 <input type="password" class="form-control" name="password" placeholder="Enter your email" autofocus value="" />
@@ -64,11 +54,11 @@ Forgot  Password
                                 <label class="form-label">confirm password <span class="star">*</span></label>
                                 <input type="password" class="form-control" name="password_confirm" placeholder="Enter your email" value="" />
                             </div>
-                            <button type="submit" class="btn btn-primary d-grid w-100">Login</button>
                         </div>
-                           
+                        
+                        <button type="submit" class="btn btn-primary d-grid w-100 waves-effect waves-light">Send OTP</button>
                     </form>
-                <br>
+                     <br>
                      <div class="text-center">
                         <a href="{{ route('admin/auth/login') }}" class="d-flex justify-content-center">
                             <i class="ti ti-chevron-left scaleX-n1-rtl"></i>
@@ -128,8 +118,8 @@ Forgot  Password
             }
         })
     })
-    function resendOtp(){
-        app.ajaxPost('{{ route('auth/resend-otp') }}',{type:'forgot_password',token:btoa($('#email').val())})
+    function resendOtp(email){
+        app.ajaxPost('{{ route('auth/resend-otp') }}',{type:'forgot_password',code:btoa(email)})
     }
 </script>
 @endpush

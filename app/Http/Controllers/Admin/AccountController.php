@@ -65,7 +65,7 @@ class AccountController extends Controller
     public function image()
     {
         $model = auth()->user();
-        return view('admin.account.image', compact('model'));
+        return view('admin.account.component.image', compact('model'));
     }
 
     /**
@@ -88,6 +88,33 @@ class AccountController extends Controller
     {
         return response()->json((new AccountService())->deleteImage(auth()->user()));
     }
+
+
+    public function tfa()
+    {
+        return view('admin/auth/tfa', ['user' => auth()->user()]);
+    }
+
+        /**
+     * Toggle TFA status.
+     *
+     * @return JsonResponse
+     */
+    public function tfaStatusChange()
+    {
+        $result = (new TfaService())->tfaStatusChange(auth()->user());
+        return response()->json($result);
+    }
+    /**
+     * Revoke all trusted devices for the current user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function revokeAll()
+    {
+        return response()->json((new UserActivity())->listAdmin($request->all(), auth()->user()));
+    }
+
 
     /**
      * Display the device management view.
@@ -128,9 +155,9 @@ class AccountController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function activity()
+    public function userActivity()
     {
-        return view('admin.account.activity');
+        return view('admin.account.user_activity');
     }
 
     /**
@@ -139,35 +166,8 @@ class AccountController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logList(Request $request)
+    public function userActivityList(Request $request)
     {
         return response()->json((new UserActivity())->list($request->all(), auth()->id()));
-    }
-
-
-    public function tfa()
-    {
-        // dd(auth()->user());
-        return view('admin/auth/tfa', ['user' => auth()->user()]);
-    }
-
-        /**
-     * Toggle TFA status.
-     *
-     * @return JsonResponse
-     */
-    public function tfaStatusChange()
-    {
-        $result = (new TfaService())->tfaStatusChange(auth()->user());
-        return response()->json($result);
-    }
-    /**
-     * Revoke all trusted devices for the current user.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function revokeAll()
-    {
-        return response()->json((new UserActivity())->listAdmin($request->all(), auth()->user()));
     }
 }

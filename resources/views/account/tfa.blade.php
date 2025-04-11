@@ -1,21 +1,17 @@
 @extends('layouts.main')
 @section('title', 'Profile')
 @section('content')
-@php
-/** @var \App\Models\User|null $user */
-$user = auth()->user();
-@endphp
 <div class="row">
     <div class="col-md-12">
         <div class="row">
-            {{ view('account/component/account_block') }}
+            {{ view('account/component/account_block',compact('model')) }}
         </div>
         <div class="col-lg-12 col-md-12">
             <div class="edit-profile_wrapper">
                 <div class="main-card mb-3 card">
                     <div class="card-header">
                         <h5>Two Factor Authentication</h5>
-                        @if($user && $user->getData()->status_tfa)
+                        @if($model && $model->getData()->status_tfa)
                         <b>Your Account Two Factor Authentication is Enabled</b><br><br>
                         <button
                             data-action="{{ route('account/tfa-status-change') }}"

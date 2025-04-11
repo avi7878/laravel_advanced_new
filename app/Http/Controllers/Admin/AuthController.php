@@ -87,115 +87,44 @@ class AuthController extends Controller
        
         return (new AuthService())->passwordForgotProcess($request->only(['email','otp','password','password_confirm','step']),0);
     }
-
-    /**
-     * resend otp.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function resendOtp(Request $request)
-    {
-        if ($this->general->rateLimit('resend_otp',5)) {
-            return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
-        }
-        $user = User::where('email', $email)->first();
-        if (!$user) {
-            return ['status'=>0,'message' => 'Email Not Valid'];
-        }
-        if ($user->status == 0) {
-            return ['status' => 0, 'message' => 'Your Account is blocked'];
-        }
-
-        return (new TfaService())->sendOTP($user->email); 
-    }
-    
-    /**
-     * Display password reset view.
-     *
-     * @param Request $request
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-     */
-    public function passwordReset(Request $request)
-    {   
-        $postData=$request->only(['code']);
-        if (!(new AuthService())->passwordResetLinkIsValid($postData,0)) {
-            return redirect('login')->withErrors('error' , 'Link is invalid or expired');
-        }
-
-        return view('admin/auth/password_reset', ['code' => $request->input('code')]);
-    }
-    
-    /**
-     * Process password reset request.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function passwordResetProcess(Request $request)
-    {
-        $result=(new AuthService())->passwordResetProcess($request->only(['password','code','password_confirmation']));
-        if (!$result['status']) {
-            return redirect()->back()->with('error', $result['message'])->withInput();
-        }
-        return redirect('admin/auth/login')->with('success', $result['message']);
-    }
-    
-    // ------------------- Two-Factor Authentication (TFA) Methods -------------------
-
-    /**
-     * Show TFA settings page.
-     *
-     * @return View
-     */
-    public function tfa()
-    {
-        return view('admin/auth/tfa', ['user' => auth()->user()]);
-    }
-
-    /**
-     * Toggle TFA status.
-     *
-     * @return JsonResponse
-     */
-    public function tfaStatusChange()
-    {
-        return response()->json((new TfaService())->tfaStatusChange(auth()->user()));
-    }
+    // ----------------- Two-Factor Authentication (TFA) Methods -------------------
 
     /**
      * Show the TFA verification page.
      *
      * @return View
      */
-    public function tfaVerify(): View
+    public function verify(Request $request)
     {
-        return view('admin/auth/tfa_verify');
+      
+        $type=$request->get('type');
+       
+        $code=$request->get('code','');
+        return view('admin/auth/verify',compact('type','code'));
+    }
+
+    /** 
+     * Process TFA OTP verification.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function verifyProcess(Request $request)
+    {
+        return response()->json((new TfaService())->verifyProcess($request->only(['otp','type','code','skip_tfa'])));
     }
 
     /**
-     * Send OTP for TFA.
+     * resend otp.
      *
-     * @return JsonResponse
+     * @return \Illuminate\View\View
      */
-    public function tfaSendOTP(): JsonResponse
+    public function resendOTP(Request $request)
     {
-        return response()->json((new TfaService())->sendOTP(auth()->user()));
+        return response()->json((new TfaService())->resendOTP($request->only(['type','code'])));
     }
     
-    
-    public function tfaVerifyProcess(Request $request): RedirectResponse
-    {
-        $result = (new TfaService())->tfaVerify($request, auth()->user());
-        if (!$result['status']) {
-            return redirect()->back()->with('error', $result['message'])->withInput();
-        }
-        return redirect()->to('admin/dashboard')->with('success', 'TFA verified successfully');
-    }
-    
-    public function otpLoginVerify(Request $request)
-    {
-        $code = $request->input('code');
-        return view('admin/auth/otp_login_verify', compact('code'));
-    }
+    // ------------------- Two-Factor Authentication (TFA) Methods -------------------
+
 
 }

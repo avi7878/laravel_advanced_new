@@ -17,8 +17,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('contact', '\App\Http\Controllers\FrontController@contact')->name('contact');
     Route::post('contact-process', '\App\Http\Controllers\FrontController@contactProcess')->name('contact-process');
 
-    Route::get('account/register', '\App\Http\Controllers\AccountController@register')->name('account/register');
-    Route::post('account/register-process', '\App\Http\Controllers\AccountController@registerProcess')->name('account/register-process');
+    Route::get('register', '\App\Http\Controllers\SiteController@register')->name('register');
+    Route::post('site/register-process', '\App\Http\Controllers\SiteController@registerProcess')->name('site/register-process');
 
     Route::get('login', '\App\Http\Controllers\AuthController@login')->name('login');
     Route::post('login-process', '\App\Http\Controllers\AuthController@loginProcess')->name('login-process');
@@ -38,7 +38,7 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 Route::group(['middleware' => ['web', 'user']], function () {
-    Route::get('dashboard', '\App\Http\Controllers\AccountController@dashboard')->name('dashboard');
+    Route::get('dashboard', '\App\Http\Controllers\SiteController@dashboard')->name('dashboard');
     
     Route::get('account/update', '\App\Http\Controllers\AccountController@update')->name('account/update');
     Route::post('account/save', '\App\Http\Controllers\AccountController@save')->name('account/save');
@@ -55,8 +55,8 @@ Route::group(['middleware' => ['web', 'user']], function () {
     Route::post('account/device-list', '\App\Http\Controllers\AccountController@deviceList')->name('account/device-list');
     Route::post('account/device-logout', '\App\Http\Controllers\AccountController@deviceLogout')->name('account/device-logout');
 
-    Route::get('account/activity', '\App\Http\Controllers\AccountController@activity')->name('account/activity');
-    Route::post('account/activity-list', '\App\Http\Controllers\AccountController@activityList')->name('account/activity-list');
+    Route::get('account/user-activity', '\App\Http\Controllers\AccountController@userActivity')->name('account/user-activity');
+    Route::post('account/user-activity-list', '\App\Http\Controllers\AccountController@userActivityList')->name('account/user-activity-list');
 });
 
 
@@ -95,8 +95,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
     Route::any('account/device-list', '\App\Http\Controllers\Admin\AccountController@deviceList')->name('admin/account/device-list');
     Route::any('account/device-logout', '\App\Http\Controllers\Admin\AccountController@deviceLogout')->name('admin/account/device-logout');
 
-    Route::get('account/activity', '\App\Http\Controllers\Admin\AccountController@activity')->name('admin/account/activity');
-    Route::any('account/activity-list', '\App\Http\Controllers\Admin\AccountController@logList')->name('admin/account/activity-list');
+    Route::get('account/user-activity', '\App\Http\Controllers\Admin\AccountController@activity')->name('admin/account/user-activity');
+    Route::any('account/user-activity-list', '\App\Http\Controllers\Admin\AccountController@logList')->name('admin/account/user-activity-list');
 
     Route::get('users', '\App\Http\Controllers\Admin\UserController@index')->name('admin/user');
     Route::any('user/list', '\App\Http\Controllers\Admin\UserController@list')->name('admin/user/list');

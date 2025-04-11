@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Helpers\General;
@@ -50,7 +51,7 @@ class TfaService
     public function checkOtp(int $otp, ?string $loginOtp): array
     {
         if (!$loginOtp) {
-            return ['status' => 0, 'message' => 'OTP is expired'];
+            return ['status' => 0, 'message' => 'OTP is invalid'];
         }
 
         $loginOtpParts = explode('_', $loginOtp);
@@ -73,7 +74,7 @@ class TfaService
      * @param string $type The type of OTP (default is 'tfa').
      * @return array The result of the OTP send operation.
      */
-    public function sendOTP(User $user,$template='otp'): array
+    public function sendOTP(User $user, $template = 'otp'): array
     {
         $otp = $this->generateOtp();
         $user->updateData(['otp' => $otp . '_' . time(), 'otp_failed' => 0]);
@@ -97,18 +98,17 @@ class TfaService
             return response()->json(['status' => 0, 'message' => 'Too many attempts, please try again later.']);
         }
 
-        if ($postData['type'] == 'forgot_password') {
+        if ($postData['type'] == 'tfa') {
             $user = auth()->user();
         } else {
-            $email = $this->decryptCode($postData['type']);
-            dd($email);
+            $email = $this->decryptCode($postData['code']);
             $user = User::where('email', $email)->first();
         }
 
         if ($user->status == 0) {
             return response()->json(['status' => 0, 'message' => 'Your Account is blocked']);
         }
-        return (new TfaService())->sendOTP($user , $template='forgot_password');
+        return (new TfaService())->sendOTP($user, 'otp');
     }
 
     /**
@@ -120,7 +120,7 @@ class TfaService
     public function verifyProcess(array $postData): array
     {
         $general = new General();
-        if ($general->rateLimit('tfa_verify')) {
+        if ($general->rateLimit('verify_tfa')) {
             return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
         }
 
@@ -133,12 +133,10 @@ class TfaService
         if ($postData['type'] == 'tfa') {
             $user = auth()->user();
         } else {
-           
-            $email = $this->decryptCode($postData['type']);
-          
+            $email = $this->decryptCode($postData['code']);
             $user = User::where('email', $email)->first();
         }
-       
+
         if ($user->status == 0) {
             return ['status' => 0, 'message' => 'Your Account is blocked'];
         }
@@ -157,6 +155,8 @@ class TfaService
                 $token = $_COOKIE[config('setting.app_uid') . '_token'] ?? null;
                 if ($token && !in_array($token, $ignoredDevices)) {
                     $ignoredDevices[] = $token;
+                    $ignoredDevices = array_filter($ignoredDevices);
+                    $ignoredDevices = array_unique($ignoredDevices);
                     $user->setData(['ignore_tfa_device' => implode(',', $ignoredDevices)]);
                 }
             }

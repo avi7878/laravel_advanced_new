@@ -54,6 +54,18 @@ class AuthController extends Controller
     }
 
     /**
+     * Process the OTP login.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function loginOtpProcess(Request $request)
+    {
+        return (new AuthService())->loginOtpProcess($request->only(['email', 'otp', 'step']));
+    }
+
+
+    /**
      * Log out the authenticated user and clear session data.
      *
      * @return RedirectResponse
@@ -67,27 +79,7 @@ class AuthController extends Controller
         return redirect('login')->withCookie(cookie()->forget(config('setting.app_uid') . '_user_token'));
     }
 
-    /**
-     * Process the OTP login.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function loginOtp()
-    {
-        return view('auth/login_otp'); 
-    }
 
-    /**
-     * Process the OTP login.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function loginOtpProcess(Request $request)
-    {
-        return (new AuthService())->loginOtpProcess($request->only(['email','otp','step']));
-    }
-    
 
     /**
      * Display the password forgot view.
@@ -99,7 +91,7 @@ class AuthController extends Controller
         return view('auth/password_forgot');
     }
 
-   /**
+    /**
      * Process password forgot request.
      *
      * @param Request $request
@@ -107,8 +99,8 @@ class AuthController extends Controller
      */
     public function passwordForgotProcess(Request $request)
     {
-      
-        return (new AuthService())->passwordForgotProcess($request->only(['email','otp','password','password_confirm','step']));
+
+        return (new AuthService())->passwordForgotProcess($request->only(['email', 'otp', 'password', 'password_confirm', 'step']));
     }
 
     // ----------------- Two-Factor Authentication (TFA) Methods -------------------
@@ -119,11 +111,11 @@ class AuthController extends Controller
      */
     public function verify(Request $request)
     {
-      
-        $type=$request->get('type');
-       
-        $code=$request->get('code','');
-        return view('auth/verify',compact('type','code'));
+
+        $type = $request->get('type');
+
+        $code = $request->get('code', '');
+        return view('auth/verify', compact('type', 'code'));
     }
 
     /** 
@@ -134,7 +126,7 @@ class AuthController extends Controller
      */
     public function verifyProcess(Request $request)
     {
-        return response()->json((new TfaService())->verifyProcess($request->only(['otp','type','code'])));
+        return response()->json((new TfaService())->verifyProcess($request->only(['otp', 'type', 'code', 'skip_tfa'])));
     }
 
     /**
@@ -144,13 +136,13 @@ class AuthController extends Controller
      */
     public function resendOTP(Request $request)
     {
-        return response()->json((new TfaService())->resendOTP($request->only(['type','code'])));
+        return response()->json((new TfaService())->resendOTP($request->only(['type', 'code'])));
     }
 
     // ----------------- Two-Factor Authentication (TFA) Methods END-------------------
 
-    
-    
+
+
     // Social Login methods
 
     /**
@@ -173,9 +165,8 @@ class AuthController extends Controller
     public function socialLoginCallback(string $type): RedirectResponse
     {
         $socialUser = Socialite::driver($type)->stateless()->user();
-        $user=(new User())->where('email',$socialUser->email)->first();
+        $user = (new User())->where('email', $socialUser->email)->first();
         Auth::login($user);
         return redirect($this->general->authRedirectUrl(config('setting.login_redirect_url')));
-        
     }
 }

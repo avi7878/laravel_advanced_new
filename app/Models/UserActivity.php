@@ -125,7 +125,7 @@ class UserActivity extends Model
                 'name' => $user->first_name . ' ' . $user->last_name,
                 'ip' => $ip,
                 'client' => $general->deviceName($client),
-                'location' => $$general->getIpLocation($ip),
+                'location' => $general->getIpLocation($ip),
             ]);
         }
 
@@ -140,7 +140,7 @@ class UserActivity extends Model
      */
     public function listAdmin($postData)
     {
-        $query = DB::table('user_activity')->select(['user_activity.created_at as created_at', 'user_activity.type As type', 'user_activity.ip', 'user_activity.client', 'user.first_name', 'user.email', 'user.last_name'])
+        $query = DB::table($this->table)->select(['user_activity.created_at as created_at', 'user_activity.type As type', 'user_activity.ip', 'user_activity.client', 'user.first_name', 'user.email', 'user.last_name'])
             ->join('user', 'user.id', '=', 'user_activity.user_id');
         $searchText = isset($postData['search']['value']) ? $postData['search']['value'] : '';
         if (strlen($searchText) > 2) {
@@ -196,7 +196,7 @@ class UserActivity extends Model
      */
     public function list(array $postData, int $userId): array
     {
-        $query = DB::table('log')
+        $query = DB::table($this->table)
             ->select('*')
             ->where('user_id', $userId);
 
@@ -209,7 +209,7 @@ class UserActivity extends Model
             $row->location = $general->getIpLocation($row->ip);
             $row->client = $general->deviceName($row->client);
             $row->type = $this->getType($row->type);
-            $row->created_at = date(config('setting.date_format'), $row->created_at);
+            $row->created_at = date(config('setting.date_time_format'), $row->created_at);
         }
 
         return $result;

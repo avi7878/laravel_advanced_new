@@ -10,46 +10,14 @@ use Illuminate\Http\Request;
 class AccountController extends Controller
 {
     /**
-     * Display the user dashboard.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function dashboard()
-    {
-        return view('account/dashboard');
-    }
-
-    /**
-     * Show the registration form.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function register()
-    {
-        return view('account/register');
-    }
-
-    /**
-     * Handle the registration process.
-     *
-     * @param Request $request The incoming request.
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function registerProcess(Request $request)
-    {
-        return response()->json((new AccountService())->registerProcess($request->all()));
-    }
-
-    /**
      * Display the account update form.
      *
      * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function update(Request $request)
+    public function update()
     {
-        $data = auth()->user();
-        return view('account/update', compact('data'));
+        return view('account/update', ['model' => auth()->user()]);
     }
 
     /**
@@ -69,9 +37,9 @@ class AccountController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function passwordChange(Request $request)
+    public function passwordChange()
     {
-        return view('account.change_password');
+        return view('account.change_password',['model' => auth()->user()]);
     }
 
     /**
@@ -92,8 +60,7 @@ class AccountController extends Controller
      */
     public function image()
     {
-        $model = auth()->user();
-        return view('account/image', compact('model'));
+        return view('account/component/image', ['model' => auth()->user()]);
     }
 
     /**
@@ -108,27 +75,6 @@ class AccountController extends Controller
     }
 
     /**
-     * Show TFA settings page.
-     */
-    public function tfa()
-    {
-        return view('account/tfa', ['data' => auth()->user()]);
-    }
-
-    /**
-     * Toggle TFA status.
-     *
-     * @return JsonResponse
-     */
-    public function tfaStatusChange()
-    {
-        $user = auth()->user();
-        $status_tfa=$user->getData()->status_tfa;
-        $user->save();
-        return response()->json(['status' => 1, 'next' => 'refresh', 'message' => $status_tfa ? 'Two Factor Authentication is enabled' : 'Two Factor Authentication is disabled']);
-    }
-
-    /**
      * Delete the current user's profile image.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -139,13 +85,46 @@ class AccountController extends Controller
     }
 
     /**
+     * Show TFA settings page.
+     */
+    public function tfa()
+    {
+        return view('account/tfa', ['model' => auth()->user()]);
+    }
+
+    /**
+     * Toggle TFA status.
+     *
+     * @return JsonResponse
+     */
+    public function tfaStatusChange()
+    {
+        $user = auth()->user();
+        $status_tfa=!$user->getData()->status_tfa;
+        $user->setData(['status_tfa' => $status_tfa]);
+        $user->save();
+        return response()->json(['status' => 1, 'next' => 'refresh', 'message' => $status_tfa ? 'Two Factor Authentication is enabled' : 'Two Factor Authentication is disabled']);
+    }
+
+    /**
+     * Revoke all trusted devices for the current user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function revokeAll()
+    {
+        return response()->json((new AccountService())->revokeAll2FADevices(auth()->user()));
+    }
+    
+
+    /**
      * Display the device management view.
      *
      * @return \Illuminate\View\View
      */
     public function device()
     {
-        return view('account/device');
+        return view('account/device',['model' => auth()->user()]);
     }
 
     /**
@@ -177,9 +156,9 @@ class AccountController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function activity()
+    public function userActivity()
     {
-        return view('account/activity');
+        return view('account/user_activity',['model' => auth()->user()]);
     }
 
     /**
@@ -188,18 +167,10 @@ class AccountController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logList(Request $request)
+    public function userActivityList(Request $request)
     {
         return response()->json((new UserActivity())->list($request->all(), auth()->id()));
     }
 
-    /**
-     * Revoke all trusted devices for the current user.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function revokeAll(Request $request)
-    {
-        return response()->json((new AccountService())->revokeAll2FADevices(auth()->user()));
-    }
+    
 }

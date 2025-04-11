@@ -7,7 +7,7 @@ Log
 <!-- Content -->
 <?= view('admin/account/account_block'); ?>
 <!-- Ajax Sourced Server-side -->
-<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Log /</span> List</h4>
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Activity /</span> List</h4>
 <!-- Invoice List Table -->
 <div class="card">
   <div class="card-datatable table-responsive">
@@ -33,10 +33,14 @@ Log
 <script>
   documentReady(function() {
     datatableObj = $('#data-table').DataTable({
-      ajax: dataTableAjax({
-        url: '{{route("admin/account/log-list")}}',
-        method: 'post'
-      }),
+      ajax: {
+        url: '{{route("admin/account/user-activity-list")}}',
+        method: 'post',
+        dataSrc: 'data',
+        data: {
+          '_token': CSRF_TOKEN
+        },
+      },
       columns: [
 
         {

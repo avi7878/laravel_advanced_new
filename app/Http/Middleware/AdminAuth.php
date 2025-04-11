@@ -21,7 +21,6 @@ class AdminAuth
      {
          $auth =Auth::guard();
          if ($auth->guest()) {
-             // dd(1);
              if ($request->ajax()) {
                  return Response::make("unauthorized");
              } else {
@@ -37,7 +36,7 @@ class AdminAuth
                      return redirect('/')->with('error', 'You are not authorized');
                  }
              }
-             if(session('tfa_verify')){
+             if(session('verify_tfa')){
                  if ($request->ajax()) {
                     //  dd(21);
                      return Response::make("unauthorized");

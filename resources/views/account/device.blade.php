@@ -3,7 +3,7 @@
 Device
 @endsection
 @section('content')
-{{ view('account/component/account_block'); }}
+{{ view('account/component/account_block',compact('model')) }}
 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Device /</span> List</h4>
 <!-- Invoice List Table -->
 <div class="card">

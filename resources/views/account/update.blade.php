@@ -3,7 +3,7 @@
 Profile
 @endsection
 @section('content')
-{{ view('account/component/account_block',compact('data')); }}
+{{ view('account/component/account_block',compact('model')) }}
 <div class="col-xl">
   <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -14,16 +14,16 @@ Profile
         {{ csrf_field() }}
         <div class="mb-3">
           <label class="body" for="basic-default-fullname">First Name <span class="star">*</span></label>
-          <input type="text" value="{{ $data->first_name }}" name="first_name" class="form-control" id="first_name" placeholder="Enter First Name" required="required" maxlength="128">
+          <input type="text" value="{{ $model->first_name }}" name="first_name" class="form-control" id="first_name" placeholder="Enter First Name" required="required" maxlength="128">
         </div>
         <div class="mb-3">
           <label class="body" for="basic-default-company">Last Name <span class="star">*</span></label>
-          <input type="text" value="{{ $data->last_name }}" name="last_name" class="form-control" id="last_name" placeholder="Enter Last Name" required="required" maxlength="128">
+          <input type="text" value="{{ $model->last_name }}" name="last_name" class="form-control" id="last_name" placeholder="Enter Last Name" required="required" maxlength="128">
         </div>
         <div class="mb-3">
           <label class="body" for="basic-default-email">Email <span class="star">*</span></label>
 
-          <input type="email" value="{{ $data->email }}" name="email" class="form-control" id="email" placeholder="Enter Email" required="required">
+          <input type="email" value="{{ $model->email }}" name="email" class="form-control" id="email" placeholder="Enter Email" required="required">
 
         </div>
         <button type="submit" class="btn btn-primary text-white" style="background-color:#685dd8;">Submit</button>

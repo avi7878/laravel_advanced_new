@@ -27,8 +27,8 @@ class UserAuth
                 return redirect('login')->with('error', 'You are not authorized');
             }
         }else{
-            if(session('tfa_verify')){
-                return redirect('auth/tfa-verify?type=login');
+            if(session('verify_tfa')){
+                return redirect('auth/verify?type=tfa');
             }
         }
 

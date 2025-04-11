@@ -1,36 +1,29 @@
-@extends('admin.layouts.main')
-
+@extends('layouts.main')
 @section('title', 'Profile')
-
 @section('content')
-@php
-/** @var \App\Models\User|null $user */
-$user = auth()->user();
-@endphp
 <div class="row">
     <div class="col-md-12">
         <div class="row">
-            @include('admin/account/account_block')
+            {{ view('admin/account/component/account_block',compact('model')) }}
         </div>
         <div class="col-lg-12 col-md-12">
             <div class="edit-profile_wrapper">
                 <div class="main-card mb-3 card">
                     <div class="card-header">
                         <h5>Two Factor Authentication</h5>
-                        @if($user && $user->getData()->status_tfa)
+                        @if($model && $model->getData()->status_tfa)
                         <b>Your Account Two Factor Authentication is Enabled</b><br><br>
                         <button
-                            data-action="{{ route('admin/account/tfa-status-change') }}"
+                            data-action="{{ route('account/tfa-status-change') }}"
                             onclick="app.confirmAction(this);"
                             class="noroute btn btn-primary text-white"
                             style="background-color:#685dd8;">
                             Disable
                         </button>
-                        
                         @else
                         <b>Your Account Two Factor Authentication is Disabled</b><br><br>
                         <button
-                            data-action="{{ route('admin/account/tfa-status-change') }}"
+                            data-action="{{ route('account/tfa-status-change') }}"
                             onclick="app.confirmAction(this);"
                             class="noroute btn btn-primary text-white"
                             style="background-color:#685dd8;">
@@ -61,7 +54,7 @@ $user = auth()->user();
                                 <h6>Revoke trusted status from your device that skips 2-Step Verification.</h6>
                                 <button
                                     onclick="app.confirmAction(this);"
-                                    data-action="{{ route('account/revoke-all') }}"
+                                    data-action="{{ route('admin/account/revoke-all') }}"
                                     class="btn btn-primary text-white"
                                     style="background-color: #685dd8;"
                                     title="Revoke All">
@@ -78,6 +71,7 @@ $user = auth()->user();
 </div>
 @endsection
 
+
 @push('scripts')
 <script type="text/javascript">
     documentReady(function() {
@@ -89,3 +83,4 @@ $user = auth()->user();
     });
 </script>
 @endpush
+
