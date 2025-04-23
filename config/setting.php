@@ -1,8 +1,8 @@
 <?php return [
     'app_uid'=>env('APP_UID','laravel'),
     'app_name'=>'Laravel',
-    'app_favicon'=>'upload/setting/favicon.png',
-    'app_logo'=>'upload/setting/logo.png',
+    'app_favicon'=>'favicon.png',
+    'app_logo'=>'logo.png',
 
     'date_format'=>'Y-m-d',
     'date_time_format'=>'Y-m-d h:i A',

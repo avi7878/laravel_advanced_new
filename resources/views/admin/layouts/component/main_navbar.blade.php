@@ -7,25 +7,15 @@
 
     <div class="navbar-nav-right  d-flex justify-content-between align-items-center" id="navbar-collapse">
         <div class="navbar-nav align-items-center">
-            <div class="nav-item d-flex align-items-center w-60">
+            <div class="nav-item d-flex align-items-center w-100">
               <i class="bx bx-search fs-4 ms-2 text-muted"></i>
               <input  type="text"  class="form-control border-0 shadow-none form-control-search " 
                 placeholder="Search" aria-label="Search" 
               />
             </div>
           </div>
-        <!-- Search -->
-        {{-- <div class="navbar-nav align-items-center">
-            <div class="nav-item navbar-search-wrapper mb-0">
-              <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
-                <span class="d-inline-block text-body-secondary fw-normal" id="autocomplete"></span>
-              </a>
-            </div>
-          </div> --}}
-      
-        <!-- /Search -->
 
-        <ul class="navbar-nav flex-row align-items-center ms-auto">
+        <ul class="navbar-nav flex-row align-items-center ms-md-auto">
             <!-- User -->
             <!-- Style Switcher -->
             <li class="nav-item dropdown me-2 me-xl-0">

@@ -312,7 +312,7 @@ class General
      */
     public function getNoFile($type = 'setting')
     {
-        return \Illuminate\Support\Facades\Storage::url('no-image.jpg');
+        return \Illuminate\Support\Facades\Storage::url('setting/no-image.jpg');
     }
 
     /**

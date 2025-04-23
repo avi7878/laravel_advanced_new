@@ -3,7 +3,7 @@
         <a href="{{ route('admin/account/update') }}" class="app-brand-link">
             <span class="app-brand-logo demo"> 
             <span class="avatar me-2 ">
-                <img src="{{ config('setting.app_logo') }}" alt="{{ Config::get('setting.app_name') }}" class="rounded h-px-44" />
+                <img src="{{ $general->getFileUrl(config('setting.app_logo')) }}" alt="{{ Config::get('setting.app_name') }}" class="rounded h-px-44" />
             </span>
             </span>
             <span class="app-brand-text demo menu-text fw-bold ms-2">Demo</span>
@@ -11,7 +11,6 @@
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
             <i class="icon-base bx bx-chevron-left"></i>
-            {{-- <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i> --}}
         </a>
     </div>
     <div class="menu-inner-shadow"></div>
@@ -96,8 +95,7 @@
             </ul>
         </li>
         @endif
-
-
+        
         <li class="menu-item">
             <a href="{{ route('admin/auth/logout') }}" class="menu-link noroute">
                 <i class="menu-icon icon-base bx bx-log-out "></i>
