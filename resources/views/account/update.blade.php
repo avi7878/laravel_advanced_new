@@ -10,7 +10,7 @@ Profile
       <h5 class="mb-0">Profile</h5>
     </div>
     <div class="card-body">
-      <form action="account/save" method="post" id="ajax-form">
+      <form action="account/update-process" method="post" id="ajax-form">
         {{ csrf_field() }}
         <div class="mb-3">
           <label class="body" for="basic-default-fullname">First Name <span class="star">*</span></label>
@@ -22,9 +22,11 @@ Profile
         </div>
         <div class="mb-3">
           <label class="body" for="basic-default-email">Email <span class="star">*</span></label>
-
           <input type="email" value="{{ $model->email }}" name="email" class="form-control" id="email" placeholder="Enter Email" required="required">
-
+        </div>
+        <div class="mb-3">
+          <label class="body" for="basic-default-email">Phone <span class="star">*</span></label>
+          <input type="text" value="{{ $model->phone }}" name="phone" class="form-control" id="phone" placeholder="Enter Phone" required="required">
         </div>
         <button type="submit" class="btn btn-primary text-white" style="background-color:#685dd8;">Submit</button>
       </form>

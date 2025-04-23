@@ -48,7 +48,7 @@
             'type': selectedValue  
         };
         $.ajax({
-            url: "admin/get-chart-user" ,
+            url: "admin/site/get-chart-user" ,
             method: 'POST',
             data: postData,
             dataType: 'json',

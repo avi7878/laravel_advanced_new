@@ -3,7 +3,7 @@
 Change password
 @endsection
 @section('content')
-<?= view('admin/account/account_block'); ?>
+<?= view('admin/account/component/account_block'); ?>
 <style>
     .star {
         color: red;

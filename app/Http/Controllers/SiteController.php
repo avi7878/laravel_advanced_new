@@ -13,6 +13,15 @@ use Illuminate\Http\Request;
  */
 class SiteController extends Controller
 {
+    /**
+     * Show the registration form.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function dashboard()
+    {
+        return view('site/dashboard');
+    }
 
     /**
      * Show the registration form.

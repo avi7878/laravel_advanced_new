@@ -5,6 +5,15 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+function getTimezone(){
+    $tz=isset($_COOKIE[env('APP_UID').'_tz'])?$_COOKIE[env('APP_UID').'_tz']:'UTC';
+    if($tz=='Asia/Calcutta'){
+        $tz="Asia/Kolkata";
+    }
+    $tz= in_array($tz, timezone_identifiers_list()) ?$tz:'UTC';
+    return $tz;
+}
+
 // Determine if the application is in maintenance mode...
 if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
     require $maintenance;

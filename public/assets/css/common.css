@@ -158,9 +158,9 @@ section.panel.panel-info {
 }
 
 .btn-primary {
-    color: #fff;
+    /* color: #fff;
     background-color: #607980;
-    border-color: #607980;
+    border-color: #607980; */
 }
 
 .btn-primary:hover {

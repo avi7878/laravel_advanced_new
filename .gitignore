@@ -48,3 +48,5 @@ composer.lock
 
 #extra
 *.zip
+/public/sitemap.xml
+/public/theme_old

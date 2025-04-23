@@ -43,7 +43,7 @@ Dashboard
         <div class="col-md-3 col-6">
           <div class="d-flex align-items-center">
             <div class="badge rounded-pill bg-label-primary me-3 p-2">
-              <i class="ti ti-chart-pie-2 ti-sm"></i>
+              <i class="icon-base bx bxs-pie-chart icon-md "></i>
             </div>
             <div class="card-info">
               <h5 class="mb-0">{{ $totalUser }}</h5>
@@ -54,7 +54,7 @@ Dashboard
         <div class="col-md-3 col-6">
           <div class="d-flex align-items-center">
             <div class="badge rounded-pill bg-label-info me-3 p-2">
-              <i class="ti ti-users ti-sm"></i>
+              <i class="icon-base bx bx-user icon-md"></i>
             </div>
             <div class="card-info">
               <h5 class="mb-0">{{ $activeUser }}</h5>
@@ -65,7 +65,7 @@ Dashboard
         <div class="col-md-3 col-6">
           <div class="d-flex align-items-center">
             <div class="badge rounded-pill bg-label-danger me-3 p-2">
-              <i class="ti ti-shopping-cart ti-sm"></i>
+              <i class="icon-base bx bx-cart icon-md"></i>
             </div>
             <div class="card-info">
               <h5 class="mb-0">{{ $deactiveUser }}</h5>

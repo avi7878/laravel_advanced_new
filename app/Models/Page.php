@@ -81,7 +81,7 @@ class Page extends Model
         // Add update link if user has permission
         if ($sessionUser && $sessionUser->hasPermission('admin/page/update')) {
             $actionLinks .= sprintf(
-                '<a href="admin/page/update?id=%d" class="text-body pjax" title="Update"><i class="ti ti-edit ti-sm me-2"></i></a>',
+                '<a href="admin/page/update?id=%d" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>',
                 $row->id
             );
         }
@@ -89,7 +89,7 @@ class Page extends Model
         // Add view link if user has permission
         if ($sessionUser && $sessionUser->hasPermission('page/')) {
             $actionLinks .= sprintf(
-                '<a target="_blank" href="page/%s" class="text-body" title="View"><i class="ti ti-eye ti-sm me-2"></i></a>&nbsp;',
+                '<a target="_blank" href="page/%s" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;',
                 htmlspecialchars($row->slug, ENT_QUOTES, 'UTF-8')
             );
         }

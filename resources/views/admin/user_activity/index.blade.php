@@ -45,7 +45,7 @@ Log
     documentReady(function() {
         datatableObj = $('#data-table').DataTable({
             ajax: dataTableAjax({
-                url: '{{route("admin/activity/list")}}',
+                url: '{{route("admin/user-activity/list")}}',
                 method: 'post'
             }),
             columns: [{

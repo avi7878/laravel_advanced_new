@@ -42,7 +42,7 @@ Route::group(['middleware' => ['web', 'user']], function () {
     Route::get('dashboard', '\App\Http\Controllers\SiteController@dashboard')->name('dashboard');
     
     Route::get('account/update', '\App\Http\Controllers\AccountController@update')->name('account/update');
-    Route::post('account/save', '\App\Http\Controllers\AccountController@save')->name('account/save');
+    Route::post('account/update-process', '\App\Http\Controllers\AccountController@updateProcess')->name('account/update-process');
     Route::get('account/image', '\App\Http\Controllers\AccountController@image')->name('account/image');
     Route::post('account/image-save', '\App\Http\Controllers\AccountController@imageSave')->name('account/image-save');
     Route::post('account/image-delete', '\App\Http\Controllers\AccountController@imageDelete')->name('account/image-delete');
@@ -96,8 +96,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
     Route::any('account/device-list', '\App\Http\Controllers\Admin\AccountController@deviceList')->name('admin/account/device-list');
     Route::any('account/device-logout', '\App\Http\Controllers\Admin\AccountController@deviceLogout')->name('admin/account/device-logout');
 
-    Route::get('account/user-activity', '\App\Http\Controllers\Admin\AccountController@activity')->name('admin/account/user-activity');
-    Route::any('account/user-activity-list', '\App\Http\Controllers\Admin\AccountController@logList')->name('admin/account/user-activity-list');
+    Route::get('account/user-activity', '\App\Http\Controllers\Admin\AccountController@userActivity')->name('admin/account/user-activity');
+    Route::any('account/user-activity-list', '\App\Http\Controllers\Admin\AccountController@userActivityList')->name('admin/account/user-activity-list');
 
     Route::get('users', '\App\Http\Controllers\Admin\UserController@index')->name('admin/user');
     Route::any('user/list', '\App\Http\Controllers\Admin\UserController@list')->name('admin/user/list');
@@ -137,8 +137,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
     Route::get('setting/cache-clear', '\App\Http\Controllers\Admin\SettingController@cacheClear')->name('admin/setting/cache-clear');
     Route::post('setting/mailprocess', '\App\Http\Controllers\Admin\SettingController@mailprocess')->name('admin/setting/mailprocess');
 
-    Route::get('activity', '\App\Http\Controllers\Admin\AccountActivityController@index')->name('admin/activity');
-    Route::post('activity/list', '\App\Http\Controllers\Admin\AccountActivityController@list')->name('admin/activity/list');
+    Route::get('user-activity', '\App\Http\Controllers\Admin\UserActivityController@index')->name('admin/user-activity');
+    Route::post('user-activity/list', '\App\Http\Controllers\Admin\UserActivityController@list')->name('admin/user-activity/list');
 
     Route::get('device', '\App\Http\Controllers\Admin\DeviceController@index')->name('admin/device');
     Route::post('device/list', '\App\Http\Controllers\Admin\DeviceController@list')->name('admin/device/list');

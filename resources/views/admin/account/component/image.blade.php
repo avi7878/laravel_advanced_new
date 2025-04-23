@@ -7,7 +7,7 @@
     <div class="col-md-12 text-center">
         <div id="file-input-container" method="POST">
             <input type='file' onchange="imageCrop.setCropFile(this.files[0])" style="display:none" accept="image/png, image/gif, image/jpeg, image/webp , image/jpg">
-            <button type="button" class="btn btn-secondary file-btn fdgmage" onclick="$(this).prev().click()"><i class="fa fa-folder-open me-1" aria-hidden="true"> </i>Choose File</button>
+            <button type="button" class="btn btn-secondary file-btn fdgmage" onclick="$(this).prev().click()"><i class="mx-1 icon-base bx bx-upload" aria-hidden="true"> </i>Choose File</button>
         </div>
         <div class="image-crop-box" style="max-width:200%;">
             <img src="{{ $general->getFileUrl(@$model->image,'profile'); }}" id="image-crop">

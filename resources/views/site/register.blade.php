@@ -32,6 +32,11 @@ Register Your Account
                             <input type="text" class="form-control" id="last_name" maxlength="255" name="last_name" required placeholder="Enter your last name"  />
                         </div>
                         <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number <span class="star">*</span></label>
+                            <input type="number" class="form-control" id="phone" maxlength="255" name="phone" required placeholder="Enter your Phone Number"  />
+                        </div>
+                        
+                        <div class="mb-3">
                             <label for="email" class="form-label">Email <span class="star">*</span></label>
                             <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email" />
                         </div>
@@ -87,6 +92,10 @@ Register Your Account
         $('#ajax-form').validate({
             rules: 
             {
+                phone :{
+                    required: true, 
+                    minlength: 10,
+                },
                 email: {
                     required: true,
                     email: true
@@ -104,6 +113,11 @@ Register Your Account
                 }
             },
             messages: {
+                
+                phone: {
+                    required: "Please enter your phone number.",
+                    minlength: "Please enter at least 10 digits."
+                },
                 email: 
                 {
                     required: "Please Enter Your Email.",

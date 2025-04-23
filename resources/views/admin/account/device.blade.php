@@ -5,7 +5,7 @@ Device
 @section('content')
 
 
-<?= view('admin/account/account_block'); ?>
+<?= view('admin/account/component/account_block'); ?>
   <!-- Content -->
 
 

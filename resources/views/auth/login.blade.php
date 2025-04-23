@@ -3,17 +3,6 @@
 Login To Your Account
 @endsection
 @section('content')
-<!-- /.login-box -->
-<style>
-  .star {
-    color: red;
-  }
-
-  .authentication-inner {
-    max-width: 460px;
-    margin: auto;
-  }
-</style>
 
 <div class="container-xxl">
   <div class="authentication-wrapper authentication-basic container-p-y">
@@ -23,7 +12,7 @@ Login To Your Account
         <div class="card-body">
           <!-- Logo -->
           <div class="app-brand justify-content-center mb-6">
-            <a href="admin/auth/login" class="app-brand-link">
+            <a href="login" class="app-brand-link">
               <span class="app-brand-logo demo">
                 <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 200%;">
               </span>
@@ -36,25 +25,13 @@ Login To Your Account
           <form id="login-form" class="mb-4" action="{{ route('login-process') }}" method="POST">
             @csrf
             <div class="mb-6">
-              <label for="email" class="form-label">Email or Username</label>
-              <input
-                type="text"
-                class="form-control"
-                id="email"
-                name="email"
-                placeholder="Enter your email or username"
-                autofocus />
+              <label for="email" class="form-label">Email or Phone</label>
+              <input type="text" class="form-control" id="email" name="email" placeholder="Enter your Email or Phone" autofocus />
             </div>
             <div class="mb-6 form-password-toggle">
               <label class="form-label" for="password">Password</label>
               <div class="input-group input-group-merge">
-                <input
-                  type="password"
-                  id="password"
-                  class="form-control"
-                  name="password"
-                  placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                  aria-describedby="password" />
+                <input type="password" id="password" class="form-control" name="password" aria-describedby="password" />
                 <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
               </div>
             </div>
@@ -64,7 +41,7 @@ Login To Your Account
                   <input class="form-check-input" type="checkbox" id="remember-me" checked />
                   <label class="form-check-label" for="remember-me"> Remember Me </label>
                 </div>
-                <a href="admin/auth/password-forgot">
+                <a href="site/password-forgot">
                   <p class="mb-0">Forgot Password?</p>
                 </a>
               </div>
@@ -100,7 +77,7 @@ Login To Your Account
           </form>
           <p class="text-center">
             <span>New on our platform?</span>
-            <a href="account/register">
+            <a href="register">
               <span>Create an account</span>
             </a>
           </p>
@@ -114,27 +91,21 @@ Login To Your Account
 @push('scripts')
 <script>
   documentReady(function() {
-    $('#ajax-form').validate({
+    $('#login-form').validate({
       rules: {
         email: {
           required: true,
-          email: true
         },
         password: {
-          minlength: 6,
-          maxlength: 32,
           required: true,
         },
       },
       messages: {
         email: {
-          required: "Please Enter Your Email.",
-          email: "Please enter a valid email address."
+          required: "Please Enter Your Email/Phone.",
         },
         password: {
           required: "Please Enter Your Password",
-          minlength: "Please enter at least 6 characters.",
-          maxlength: "Please enter no more than 32 characters.",
         }
       },
     })

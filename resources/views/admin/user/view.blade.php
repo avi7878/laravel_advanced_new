@@ -32,51 +32,71 @@ User View
       <div class="card-body">
         <div class="user-avatar-section">
           <div class="d-flex align-items-center flex-column">
-              @dd($model->image)
+            <?php if (!empty($model->image)) { ?>
+                <img class="img-fluid rounded mb-3 pt-1 mt-4" src="{{ $general->getFileUrl($model->image,'profile') }} "height="100" width="100" alt="User avatar" />
+            <?php } else { ?>
+                <img class="img-fluid rounded mb-3 pt-1 mt-4" src="{{ $general->getNoFile() }}" height="100" width="100" alt="User avatar" />
+            <?php  } ?>
+            {{-- @dd($model->image)
             <img class="img-fluid rounded mb-3 pt-1 mt-4" src="{{ assets($general->getFileUrl($model->image,'profile')) }}" height="100" width="100" alt="User avatar" />
-            <div class="user-info text-center">
-              <h4 class="mb-2">{{ $model->first_name.' '.$model->last_name }}</h4>
+            --}}    
+          <div class="user-info text-center">
+              <h4 class="mb-2">{{  $model->first_name.' '.$model->last_name }}</h4>
               <span class="badge bg-label-secondary mt-1">Author</span>
             </div>
           </div>
         </div>
-        <p class="mt-4 small text-uppercase text-muted">Details</p>
+        <small class="card-text text-uppercase text-body-secondary small">Details</small>
+       
         <div class="info-container">
-          <ul class="list-unstyled">
-            <li class="mb-2">
-              <span class="fw-semibold me-1">Username:</span>
+          <ul class="list-unstyled my-3 py-1">
+            <li class="d-flex align-items-center mb-4">
+              <i class="icon-base bx bx-user"></i>
+              <span class="fw-medium mx-2">Username:</span>
               <span>{{ $model->first_name.' '.$model->last_name }}</span>
             </li>
-            <li class="mb-2 pt-1">
-              <span class="fw-semibold me-1">Email:</span>
+            <li class="d-flex align-items-center mb-4">
+              <i class="icon-base bx bx-envelope"></i>
+              <span class="fw-medium mx-2">Email:</span>
               <span>{{ $model->email }}</span>
             </li>
-            <li class="mb-2 pt-1">
-              <span class="fw-semibold me-1">Status:</span>
+            <li class="d-flex align-items-center mb-4">
+              <i class="icon-base bx bx-phone"></i>
+              <span class="fw-medium mx-2">Phone Number:</span>
+              <span>{{ $model->phone }}</span>
+            </li>
+            <li class="d-flex align-items-center mb-4">
+              <i class="icon-base bx bx-check"></i>
+              <span class="fw-medium mx-2">Status:</span>
               @if($model->status == 0)
               <span class="badge rounded-pill bg-label-danger">Inactive</span>
               @else($model->status == 1)
               <span class="badge rounded-pill bg-label-success">Active</span>
               @endif
             </li>
-            <li class="mb-2 pt-1">
-              <span class="fw-semibold me-1">Created at:</span>
+            <li class="d-flex align-items-center mb-4">
+              <i class="icon-base bx bx-time"></i>
+              <span class="fw-medium mx-2">Created at:</span>
               <span>{{ date('Y-m-d h:i A', strtotime($model->created_at)); }}</span>
             </li>
-            <li class="mb-2 pt-1">
-              <span class="fw-semibold me-1">Update at:</span>
+            <li class="d-flex align-items-center mb-4">
+              <i class="icon-base bx bx-time-five"></i>
+              <span class="fw-medium mx-2">Update at:</span>
               <span>{{ date('Y-m-d h:i A', strtotime($model->update_at)); }}</span>
             </li>
-            <li class="mb-2 pt-1">
-              <span class="fw-semibold me-1">Time Zone:</span>
+            <li class="d-flex align-items-center mb-4">
+              <i class="icon-base bx bx-timer"></i>
+              <span class="fw-medium mx-2">Time Zone:</span>
               <span>{{ $model->timezone }}</span>
             </li>
-            <li class="mb-2 pt-1">
-              <span class="fw-semibold me-1">Register Ip:</span>
-              <span>{{ $model->getData()->registered_ip }}</span>
+            <li class="d-flex align-items-center mb-4">
+              <i class="icon-base bx bx-registered"></i>
+              <span class="fw-medium mx-2">Register Ip:</span>
+              <span class="small">{{ $model->getData()->registered_ip }}</span>
             </li>
-            <li class="pt-1">
-              <span class="fw-semibold me-1">Country:</span>
+            <li class="d-flex align-items-center mb-4">
+              <i class="icon-base bx bx-flag"></i>
+              <span class="fw-medium mx-2">Country:</span>
               <span>{{ $model->country }}</span>
             </li>
           </ul>

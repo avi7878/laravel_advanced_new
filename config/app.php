@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => isset($_COOKIE['tz']) && in_array($_COOKIE['tz'], timezone_identifiers_list())?$_COOKIE['tz']:'UTC',
+    'timezone' => getTimezone(),
 
     /*
     |--------------------------------------------------------------------------

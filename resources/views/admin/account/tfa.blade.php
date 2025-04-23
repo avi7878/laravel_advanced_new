@@ -1,6 +1,7 @@
 @extends('layouts.main')
 @section('title', 'Profile')
 @section('content')
+
 <div class="row">
     <div class="col-md-12">
         <div class="row">
@@ -54,7 +55,7 @@
                                 <h6>Revoke trusted status from your device that skips 2-Step Verification.</h6>
                                 <button
                                     onclick="app.confirmAction(this);"
-                                    data-action="{{ route('admin/account/revoke-all') }}"
+                                    data-action="{{ route('account/revoke-all') }}"
                                     class="btn btn-primary text-white"
                                     style="background-color: #685dd8;"
                                     title="Revoke All">

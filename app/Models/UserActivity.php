@@ -178,7 +178,7 @@ class UserActivity extends Model
             $result['data'][$key]->device = $deviceName;
             $result['data'][$key]->type = $this->getType($row->type);
             $result['data'][$key]->created_at = date(config('setting.date_time_format'), $row->created_at);
-            $result['data'][$key]->action = '<button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
+            $result['data'][$key]->action = '<button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
             <div class="dropdown-menu">
                 <label class="dropdown-item">Ip: ' . $row->ip . '</label>
                 <label class="dropdown-item">Created At: ' . $row->created_at . '</label>

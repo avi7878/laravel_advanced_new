@@ -225,8 +225,8 @@ class Device extends Model
             $result['data'][$key]->location = $general->getIpLocation($row->ip);
             $result['data'][$key]->client = (new General())->deviceName($row->client) . ' ' . ($row->device_uid == @$_COOKIE[config("setting.app_uid") . '_token'] ? ' (This Device)' : '');
             $result['data'][$key]->last_activity = date(config('setting.date_format'), @$row->last_activity ? $row->last_activity : $row->updated_at);
-            $result['data'][$key]->action = '<button style="border: none; background: none;"  onclick="app.confirmAction(this);" data-action="account/device-logout?id='.$row->id .'"  class="text-body" title="logout"><i class="ti ti-logout me-2 ti-sm"></i></button>';
-        }
+            $result['data'][$key]->action = '<button style="border: none; background: none;"  onclick="app.confirmAction(this);" data-action="account/device-logout?id='.$row->id .'"  class="text-body pjax" title="logout"><i class="bx bx-log-out icon-base"></i></button>';
+        } 
         return $result;
     }
 
@@ -271,7 +271,7 @@ class Device extends Model
             $result['data'][$key]->action = '';
             if ($sessionUser->hasPermission('admin/device/logout')) {
                 $result['data'][$key]->action .= '
-                <button style="border: none; background: none;" onclick="app.confirmAction(this);" data-action="admin/device/logout?id=' . $row->deviceId . '" class="text-body" title="logout"><i class="ti ti-logout me-2 ti-sm"></i></button>';
+                <button style="border: none; background: none;" onclick="app.confirmAction(this);" data-action="admin/device/logout?id=' . $row->deviceId . '" class="text-body pjax" title="logout"><i class="bx bx-log-out icon-base"></i></button>';
             }
         }
         return $result;

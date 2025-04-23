@@ -78,28 +78,7 @@ class AuthController extends Controller
 
 
 
-    /**
-     * Display the password forgot view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function passwordForgot()
-    {
-        return view('auth/password_forgot');
-    }
-
-    /**
-     * Process password forgot request.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function passwordForgotProcess(Request $request)
-    {
-
-        return (new AuthService())->passwordForgotProcess($request->only(['email', 'otp', 'password', 'password_confirm', 'step']));
-    }
-
+   
     // ----------------- Two-Factor Authentication (TFA) Methods -------------------
     /**
      * Show the TFA verification page.
@@ -121,7 +100,7 @@ class AuthController extends Controller
      */
     public function verifyProcess(Request $request)
     {
-        return response()->json((new TfaService())->verifyProcess($request->only(['otp', 'skip_tfa'])));
+        return response()->json((new TfaService())->verifyProcess($request->only(['otp', 'skip_tfa', 'type'])));
     }
 
     /**
@@ -160,6 +139,10 @@ class AuthController extends Controller
     public function socialLoginCallback(string $type): RedirectResponse
     {
         $socialUser = \Laravel\Socialite\Facades\Socialite::driver($type)->stateless()->user();
+        $user = User::where(function ($query) use ($socialUser) {
+            $query->where('email', $socialUser->email)
+                ->orWhere("phone", $socialUser->phone);
+        })->where('type', 1)->first();
         $user = (new User())->where('email', $socialUser->email)->first();
         Auth::login($user);
         return redirect($this->general->authRedirectUrl(config('setting.login_redirect_url')));

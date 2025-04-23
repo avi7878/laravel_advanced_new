@@ -33,6 +33,7 @@ class AccountService
         $validator = Validator::make($postData, [
             'first_name' => 'required|alpha|max:255',
             'last_name' => 'required|alpha|max:255',
+            'phone' => 'required|digits:10|numeric',
             'email' => 'required|email|unique:user,email',
             'password' => [
                 'required',
@@ -55,6 +56,7 @@ class AccountService
             'first_name' => $postData['first_name'],
             'last_name' => $postData['last_name'],
             'email' => $postData['email'],
+            'phone' => $postData['phone'],
             'password' => (new AuthService())->encryptPassword($postData['password']),
             'country' => $general->getIpInfoCountry($ip),
             'status'      => 1,
@@ -96,7 +98,7 @@ class AccountService
         if ($validator->fails()) {
             return ['status' => 0, 'message' => $validator->errors()->first()];
         }
-        $tfaService=(new TfaService());
+        $tfaService = (new TfaService());
         $email = $tfaService->decryptCode($postData['code']);
         $user = User::where('email', $email)->first();
 
@@ -154,7 +156,11 @@ class AccountService
             return ['status' => 0, 'message' => $validator->errors()->first()];
         }
 
-        $user = User::where('email', $postData['email'])->first();
+        $user = User::where(function ($query) use ($postData) {
+            $query->where('email', $postData['email'])
+                ->orWhere("phone", $postData['email']);
+        })->first();
+
         if (!$user) {
             return ['status' => 0, 'message' => 'Email Not Valid'];
         }
@@ -168,6 +174,7 @@ class AccountService
         if ($userData->otp_failed >= config('setting.login_max_attempt')) {
             return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
         }
+
         $result = $tfaService->checkOtp($postData['otp'], $userData->otp);
         if (!$result['status']) {
             $user->updateData(['otp_failed', $userData->otp_failed + 1]);
@@ -178,7 +185,7 @@ class AccountService
             return ['status' => 1, 'message' => 'Otp is valid', 'next'  => 'step_3'];
         } else {
             $user->update([
-                'password' => $this->encryptPassword($postData['password']),
+                'password' => (new AuthService())->encryptPassword($postData['password']),
                 'data' => $user->setData(['otp', '']),
             ]);
             return ['status' => 1, 'message' => 'Password reset successfully. You can now log in', 'next' => 'redirect', 'url' => 'login'];
@@ -192,11 +199,12 @@ class AccountService
      * @param User $user
      * @return array
      */
-    public function save(Request $request, User $user): array
+    public function updateProcess(Request $request, User $user): array
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|alpha',
             'last_name' => 'required|alpha',
+            'phone' => 'required',
             'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i',
         ]);
 
@@ -209,8 +217,13 @@ class AccountService
         $user->update([
             'first_name' => $request->input('first_name'),
             'last_name' => $request->input('last_name'),
-            'email' => $request->input('email')
         ]);
+
+        if($request->input('phone') != $user->phone || $request->input('email') != $user->email) {
+            $user->updateData(['new_phone'=>$request->input('phone'),'new_email'=>$request->input('email')]);
+            (new \App\Services\TfaService())->sendOTP($user, 'otp');
+            return ['status' => 1, 'message' => 'Account Updated Successfully', 'next' => 'redirect', 'url' => 'auth/verify?type=new_email'];
+        }
 
         return ['status' => 1, 'message' => 'Account Updated Successfully', 'next' => 'reload'];
     }

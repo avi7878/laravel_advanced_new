@@ -102,7 +102,9 @@ class AccountController extends Controller
 
     public function tfa()
     {
-        return view('admin/auth/tfa', ['user' => auth()->user()]);
+        $model = auth()->user();
+        return view('admin.account.tfa', compact('model'));
+       // return view('admin/account/tfa', ['user' => auth()->user()]);
     }
 
     /**
@@ -179,6 +181,7 @@ class AccountController extends Controller
     public function userActivityList(Request $request)
     {
         return response()->json((new UserActivity())->list($request->all(), auth()->id()));
+        
     }
 
     

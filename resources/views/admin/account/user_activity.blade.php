@@ -5,7 +5,7 @@ Log
 @section('content')
 
 <!-- Content -->
-<?= view('admin/account/account_block'); ?>
+<?= view('admin/account/component/account_block'); ?>
 <!-- Ajax Sourced Server-side -->
 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Activity /</span> List</h4>
 <!-- Invoice List Table -->

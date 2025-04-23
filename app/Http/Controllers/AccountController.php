@@ -26,9 +26,9 @@ class AccountController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function save(Request $request)
+    public function updateProcess(Request $request)
     {
-        return response()->json((new AccountService())->save($request, auth()->user()));
+        return response()->json((new AccountService())->updateProcess($request, auth()->user()));
     }
 
     /**

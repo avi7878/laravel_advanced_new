@@ -23,6 +23,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
+        'phone',
         'password',
         'password_reset_token',
         'remember_token',
@@ -146,22 +147,22 @@ class User extends Authenticatable
             // Assign action buttons based on the role and permissions
             if (auth()->user()->role == 0) {
                 $result['data'][$key]->action = '<div class="act-btns">
-            <a href="admin/admin/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="ti ti-eye ti-sm "></i></a>&nbsp;
-            <a href="admin/admin/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="ti ti-edit ti-sm"></i></a>
-            <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/admin/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="ti ti-trash ti-sm"></i></button></div>';
+            <a href="admin/admin/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;
+            <a href="admin/admin/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>
+            <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/admin/delete" data-id="' . $row->id . '" class="text-body pjax" title="Delete"><i class="bx bxs-trash icon-base"></i></button></div>';
             } else {
                 $result['data'][$key]->action = '';
                 if ($sessionUser->hasPermission('admin/admin/view')) {
                     $result['data'][$key]->action .= '
-                    <a href="admin/admin/view?id=' . $row->id . '" class="text-body  pjax" title="View"><i class="ti ti-eye ti-sm"></i></a>&nbsp;';
+                    <a href="admin/admin/view?id=' . $row->id . '" class="text-body  pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;';
                 }
                 if ($sessionUser->hasPermission('admin/admin/update')) {
                     $result['data'][$key]->action .= '
-                    <a href="admin/admin/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="ti ti-edit ti-sm "></i></a>';
+                    <a href="admin/admin/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>';
                 }
                 if ($sessionUser->hasPermission('admin/admin/delete')) {
                     $result['data'][$key]->action .= '
-                    <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/admin/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="ti ti-trash ti-sm"></i></button>';
+                    <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/admin/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button>';
                 }
             }
         }
@@ -201,22 +202,22 @@ class User extends Authenticatable
             $result['data'][$key]->updated_at = date(config('setting.date_format'), $row->updated_at);
             if (auth()->user()->role == 0) {
                 $result['data'][$key]->action = '
-            <div class="act-btns"><a href="admin/user/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="ti ti-eye ti-sm"></i></a>;
-            <a href="admin/user/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="ti ti-edit ti-sm"></i></a>
-            <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/user/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="ti ti-trash ti-sm"></i></button></div>';
+            <div class="act-btns"><a href="admin/user/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>;
+            <a href="admin/user/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>
+            <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/user/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button></div>';
             } else {
                 $result['data'][$key]->action = '';
                 if ($sessionUser->hasPermission('admin/user/view')) {
                     $result['data'][$key]->action .= '
-                    <a href="admin/user/view?id=' . $row->id . '" class="text-body " title="View"><i class="ti ti-eye ti-sm"></i></a>&nbsp;</div>';
+                    <a href="admin/user/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;</div>';
                 }
                 if ($sessionUser->hasPermission('admin/user/update')) {
                     $result['data'][$key]->action .= '
-                    <a href="admin/user/update?id=' . $row->id . '" class="text-body " title="Update"><i class="ti ti-edit ti-sm"></i></a>';
+                    <a href="admin/user/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>';
                 }
                 if ($sessionUser->hasPermission('admin/user/delete')) {
                     $result['data'][$key]->action .= '
-                    <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/user/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="ti ti-trash ti-sm"></i></button>';
+                    <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/user/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button>';
                 }
             }
         }
@@ -235,6 +236,7 @@ class User extends Authenticatable
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:user,email,' . $id,
+            'phone' => 'required|digits:10|numeric',
             'status' => 'required|boolean',
             'permission' => 'required|array',
             'role' => 'required|string|max:255',
@@ -278,6 +280,7 @@ class User extends Authenticatable
         $model->first_name = $postData['first_name'];
         $model->last_name = $postData['last_name'];
         $model->email = $postData['email'];
+        $model->phone = $postData['phone'];
         $model->status = (bool) $postData['status'];
         $model->permission = implode(',', $postData['permission']);
         $model->role = $postData['role'];
@@ -317,7 +320,8 @@ class User extends Authenticatable
         $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255', 
+            'phone' => 'required|digits:10|numeric',
             'status' => 'required|boolean',
         ];
         // Additional rule for new users
@@ -355,6 +359,7 @@ class User extends Authenticatable
         $model->first_name = $postData['first_name'];
         $model->last_name = $postData['last_name'];
         $model->email = $postData['email'];
+        $model->phone = $postData['phone'] ;
         $model->country = $postData['country'] ?? null;
         $model->status = $postData['status'];
         $model->role = $postData['role'];

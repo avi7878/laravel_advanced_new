@@ -73,12 +73,12 @@ class EmailTemplate extends Model
 
         // Add update link if user has permission
         if ($sessionUser && $sessionUser->hasPermission('admin/email-template/update')) {
-            $actionLinks .= '<a href="admin/email-template/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="ti ti-edit ti-sm me-2"></i></a>';
+            $actionLinks .= '<a href="admin/email-template/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>';
         }
 
         // Add view link if user has permission
         if ($sessionUser && $sessionUser->hasPermission('admin/email-template/view')) {
-            $actionLinks .= '<a target="_blank" href="admin/email-template/view?id=' . $row->id . '" class="text-body" title="View"><i class="ti ti-eye ti-sm me-2"></i></a>&nbsp;';
+            $actionLinks .= '<a target="_blank" href="admin/email-template/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;';
         }
 
         return $actionLinks;

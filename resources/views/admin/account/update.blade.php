@@ -3,7 +3,8 @@
 Profile
 @endsection
 @section('content')
-<?= view('admin/account/account_block'); ?>
+<?= view('admin/account/component/account_block'); ?>
+
 <style>
   .swal2-container.swal2-center.swal2-shown {
     z-index: 9999;
@@ -27,6 +28,10 @@ Profile
         <div class="mb-3">
           <label class="body" for="basic-default-company">Last Name <span class="star">*</span></label>
           <input type="text" value="{{ $model->last_name }}" name="last_name" class="form-control" id="last_name" placeholder="Enter Last Name" required="required" maxlength="128">
+        </div>
+        <div class="mb-3">
+          <label class="body" for="basic-default-company">Phone Number <span class="star">*</span></label>
+          <input type="number" value="{{ $model->phone }}" name="phone" class="form-control" id="phone" placeholder="Enter Phone Number" required="required" maxlength="10">
         </div>
         <div class="mb-3">
           <label class="body" for="basic-default-email">Email <span class="star">*</span></label>

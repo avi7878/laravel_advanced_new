@@ -1,37 +1,40 @@
-<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+<aside id="layout-menu" class="layout-menu menu-vertical menu">
     <div class="app-brand demo">
         <a href="{{ route('admin/account/update') }}" class="app-brand-link">
-            <span class="avatar me-2">
-                <img src="{{ config('setting.app_logo') }}" alt="{{ Config::get('setting.app_name') }}" class="rounded" />
+            <span class="app-brand-logo demo"> 
+            <span class="avatar me-2 ">
+                <img src="{{ config('setting.app_logo') }}" alt="{{ Config::get('setting.app_name') }}" class="rounded h-px-44" />
             </span>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">Demo</span>
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-            <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
-            <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+            <i class="icon-base bx bx-chevron-left"></i>
+            {{-- <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i> --}}
         </a>
     </div>
     <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
         <li class="menu-item {{ $general->routeMatchClass(['admin/dashboard']) }}">
             <a href="{{ route('admin/dashboard') }}" class="menu-link pjax">
-                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <i class="menu-icon icon-base bx bx-home-smile"></i>
                 <div data-i18n="Dashboard">Dashboard</div>
             </a>
         </li>
         @if($sessionUser->hasPermission('admin_user'))
         <li class="menu-item {{ $general->routeMatchClass(['admin/user/create','admin/user/update','admin/user/view','admin/user']) }}">
             <a href="{{ route('admin/user') }}" class="menu-link pjax" data-pjax-cache="true">
-                <i class="menu-icon tf-icons ti ti-users"></i>
+                <i class="menu-icon icon-base bx bx-user"></i>
                 <div data-i18n="Users">Users</div>
             </a>
         </li>
         @endif
 
         @if($sessionUser->hasPermission(['admin_setting','admin_seo','admin_admin','admin_device','admin_log','admin_page']))
-        <li class="menu-item {{ $general->routeMatchClass(['admin/setting/update','admin/seo/meta','admin/seo/create','admin/seo/update','admin/seo/delete','admin/admin','admin/admin/create','admin/admin/update','admin/admin/view','admin/admin/delete','admin/device','admin/activity','admin/page','admin/page/view','admin/page/update','admin/page/delete'], 'open') }}">
+        <li class="menu-item {{ $general->routeMatchClass(['admin/setting/update','admin/seo/meta','admin/seo/create','admin/seo/update','admin/seo/delete','admin/admin','admin/admin/create','admin/admin/update','admin/admin/view','admin/admin/delete','admin/device','admin/user-activity','admin/page','admin/page/view','admin/page/update','admin/page/delete'], 'open') }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle pjax">
-                <i class="menu-icon tf-icons ti ti-settings"></i>
+                <i class="menu-icon icon-base bx bx-cog"></i>
                 <div data-i18n="Setting">Setting</div>
             </a>
             <ul class="menu-sub">
@@ -67,9 +70,9 @@
                 </li>
                 @endif
 
-                @if($sessionUser->hasPermission('admin_log'))
-                <li class="menu-item {{ $general->routeMatchClass(['admin/activity']) }}">
-                    <a href="{{ route('admin/activity') }}" class="menu-link pjax" data-pjax-cache="true">
+                @if($sessionUser->hasPermission('admin_user_activity'))
+                <li class="menu-item {{ $general->routeMatchClass(['admin/user-activity']) }}">
+                    <a href="{{ route('admin/user-activity') }}" class="menu-link pjax" data-pjax-cache="true">
                         <div data-i18n="Activity">Activity</div>
                     </a>
                 </li>
@@ -97,7 +100,7 @@
 
         <li class="menu-item">
             <a href="{{ route('admin/auth/logout') }}" class="menu-link noroute">
-                <i class="menu-icon tf-icons ti ti-logout me-2 ti-sm"></i>
+                <i class="menu-icon icon-base bx bx-log-out "></i>
                 <div>Logout</div>
             </a>
         </li>

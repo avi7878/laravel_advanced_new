@@ -27,8 +27,8 @@ Seo meta
       <button type="button" class="btn btn-primary d-sm-inline-block" style="float: inline-end;margin-right: 10px;" onclick="$('#sitemapmodel').modal('show')">Sitemap</button>
       @endif
     </div>
-    <div class="card-datatable table-responsive">
-        <table class="datatable-list-table table border-top" id="data-table">
+    <div class="card-datatable mx-2">
+        <table class="dt-fixedheader table table-bordered table-responsive" id="data-table">
             <thead>
                 <tr>
                     <th>#</th>

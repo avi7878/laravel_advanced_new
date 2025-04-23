@@ -114,9 +114,13 @@ class AuthService
             return ['status' => 0, 'message' => $validator->errors()->first()];
         }
 
-        $user = User::where(['email' => $postData['email']])->where('type', $type)->first();
+        $user = User::where(function ($query) use ($postData) {
+            $query->where('email', $postData['email'])
+                ->orWhere("phone", $postData['email']);
+        })->where('type', $type)->first();
+        
         if (!$user) {
-            return ['status' => 0, 'message' => 'Email or password is not valid'];
+            return ['status' => 0, 'message' => 'Email/Phone or password is not valid'];
         }
         $userData = $user->getData();
         if ($user->status == 0) {
@@ -159,6 +163,7 @@ class AuthService
             if (!in_array(@$_COOKIE[config("setting.app_uid") . '_token'], explode(',', $userData->ignore_tfa_device))) {
                 session(['verify_tfa' => 1]);
                 (new \App\Services\TfaService())->sendOTP($user, 'otp');
+                return ['status' => 1, 'message' => '', 'next' => 'redirect', 'url' =>  route('auth/verify', ['type' => 'tfa'])];
             }
         }
 
@@ -231,8 +236,4 @@ class AuthService
 
         return ['status' => 1, 'message' => 'Login successful', 'next' => 'redirect', 'url' => $general->authRedirectUrl(config('setting.login_redirect_url'))];
     }
-
-    
-
-    
 }

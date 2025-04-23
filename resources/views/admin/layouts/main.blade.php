@@ -18,7 +18,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     }
     ?>
     <!DOCTYPE html>
-    <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="theme/assets/" data-template="vertical-menu-template-no-customizer">
+    <html lang="en" class="layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr" data-skin="default" data-bs-theme="light" data-assets-path="theme/assets/" data-template="vertical-menu-template">
 
     <head>
         <meta charset="utf-8" />
@@ -33,17 +33,20 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
         <!-- Icons -->
-        <link rel="stylesheet" href="theme/assets/vendor/fonts/fontawesome.css" />
+         <link rel="stylesheet" href="theme/assets/vendor/fonts/fontawesome.css" />
         <link rel="stylesheet" href="theme/assets/vendor/fonts/tabler-icons.css" />
         <link rel="stylesheet" href="theme/assets/vendor/fonts/flag-icons.css" />
+        <link rel="stylesheet" href="theme/assets/vendor/fonts/iconify-icons.css" />
 
         <!-- Core CSS -->
-        <link rel="stylesheet" href="theme/assets/vendor/css/rtl/core.css" class="template-customizer-core-css  " />
+        <link rel="stylesheet" href="theme/assets/vendor/libs/pickr/pickr-themes.css">
+        <link rel="stylesheet" href="theme/assets/vendor/css/core.css" class="template-customizer-core-css  " />
         <link rel="stylesheet" href="theme/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
-        <link rel="stylesheet" href="theme/assets/css/demo.css" />
+        <link rel="stylesheet" href="theme/assets/css/demo.css" /> 
 
         <!-- Vendors CSS -->
         <link rel="stylesheet" href="theme/assets/vendor/libs/node-waves/node-waves.css" />
+        
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" integrity="sha512-UtLOu9C7NuThQhuXXrGwx9Jb/z9zPQJctuAgNUBK3Z6kkSYT9wJ+2+dh6klS+TDBCV9kNPBbAxbVD+vCcfGPaA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.css" integrity="sha512-Of+yU7HlIFqXQcG8Usdd67ejABz27o7CRB1tJCvzGYhTddCi4TZLVhh9tGaJCwlrBiodWCzAx+igo9oaNbUk5A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -51,7 +54,9 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <link rel="stylesheet" href="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
         <link rel="stylesheet" href="theme/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
         <link rel="stylesheet" href="theme/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
-        
+        <link rel="stylesheet" href="theme/assets/vendor/libs/datatables-select-bs5/select.bootstrap5.css" />
+        <link rel="stylesheet" href="theme/assets/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css" />
+        <link rel="stylesheet" href="theme/assets/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css" />
         
         <link rel="stylesheet" href="assets/css/common.css" />
 
@@ -125,16 +130,22 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <script src="theme/assets/vendor/libs/jquery/jquery.js"></script>
         <script src="theme/assets/vendor/libs/popper/popper.js"></script>
         <script src="theme/assets/vendor/js/bootstrap.js"></script>
+        <script src="theme/assets/vendor/libs/pickr/pickr.js"></script>
         <script src="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-        <script src="theme/assets/vendor/libs/node-waves/node-waves.js"></script>
+        <script src="theme/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+        <script src="theme/assets/vendor/libs/moment/moment.js"></script>
+        <script src="theme/assets/vendor/libs/flatpickr/flatpickr.js"></script>
+     
+        {{-- <script src="theme/assets/vendor/libs/node-waves/node-waves.js"></script> --}}
 
         <script src="theme/assets/vendor/libs/hammer/hammer.js"></script>
         <script src="theme/assets/vendor/libs/i18n/i18n.js"></script>
         <script src="theme/assets/vendor/libs/typeahead-js/typeahead.js"></script>
-        <script src="theme/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
         <script src="theme/assets/vendor/js/menu.js"></script>
 
         <script src="theme/assets/js/main.js"></script>
+        {{-- <script src="theme/assets/js/tables-datatables-advanced.js"></script> --}}
+        <script src="theme/assets/js/tables-datatables-extensions.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.9/sweetalert2.min.js" integrity="sha512-42SOMmTiQryVFk+kJc8Mk1YCoPYvTSX1KCz7sZOGGFcBzytpPLeKuF6AOOQvln5zrUBDjJqshCdMGYRVC/BsYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" integrity="sha512-JyCZjCOZoyeQZSd5+YEAcFgz2fowJ1F1hyJOXgtKu4llIa0KneLcidn5bwfutiehUTiOuK87A986BZJMko0eWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

@@ -102,8 +102,8 @@ class SeoMeta extends Model
 
         foreach ($result['data'] as $row) {
             $row->action = sprintf(
-                '<a href="page/%s" class="text-body" title="View"><i class="fa fa-eye"></i></a>&nbsp;' .
-                '<a href="admin/page/update?id=%d" class="btn btn-info" title="Update"><i class="fa fa-edit"></i></a>',
+                '<a href="page/%s" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;' .
+                '<a href="admin/page/update?id=%d" class="btn btn-info pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>',
                 e($row->slug),
                 $row->id
             );
@@ -144,14 +144,14 @@ class SeoMeta extends Model
 
             if ($sessionUser->hasPermission('admin/seo/update')) {
                 $row->action .= sprintf(
-                    '<a href="admin/seo/update?id=%d" class="text-body pjax" title="Update"><i class="ti ti-edit ti-sm me-2"></i></a>&nbsp;',
+                    '<a href="admin/seo/update?id=%d" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>&nbsp;',
                     $row->id
                 );
             }
 
             if ($sessionUser->hasPermission('admin/seo/delete')) {
                 $row->action .= sprintf(
-                    '<button style="border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/seo/delete?id=%d"  class="text-body" title="Delete"><i class="ti ti-trash ti-sm mx-2"></i></button>',
+                    '<button style="border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/seo/delete?id=%d"  class="text-body pjax" title="Delete"><i class="bx bxs-trash icon-base"></i></button>',
                     $row->id
                 );
             }

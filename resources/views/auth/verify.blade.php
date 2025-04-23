@@ -27,17 +27,20 @@ Login with Otp
         {{ view('common/message_alert') }}
         <p class="mb-0 fw-semibold">Type your 6 digit OTP</p>
         <form id="ajax-form" action="{{route('auth/verify-process')}}" method="post">
+          <input type="hidden" name="type" value="{{$type}}">
           {{ csrf_field() }}
           <div class="mb-3">
             <label class="form-label">OTP</label>
             <input name="otp" type="number" class="form-control" required maxlength="6" minlength="6" autofocus />
           </div>
+          @if($type=='tfa')
           <div class="mb-3">
             <div class="form-check" style="display: flex;justify-content: space-between;">
               <input class="form-check-input" type="checkbox" id="skip_tfa" name="skip_tfa" value="1" checked />
               <label class="form-check-label" for="skip_tfa" style="padding-right: 95px;"> Ignore this device next time </label>
             </div>
           </div>
+          @endif
           <button class="btn btn-primary d-grid w-100 mb-3">Submit</button>
           <div class="form-group mb-8">
             <a href="{{route('logout')}}" class="btn btn-default d-grid w-100 noroute">Logout</a>
@@ -64,7 +67,7 @@ Login with Otp
   });
   function resendOtp() {
     app.ajaxPost("{{ route('auth/resend-otp') }}", {
-      type: 'tfa'
+      type: '{{$type}}'
     })
   }
 </script>

@@ -70,7 +70,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" for="basic-icon-default-fullname">Phone Number <span class="star">*</span></label>
+                        <div class="input-group input-group-merge">
+                            <input type="number" class="form-control" id="basic-icon-default-phone-number" placeholder="Phone Number" name="phone" aria-label="Name" value="{{ @$model->phone }}" />
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
         <div class="col-md-6"><br>
             <?php if (!empty($model->image)) { ?>
@@ -86,7 +95,9 @@
             </div>
         </div>
 
-    </div>
+    </div> 
+    
+
     <button type="submit" class="btn btn-primary">Submit</button>
   <a href="admin/users" class="btn btn-dark" style="color: white;">Back</a>
 </form>
@@ -123,6 +134,11 @@
                 status: {
                     required: true,
                 },
+                phone:
+                {
+                    required : true,
+                    minlength: 10
+                },
             },
              messages: {
                 first_name: {
@@ -139,6 +155,11 @@
                 },
                 status: {
                     required: "Please select the status",
+                },
+                phone : 
+                {
+                    required: "Please enter the phone number",
+                    minlength: "Please enter at least 10 digits"
                 },
             },
 

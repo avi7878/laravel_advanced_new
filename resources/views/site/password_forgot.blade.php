@@ -10,7 +10,7 @@ Forgot Password
                 <div class="card-body">
                     <!-- Logo -->
                     <div class="app-brand justify-content-center mb-6">
-                        <a href="auth/password-forgot" class="app-brand-link">
+                        <a href="site/password-forgot" class="app-brand-link">
                             <span class="app-brand-logo demo">
                                 <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 200%;">
                             </span>
@@ -60,7 +60,7 @@ Forgot Password
                     </form>
                     <br>
                     <div class="text-center">
-                        <a href="{{ route('auth/login') }}" class="d-flex justify-content-center">
+                        <a href="{{ route('login') }}" class="d-flex justify-content-center">
                             <i class="ti ti-chevron-left scaleX-n1-rtl"></i>
                             Back to login
                         </a>

@@ -26,7 +26,7 @@ Pages
     <h4 class="align-middle d-sm-inline-block d-none">Pages</h4>
   </div>
   <div class="card-datatable table-responsive">
-    <table class="datatables table" id="data-table">
+    <table class="dt-fixedheader table table-bordered table-responsive" id="data-table">
       <thead>
         <tr>
           <th>#</th>
