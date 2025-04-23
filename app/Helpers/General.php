@@ -226,7 +226,7 @@ class General
         if (empty($ip)) {
             $ip = $this->getClientIp();
         }
-        $key = 'ip_info:' . $ip;
+        $key = 'ip_info_country:' . $ip;
         $data = \Illuminate\Support\Facades\Cache::get($key);
         if ($data) {
             return $data;

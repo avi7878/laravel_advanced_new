@@ -36,6 +36,7 @@ Admin
           <th>#</th>
           <th>Name</th>
           <th>Email</th>
+          <th>Phone</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -69,6 +70,10 @@ Admin
         {
           data: "email",
           responsivePriority: 4
+        },
+        {
+          data: "phone",
+          responsivePriority: 3
         },
         {
           data: "status",

@@ -18,7 +18,7 @@ Login with Otp
                 </div>
                 <!-- /Logo -->
                 <h4 class="mb-1 pt-2">
-                    Verify Your Email
+                    Verify Your Account
                 </h4>
                 <p class="text-start mb-4">
                     OTP is sent on your Email Address.
@@ -56,7 +56,7 @@ Login with Otp
 
     function resendOtp() {
         app.ajaxPost("{{ route('auth/resend-otp') }}", {
-            type: 'email',
+            type: 'verify_account',
             code: '{{$code}}'
         })
     }

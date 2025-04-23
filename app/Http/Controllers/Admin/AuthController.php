@@ -40,14 +40,9 @@ class AuthController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function loginProcess(Request $request): RedirectResponse
+    public function loginProcess(Request $request)
     {
-
-        $result = (new AuthService())->loginProcess($request->only(['email', 'password']), 0);
-        if (!$result['status']) {
-            return redirect()->back()->with('error', $result['message'])->withInput();
-        }
-        return redirect($this->general->authRedirectUrl('admin/dashboard'))->with('success', $result['message']);
+        return response()->json((new AuthService())->loginProcess($request->only(['email', 'password','remember']), 0));
     }
 
 
@@ -77,7 +72,6 @@ class AuthController extends Controller
     {
 
         $type = $request->get('type');
-
         $code = $request->get('code', '');
         return view('admin/auth/verify', compact('type', 'code'));
     }
@@ -96,7 +90,7 @@ class AuthController extends Controller
     /**
      * resend otp.
      *
-     * @return \Illuminate\View\View
+     * @return RedirectResponse
      */
     public function resendOTP(Request $request)
     {

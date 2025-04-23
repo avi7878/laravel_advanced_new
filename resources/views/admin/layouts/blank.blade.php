@@ -48,10 +48,10 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <link rel="stylesheet" href="theme/assets/vendor/libs/typeahead-js/typeahead.css" />
     <!-- Vendor -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.css" integrity="sha512-Of+yU7HlIFqXQcG8Usdd67ejABz27o7CRB1tJCvzGYhTddCi4TZLVhh9tGaJCwlrBiodWCzAx+igo9oaNbUk5A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        
+
     <!-- Page CSS -->
     <link rel="stylesheet" href="theme/assets/vendor/css/pages/page-auth.css" />
-    
+
     <!-- Page -->
     <link rel="stylesheet" href="assets/css/common.css" />
     @stack('style')
@@ -69,6 +69,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     var CSRF_TOKEN = "{{ Session::token() }}";
     var dataTableObj = false;
     var documentReadyFunctions = [];
+
     function documentReady(fn) {
       documentReadyFunctions.push(fn);
     }
@@ -76,6 +77,14 @@ if (isset($_GET['partial']) && $_GET['partial']) {
   </head>
 
   <body class="hold-transition login-page">
+    <div id="common-loader" style="display:none;">
+      <div class="common-loader-conetent">
+        <div class="spinner-border spinner-border-lg text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <div class="common-loader-backdrop"></div>
+    </div>
     <!-- Layout wrapper -->
     <div id="main-container" data-layout="blank">
       <div id="main-content" data-title="@yield('title') | {{config('app.name')}}">
@@ -84,6 +93,15 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     </div>
 
     <!-- / Layout wrapper -->
+    <div class="modal fade" id="common-modal">
+      <div class="modal-dialog">
+        <div class="modal-content" id="common-modal-content">
+        </div>
+      </div>
+    </div>
+    <!-- Toast with Placements -->
+    <div id="common-toast"></div>
+    <!-- Toast with Placements -->
     <!-- Core JS -->
     <!-- build:js theme/assets/vendor/js/core.js -->
     <script src="theme/assets/vendor/libs/jquery/jquery.js"></script>
@@ -97,20 +115,20 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <!-- Vendors JS -->
     <!-- Main JS -->
     <script src="theme/assets/js/main.js"></script>
-    
+
     <!-- Page JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.9/sweetalert2.min.js" integrity="sha512-42SOMmTiQryVFk+kJc8Mk1YCoPYvTSX1KCz7sZOGGFcBzytpPLeKuF6AOOQvln5zrUBDjJqshCdMGYRVC/BsYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        
+
     <script src="assets/js/common.js"></script>
     <script src="assets/js/pjax.js"></script>
     <script src="assets/js/app.js"></script>
     @stack('scripts')
     <script>
-        $(document).ready(function () {
-            runDocumentReady();
-        });
+      $(document).ready(function() {
+        runDocumentReady();
+      });
     </script>
   </body>
+
   </html>
 <?php } ?>

@@ -1,17 +1,28 @@
 <nav class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
         <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-            <i class="icon-base bx bx-search icon-md me-3"></i>
+            <i class="icon-base bx bx-menu icon-md me-3"></i>
         </a>
     </div>
 
-    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-        <!-- Search -->
+    <div class="navbar-nav-right  d-flex justify-content-between align-items-center" id="navbar-collapse">
         <div class="navbar-nav align-items-center">
-            <div class="nav-item navbar-search-wrapper mb-0">
-                
+            <div class="nav-item d-flex align-items-center w-60">
+              <i class="bx bx-search fs-4 ms-2 text-muted"></i>
+              <input  type="text"  class="form-control border-0 shadow-none form-control-search " 
+                placeholder="Search" aria-label="Search" 
+              />
             </div>
-        </div>
+          </div>
+        <!-- Search -->
+        {{-- <div class="navbar-nav align-items-center">
+            <div class="nav-item navbar-search-wrapper mb-0">
+              <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                <span class="d-inline-block text-body-secondary fw-normal" id="autocomplete"></span>
+              </a>
+            </div>
+          </div> --}}
+      
         <!-- /Search -->
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
@@ -84,8 +95,8 @@
     </div>
 
     <!-- Search Small Screens -->
-    <div class="navbar-search-wrapper search-input-wrapper d-none">
+    {{-- <div class="navbar-search-wrapper search-input-wrapper d-none">
         <input type="text" class="form-control search-input container-xxl border-0" placeholder="Search..." aria-label="Search..." />
         <i class="ti ti-x ti-sm search-toggler cursor-pointer"></i>
-    </div>
+    </div> --}}
 </nav>

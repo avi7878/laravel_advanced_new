@@ -51,8 +51,8 @@ class AccountService
         }
 
         $ip = $general->getClientIp();
-
-        $user = User::create([
+        $userObj=new User();
+        $user = $userObj->create([
             'first_name' => $postData['first_name'],
             'last_name' => $postData['last_name'],
             'email' => $postData['email'],
@@ -61,20 +61,24 @@ class AccountService
             'country' => $general->getIpInfoCountry($ip),
             'status'      => 1,
             'timezone' => config('app.timezone'),
-            'data' => json_encode(['registered_ip' => $ip])
+            'data' => $userObj->setData(['registered_ip' => $ip])
         ]);
 
         (new UserActivity())->add($user->id, 3);
 
         if (config('setting.user_email_verify')) {
-            (new TfaService())->sendOTP($user, 'Verify_email');
+            (new TfaService())->sendOTP($user, 'verify_account');
             $token = base64_encode($user->email);
-            return ['status' => 1, 'message' => 'Thank you for registration, Please verify your email.', 'next' => 'redirect', 'url' => 'site/verify-account?token=' . $token];
+            return ['status' => 1, 'message' => 'Thank you for registration, Please verify your email.', 'next' => 'redirect', 'url' => 'site/verify-account?code=' . $token];
         } else {
             Auth::guard()->login($user);
             (new Device())->login($user->id, 0);
             (new UserActivity())->add($user->id, 1);
         }
+        (new General())->sendEmail($user->email, 'welcome', [
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name
+        ]);
         return ['status' => 1, 'message' => 'Thank you for registration', 'next' => 'redirect', 'url' => config('setting.login_redirect_url')];
     }
 

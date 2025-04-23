@@ -77,15 +77,20 @@ class TfaService
     public function sendOTP(User $user, $type = 'otp'): array
     {
         if($type=='new_email'){
-            $message = 'One time otp for verity your new email/phone';
+            $message = 'verity your new email/phone';
+        }else if($type=='verify_account'){
+            $message = 'verify your account';
+        }else if($type=='forgot_password'){
+            $message = 'reset your password';
         }else{
-            $message = 'One time otp for login';
+            $message = 'login';
         }
 
         $otp = $this->generateOtp();
         $user->updateData(['otp' => $otp . '_' . time(), 'otp_failed' => 0]);
         (new General())->sendEmail($user->email, 'otp', [
-            'name' => $user->first_name . ' ' . $user->last_name,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
             'otp' => $otp,
             'message' => $message,
         ]);
@@ -115,7 +120,7 @@ class TfaService
         if ($user->status == 0) {
             return response()->json(['status' => 0, 'message' => 'Your Account is blocked']);
         }
-        return (new TfaService())->sendOTP($user, 'otp');
+        return (new TfaService())->sendOTP($user, $postData['type']);
     }
 
     /**

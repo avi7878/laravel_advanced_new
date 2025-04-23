@@ -30,8 +30,49 @@ Dashboard
 
 @if($sessionUser->hasPermission('admin_setting'))
 
+<div class="row g-6 mb-6">
+  <div class="col-sm-6 col-lg-3">
+    <div class="card card-border-shadow-primary h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+          <div class="avatar me-4">
+            <span class="avatar-initial rounded bg-label-primary"><i class="icon-base bx bx-user icon-lg"></i></span>
+          </div>
+          <h4 class="mb-0">{{ $totalUser }}</h4>
+        </div>
+        <p class="mb-2">Total Users</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card card-border-shadow-success  h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+          <div class="avatar me-4">
+            <span class="avatar-initial rounded bg-label-success "><i class="icon-base bx bx-user icon-lg"></i></span>
+          </div>
+          <h4 class="mb-0">{{ $activeUser }}</h4>
+        </div>
+        <p class="mb-2">Active Users</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card card-border-shadow-danger h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+          <div class="avatar me-4">
+            <span class="avatar-initial rounded bg-label-danger"><i class="icon-base bx bx-user icon-lg"></i></span>
+          </div>
+          <h4 class="mb-0">{{ $deactiveUser }}</h4>
+        </div>
+        <p class="mb-2">Inactive Users</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-<div class=" col-12 mb-3">
+{{-- <div class=" col-12 mb-3">
   <div class="card h-100">
     <div class="card-header">
       <div class="d-flex justify-content-between mb-3">
@@ -77,7 +118,7 @@ Dashboard
       </div>
     </div>
   </div>
-</div>
+</div> --}}
 @endif
 {{view('admin/site/userchart',['activeUser'=>$activeUser,'deactiveUser'=>$deactiveUser])}}
 @endsection

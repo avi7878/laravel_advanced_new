@@ -19,13 +19,13 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('register', '\App\Http\Controllers\SiteController@register')->name('register');
     Route::post('site/register-process', '\App\Http\Controllers\SiteController@registerProcess')->name('site/register-process');
-    Route::get('site/verify-account', '\App\Http\Controllers\SiteController@verifyAccount')->name('site/site/verify-account');
-    Route::post('site/verify-account-process', '\App\Http\Controllers\SiteController@verifyAccountProcess')->name('site/site/verify-account-process');
+    Route::get('site/verify-account', '\App\Http\Controllers\SiteController@verifyAccount')->name('site/verify-account');
+    Route::post('site/verify-account-process', '\App\Http\Controllers\SiteController@verifyAccountProcess')->name('site/verify-account-process');
     Route::get('site/password-forgot', '\App\Http\Controllers\SiteController@passwordForgot')->name('site/password-forgot');
     Route::post('site/password-forgot-process', '\App\Http\Controllers\SiteController@passwordForgotProcess')->name('site/password-forgot-process');
 
     Route::get('login', '\App\Http\Controllers\AuthController@login')->name('login');
-    Route::post('login-process', '\App\Http\Controllers\AuthController@loginProcess')->name('login-process');
+    Route::post('auth/login-process', '\App\Http\Controllers\AuthController@loginProcess')->name('auth/login-process');
     Route::get('logout', '\App\Http\Controllers\AuthController@logout')->name('logout');
     Route::get('auth/login-otp', '\App\Http\Controllers\AuthController@loginOtp')->name('auth/login-otp');
     Route::post('auth/login-otp-process', '\App\Http\Controllers\AuthController@loginOtpProcess')->name('auth/login-otp-process');

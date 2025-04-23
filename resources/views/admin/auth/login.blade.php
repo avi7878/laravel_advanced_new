@@ -22,8 +22,7 @@ Login To Your Account
           <!-- /Logo -->
           <h4 class="mb-1">Welcome to {{ Config::get('setting.app_name') }}</h4>
           <p class="mb-6">Please Log-in to your account</p>
-          {{ view('common/message_alert') }}
-          <form id="ajax-form" class="mb-4" action="{{ route('admin/auth/login-process') }}" method="POST">
+          <form id="login-form" class="mb-4" action="{{ route('admin/auth/login-process') }}" method="POST">
             @csrf
             <div class="mb-6">
               <label for="email" class="form-label">Email or Username</label>
@@ -51,10 +50,10 @@ Login To Your Account
             <div class="my-8">
               <div class="d-flex justify-content-between">
                 <div class="form-check mb-0 ms-2">
-                  <input class="form-check-input" type="checkbox" id="remember-me" />
+                  <input class="form-check-input" type="checkbox" id="remember-me" name="remember" checked/>
                   <label class="form-check-label" for="remember-me"> Remember Me </label>
                 </div>
-                <a href="admin/auth/password-forgot">
+                <a href="admin/site/password-forgot">
                   <p class="mb-0">Forgot Password?</p>
                 </a>
               </div>
@@ -64,12 +63,7 @@ Login To Your Account
             </div>
           </form>
 
-          <p class="text-center">
-            <span>New on our platform?</span>
-            <a href="register">
-              <span>Create an account</span>
-            </a>
-          </p>
+          
 
         </div>
       </div>
@@ -81,7 +75,7 @@ Login To Your Account
 @push('scripts')
 <script>
   documentReady(function() {
-    $('#ajax-form').validate({
+    $('#login-form').validate({
       rules: {
         email: {
           required: true,
@@ -104,6 +98,9 @@ Login To Your Account
           maxlength: "Please enter no more than 32 characters.",
         }
       },
+      submitHandler: function(form) {
+        app.ajaxForm(form);
+      }
     })
   })
 </script>

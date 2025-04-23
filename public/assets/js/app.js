@@ -260,9 +260,10 @@ const app = {
     ajaxSuccess: function (response) {
         if (response.status) {
             if (response.message) {
-                app.showConfirmationPopup({text:response.message, type:"success"}).then(() => {
+                app.showMessage(response.message,'success');
+                setTimeout(function () {    
                     app.nextAction(response);
-                });
+                },2000);
             } else {
                 app.nextAction(response);
             }
@@ -282,27 +283,47 @@ const app = {
      * Loading indicator management
      */
     showLoading: function () {
-        Swal.showLoading();
+        //Swal.showLoading();
+        $('#common-loader').show();
     },
 
     hideLoading: function () {
-        Swal.close();
+        // Swal.close();
+        $('#common-loader').hide();
     },
 
     showMessage: function (message,type) {
-        title=type.charAt(0).toUpperCase() + type.slice(1);
-        Swal.fire(title,message,type);
+        var toastHtml=`
+        <div class="bs-toast toast toast-placement-ex m-2 fade bg-__type__ top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+            <div class="toast-header">
+                <i class="icon-base bx bx-bell me-2"></i>
+                <div class="me-auto fw-medium">__title__</div>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">__message__</div>
+        </div>`;
+        var title=type.charAt(0).toUpperCase() + type.slice(1);
+        $('#common-toast').html(app.dataToHtml(toastHtml, {message:message,title:title,type:type}));
+        setTimeout(function () {
+            $('#common-toast').html('');
+        }, 3000);   
+        // Swal.fire(title,message,type);
     },
 
     showConfirmationPopup : function (params) {
         return new Promise((resolve, reject) => {
-            Swal.fire(params).then((result) => {
-                if (result.value) {
-                    resolve(true);
-                }else{
-                    reject(false);
-                }
-            });
+            if (confirm(params.text)) {
+                resolve(true);
+            } else {
+                reject(false);
+            }
+            // Swal.fire(params).then((result) => {
+            //     if (result.value) {
+            //         resolve(true);
+            //     }else{
+            //         reject(false);
+            //     }
+            // });
         });
     },
 

@@ -197,6 +197,8 @@ class User extends Authenticatable
                 <img style="width:30px;height:30px" src="' . $imageUrl . '" class="h-auto rounded-circle" alt="blog image"></a>';
             }
             $result['data'][$key]->first_name = $row->first_name . ' ' . $row->last_name;
+            $result['data'][$key]->email = $row->email;
+            $result['data'][$key]->phone = $row->phone;
             $result['data'][$key]->status = $userObj->getStatusBadge($row->status);
             $result['data'][$key]->created_at = date(config('setting.date_format'), $row->created_at);
             $result['data'][$key]->updated_at = date(config('setting.date_format'), $row->updated_at);

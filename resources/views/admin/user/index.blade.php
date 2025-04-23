@@ -30,12 +30,13 @@ Users
 
   </div>
   <div class="card-datatable mx-2">
-    <table class="dt-fixedheader table table-bordered table-responsive" id="data-table">
+    <table class="table table-bordered table-responsive" id="data-table">
       <thead>
         <tr>
           <th>#</th>
           <th>Name</th>
           <th>Email</th>
+          <th>Phone</th>
           <th>Country</th>
           <th>Status</th>
           <th>Created At</th>
@@ -49,6 +50,8 @@ Users
 @endsection
 @push('scripts')
 <script>
+
+  
 documentReady(function() {
     datatableObj = $('#data-table').DataTable({
       ajax: dataTableAjax({
@@ -68,12 +71,16 @@ documentReady(function() {
           responsivePriority: 2
         },
         {
+          data: "phone",
+          responsivePriority: 3
+        },
+        {
           data: "country",
           responsivePriority: 4
         },
         {
           data: "status",
-          responsivePriority: 3
+          responsivePriority: 5
         },
         {
           data: "created_at",

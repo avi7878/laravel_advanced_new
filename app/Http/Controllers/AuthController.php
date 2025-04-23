@@ -43,11 +43,7 @@ class AuthController extends Controller
      */
     public function loginProcess(Request $request)
     {
-        $result = (new AuthService())->loginProcess($request->only(['email', 'password']));
-        if (!$result['status']) {
-            return redirect()->back()->with('error', $result['message'])->withInput();
-        }
-        return redirect($this->general->authRedirectUrl('dashboard'))->with('success', $result['message']);
+        return response()->json((new AuthService())->loginProcess($request->only(['email', 'password','remember'])));
     }
 
     /**

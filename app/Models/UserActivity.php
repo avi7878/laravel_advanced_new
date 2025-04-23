@@ -122,7 +122,8 @@ class UserActivity extends Model
 
         if (!$existingLog) {
             $general->sendEmail($user->email, 'new_device_login', [
-                'name' => $user->first_name . ' ' . $user->last_name,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
                 'ip' => $ip,
                 'client' => $general->deviceName($client),
                 'location' => $general->getIpLocation($ip),

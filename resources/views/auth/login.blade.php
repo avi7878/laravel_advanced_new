@@ -22,7 +22,7 @@ Login To Your Account
           <!-- /Logo -->
           <h4 class="mb-1">Welcome to {{ Config::get('setting.app_name') }}</h4>
           <p class="mb-6">Please Log-in to your account</p>
-          <form id="login-form" class="mb-4" action="{{ route('login-process') }}" method="POST">
+          <form id="login-form" class="mb-4" action="{{ route('auth/login-process') }}" method="POST">
             @csrf
             <div class="mb-6">
               <label for="email" class="form-label">Email or Phone</label>
@@ -38,7 +38,7 @@ Login To Your Account
             <div class="my-8">
               <div class="d-flex justify-content-between">
                 <div class="form-check mb-0 ms-2">
-                  <input class="form-check-input" type="checkbox" id="remember-me" checked />
+                  <input class="form-check-input" type="checkbox" id="remember-me" name="remember" checked />
                   <label class="form-check-label" for="remember-me"> Remember Me </label>
                 </div>
                 <a href="site/password-forgot">
@@ -108,6 +108,9 @@ Login To Your Account
           required: "Please Enter Your Password",
         }
       },
+      submitHandler: function(form) {
+        app.ajaxForm(form);
+      }
     })
 
     $('#login-otp-form').validate({

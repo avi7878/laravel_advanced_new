@@ -11,7 +11,7 @@ Forgot Password
                 <div class="card-body">
                     <!-- Logo -->
                     <div class="app-brand justify-content-center mb-6">
-                        <a href="admin/auth/password-forgot" class="app-brand-link">
+                        <a href="admin/site/password-forgot" class="app-brand-link">
                             <span class="app-brand-logo demo">
                                 <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 200%;">
                             </span>
@@ -22,7 +22,7 @@ Forgot Password
                     <h4 class="mb-1">Forgot Password</h4>
                     <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
                     {{ view('common/message_alert') }}
-                    <form id="ajax-form" action="{{ route('admin/auth/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
+                    <form id="ajax-form" action="{{ route('admin/site/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
                         {{ csrf_field() }}
                         <input type="hidden" name="step" id="step" value="1">
                         <div id="email-block">

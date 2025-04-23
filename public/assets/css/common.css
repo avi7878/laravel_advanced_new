@@ -2,6 +2,25 @@
     min-height: 85vh;
 }
 
+#common-loader{
+    position: relative;
+}
+
+.common-loader-conetent{
+    position: absolute;
+    top: 400px;
+    right: 50%;
+    z-index: 9999;
+}
+.common-loader-backdrop{
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    position: absolute;
+
+}
+
 .loading-text {
     margin-top: 20%;
     text-align: center;

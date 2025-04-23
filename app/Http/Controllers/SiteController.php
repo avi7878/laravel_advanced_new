@@ -52,7 +52,7 @@ class SiteController extends Controller
     public function verifyAccount(Request $request)
     {
         $code = $request->get('code', '');
-        return view('site.veriify_account', compact('code'));
+        return view('site.verify_account', compact('code'));
     }
 
     /** 

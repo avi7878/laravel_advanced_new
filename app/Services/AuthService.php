@@ -163,11 +163,11 @@ class AuthService
             if (!in_array(@$_COOKIE[config("setting.app_uid") . '_token'], explode(',', $userData->ignore_tfa_device))) {
                 session(['verify_tfa' => 1]);
                 (new \App\Services\TfaService())->sendOTP($user, 'otp');
-                return ['status' => 1, 'message' => '', 'next' => 'redirect', 'url' =>  route('auth/verify', ['type' => 'tfa'])];
+                return ['status' => 1, 'message' => '', 'next' => 'redirect', 'url' =>  route($type?'auth/verify':'admin/auth/verify', ['type' => 'tfa'])];
             }
         }
-
-        return ['status' => 1, 'message' => 'Login success', 'next' => 'redirect', 'url' => $general->authRedirectUrl(config('setting.login_redirect_url'))];
+        
+        return ['status' => 1, 'message' => 'Login success', 'next' => 'redirect', 'url' => $general->authRedirectUrl($type? config('setting.login_redirect_url') : config('setting.adimn_login_redirect_url'))];
     }
 
     /**

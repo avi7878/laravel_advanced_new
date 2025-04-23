@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Services\AccountService;
 use App\Services\GeneralService;
 
 
@@ -62,5 +63,27 @@ class SiteController extends Controller
     public function getChartUser2()
     {
         return view("admin.site.userchart");
+    }
+
+    /**
+     * Display the password forgot view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function passwordForgot()
+    {
+        return view('admin.site.password_forgot');
+    }
+
+    /**
+     * Process password forgot request.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function passwordForgotProcess(Request $request)
+    {
+
+        return (new AccountService())->passwordForgotProcess($request->only(['email', 'otp', 'password', 'password_confirm', 'step']));
     }
 }

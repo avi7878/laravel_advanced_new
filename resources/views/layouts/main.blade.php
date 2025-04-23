@@ -22,6 +22,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     ?>
     <!DOCTYPE html>
     <html lang="{{ Config::get('app.locale') }}" class="dark-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="theme/assets/" data-template="horizontal-menu-template">
+
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -83,6 +84,14 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     </head>
 
     <body>
+        <div id="common-loader" style="display:none;">
+            <div class="common-loader-conetent">
+                <div class="spinner-border spinner-border-lg text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div class="common-loader-backdrop"></div>
+        </div>
         <!-- Layout wrapper -->
         <div class="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">
             <div class="layout-container">
@@ -97,7 +106,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
                         {{ view('layouts/component/main_sidebar') }}
                         <!-- / Menu -->
                         <!-- Content -->
-                        <div class="container-xxl flex-grow-1 container-p-y" >
+                        <div class="container-xxl flex-grow-1 container-p-y">
                             <div id="main-container" data-layout="main">
                                 <div id="main-content" data-title="@php if($metaData['title']){echo $metaData['title'];}else{ @endphp@yield('title') | {{config('setting.app_name')}}@php }@endphp">
                                     {{ view('common/message_alert') }}
@@ -141,6 +150,9 @@ if (isset($_GET['partial']) && $_GET['partial']) {
                 </div>
             </div>
         </div>
+        <!-- Toast with Placements -->
+        <div id="common-toast"></div>
+        <!-- Toast with Placements -->
         <!-- Core JS -->
         {{view('common/cookie_consent')}}
         <!-- build:js assets/vendor/js/core.js -->
@@ -155,7 +167,6 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <!-- endbuild -->
         <!-- Main JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.9/sweetalert2.min.js" integrity="sha512-42SOMmTiQryVFk+kJc8Mk1YCoPYvTSX1KCz7sZOGGFcBzytpPLeKuF6AOOQvln5zrUBDjJqshCdMGYRVC/BsYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
         <script src="assets/js/common.js"></script>
         <script src="assets/js/pjax.js"></script>
