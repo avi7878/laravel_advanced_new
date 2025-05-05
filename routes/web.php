@@ -32,7 +32,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('auth/verify', '\App\Http\Controllers\AuthController@verify')->name('auth/verify');
     Route::post('auth/verify-process', '\App\Http\Controllers\AuthController@verifyProcess')->name('auth/verify-process');
     Route::post('auth/resend-otp', '\App\Http\Controllers\AuthController@resendOTP')->name('auth/resend-otp');
-    
+
     Route::get('oauth/login/{type}', '\App\Http\Controllers\AuthController@socialLogin')->name('oauth/login');
     Route::get('oauth/callback/{type}', '\App\Http\Controllers\AuthController@socialLoginCallback')->name('oauth/callback');
 });
@@ -40,7 +40,7 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['middleware' => ['web', 'user']], function () {
     Route::get('dashboard', '\App\Http\Controllers\SiteController@dashboard')->name('dashboard');
-    
+
     Route::get('account/update', '\App\Http\Controllers\AccountController@update')->name('account/update');
     Route::post('account/update-process', '\App\Http\Controllers\AccountController@updateProcess')->name('account/update-process');
     Route::get('account/image', '\App\Http\Controllers\AccountController@image')->name('account/image');
@@ -51,7 +51,7 @@ Route::group(['middleware' => ['web', 'user']], function () {
     Route::get('account/tfa', '\App\Http\Controllers\AccountController@tfa')->name('account/tfa');
     Route::post('account/tfa-status-change', '\App\Http\Controllers\AccountController@tfaStatusChange')->name('account/tfa-status-change');
     Route::post('account/revoke-all', '\App\Http\Controllers\AccountController@revokeAll')->name('account/revoke-all');
-    
+
     Route::get('account/device', '\App\Http\Controllers\AccountController@device')->name('account/device');
     Route::post('account/device-list', '\App\Http\Controllers\AccountController@deviceList')->name('account/device-list');
     Route::post('account/device-logout', '\App\Http\Controllers\AccountController@deviceLogout')->name('account/device-logout');
@@ -79,7 +79,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'web'], function () {
 Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function () {
     Route::get('dashboard', '\App\Http\Controllers\Admin\SiteController@dashboard')->name('admin/dashboard');
     Route::post('site/get-chart-user', '\App\Http\Controllers\Admin\SiteController@getChartUser')->name('admin/site/get-chart-user');
-    
+
     Route::get('account/tfa', '\App\Http\Controllers\Admin\AccountController@tfa')->name('admin/account/tfa');
     Route::post('account/tfa-status-change', '\App\Http\Controllers\Admin\AccountController@tfaStatusChange')->name('admin/account/tfa-status-change');
     Route::post('account/revoke-all', '\App\Http\Controllers\AccountController@revokeAll')->name('account/revoke-all');
@@ -126,7 +126,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
     Route::get('seo/sitemap-update', '\App\Http\Controllers\Admin\SeoController@sitemapUpdate')->name('admin/seo/sitemap-update');
 
     Route::get('pages', '\App\Http\Controllers\Admin\PageController@index')->name('admin/page');
-    Route::get('page/list', '\App\Http\Controllers\Admin\PageController@list')->name('admin/page/list');
+    Route::post('page/list', '\App\Http\Controllers\Admin\PageController@list')->name('admin/page/list');
     Route::get('page/update', '\App\Http\Controllers\Admin\PageController@update')->name('admin/page/update');
     Route::post('page/save', '\App\Http\Controllers\Admin\PageController@save')->name('admin/page/save');
     Route::post('page/save-image', '\App\Http\Controllers\Admin\PageController@saveImage')->name('admin/page/save-image');
@@ -136,6 +136,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
     Route::post('setting/save-logo', '\App\Http\Controllers\Admin\SettingController@saveLogo')->name('admin/setting/save-logo');
     Route::get('setting/cache-clear', '\App\Http\Controllers\Admin\SettingController@cacheClear')->name('admin/setting/cache-clear');
     Route::post('setting/mailprocess', '\App\Http\Controllers\Admin\SettingController@mailprocess')->name('admin/setting/mailprocess');
+    Route::post('setting/smtp', '\App\Http\Controllers\Admin\SettingController@smtp')->name('admin/setting/smtp');
+    Route::post('setting/captcha', '\App\Http\Controllers\Admin\SettingController@captcha')->name('admin/setting/captcha');
+    Route::post('setting/social', '\App\Http\Controllers\Admin\SettingController@social')->name('admin/setting/social');
+    Route::post('setting/content', '\App\Http\Controllers\Admin\SettingController@content')->name('admin/setting/content');
+
 
     Route::get('user-activity', '\App\Http\Controllers\Admin\UserActivityController@index')->name('admin/user-activity');
     Route::post('user-activity/list', '\App\Http\Controllers\Admin\UserActivityController@list')->name('admin/user-activity/list');
@@ -144,10 +149,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
     Route::post('device/list', '\App\Http\Controllers\Admin\DeviceController@list')->name('admin/device/list');
     Route::post('device/logout', '\App\Http\Controllers\Admin\DeviceController@logout')->name('admin/device/logout');
 
-    Route::get('email-template','\App\Http\Controllers\Admin\EmailTemplateController@index')->name('admin/email-template');
+    Route::get('email-template', '\App\Http\Controllers\Admin\EmailTemplateController@index')->name('admin/email-template');
     Route::get('email-template/list', '\App\Http\Controllers\Admin\EmailTemplateController@list')->name('admin/email-template/list');
     Route::get('email-template/update', '\App\Http\Controllers\Admin\EmailTemplateController@update')->name('admin/email-template/update');
     Route::get('email-template/view', '\App\Http\Controllers\Admin\EmailTemplateController@view')->name('admin/email-template/view');
     Route::post('email-template/save', '\App\Http\Controllers\Admin\EmailTemplateController@save')->name('admin/email-template/save');
     Route::post('email-template/save-file', '\App\Http\Controllers\Admin\EmailTemplateController@saveFile')->name('admin/email-template/save-file');
+    Route::get('email-template/create', '\App\Http\Controllers\Admin\EmailTemplateController@create')->name('admin/email-template/create');
 });

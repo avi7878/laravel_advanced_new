@@ -15,7 +15,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
   ?>
   <!DOCTYPE html>
 
-  <html lang="{{ Config::get('app.locale') }}" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-theme/assets-path="/tracer/public/theme/assets/" data-template="vertical-menu-template">
+  <html lang="{{ Config::get('app.locale') }}" class="system-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-theme/assets-path="/tracer/public/theme/assets/" data-template="vertical-menu-template">
 
   <head>
     <meta charset="utf-8" />
@@ -33,6 +33,8 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
     <!-- Icons -->
+    <link rel="stylesheet" href="theme/assets/vendor/fonts/iconify-icons.css" />
+
     <link rel="stylesheet" href="theme/assets/vendor/fonts/fontawesome.css" />
     <link rel="stylesheet" href="theme/assets/vendor/fonts/tabler-icons.css" />
     <link rel="stylesheet" href="theme/assets/vendor/fonts/flag-icons.css" />
@@ -73,6 +75,8 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     function documentReady(fn) {
       documentReadyFunctions.push(fn);
     }
+
+    window.templateCustomizer.settings.defaultTheme='system';
   </script>
   </head>
 
@@ -93,7 +97,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     </div>
 
     <!-- / Layout wrapper -->
-    <div class="modal fade" id="common-modal">
+    <div id="common-modal" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content" id="common-modal-content">
         </div>

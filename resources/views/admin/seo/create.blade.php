@@ -20,7 +20,7 @@ Seo Meta Create
 </div>
 <div class="card card-default color-palette-box">
 <div class="card-header justify-content-between">
-        <div class="row">
+        <div class="row ">
         <div class="col-md-6">
             <div class="mb-3">
                <h4 class="align-middle d-sm-inline-block d-none">Seo Meta Create</h4>

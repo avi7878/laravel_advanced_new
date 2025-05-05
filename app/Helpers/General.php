@@ -535,6 +535,32 @@ class General
         return $result;
     }
 
+    public function generateTFAQrcode($userName)
+    {
+        $secret = $this->generateTotpSecret();
+        $issuer = config('app.name');
+        $qrCodeData = "otpauth://totp/$issuer:$userName?secret=$secret&issuer=$issuer";
+        $qrCode = (new \App\Helper\QrGenerator())->render_svg('qr', $qrCodeData, []);
+        return [
+            'qrCode' => $qrCode,
+            'secretKey' => $secret,
+        ];
+    }
+
+    function verifyTotp($secret, $code, $discrepancy = 1)
+    {
+        $currentTimeSlice = floor(time() / 30);
+
+        for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
+            $validCode = $this->get_totp_code($secret, $currentTimeSlice + $i);
+            if ($validCode === $code) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getTimezooneList()
     {
         return json_decode('{"Pacific/Midway":"(UTC-11:00) Pacific/Midway","US/Samoa":"(UTC-11:00) US/Samoa","US/Hawaii":"(UTC-10:00) US/Hawaii","US/Alaska":"(UTC-09:00) US/Alaska","US/Pacific":"(UTC-08:00) US/Pacific","America/Tijuana":"(UTC-08:00) America/Tijuana","US/Arizona":"(UTC-07:00) US/Arizona","US/Mountain":"(UTC-07:00) US/Mountain","America/Chihuahua":"(UTC-07:00) America/Chihuahua","America/Mazatlan":"(UTC-07:00) America/Mazatlan","America/Mexico_City":"(UTC-06:00) America/Mexico_City","America/Monterrey":"(UTC-06:00) America/Monterrey","Canada/Saskatchewan":"(UTC-06:00) Canada/Saskatchewan","US/Central":"(UTC-06:00) US/Central","US/Eastern":"(UTC-05:00) US/Eastern","US/East-Indiana":"(UTC-05:00) US/East-Indiana","America/Bogota":"(UTC-05:00) America/Bogota","America/Lima":"(UTC-05:00) America/Lima","America/Caracas":"(UTC-04:30) America/Caracas","Canada/Atlantic":"(UTC-04:00) Canada/Atlantic","America/La_Paz":"(UTC-04:00) America/La_Paz","America/Santiago":"(UTC-04:00) America/Santiago","Canada/Newfoundland":"(UTC-03:30) Canada/Newfoundland","America/Buenos_Aires":"(UTC-03:00) America/Buenos_Aires","Greenland":"(UTC-03:00) Greenland","Atlantic/Stanley":"(UTC-02:00) Atlantic/Stanley","Atlantic/Azores":"(UTC-01:00) Atlantic/Azores","Atlantic/Cape_Verde":"(UTC-01:00) Atlantic/Cape_Verde","Africa/Casablanca":"(UTC) Africa/Casablanca","Europe/Dublin":"(UTC) Europe/Dublin","Europe/Lisbon":"(UTC) Europe/Lisbon","Europe/London":"(UTC) Europe/London","Africa/Monrovia":"(UTC) Africa/Monrovia","Europe/Amsterdam":"(UTC+01:00) Europe/Amsterdam","Europe/Belgrade":"(UTC+01:00) Europe/Belgrade","Europe/Berlin":"(UTC+01:00) Europe/Berlin","Europe/Bratislava":"(UTC+01:00) Europe/Bratislava","Europe/Brussels":"(UTC+01:00) Europe/Brussels","Europe/Budapest":"(UTC+01:00) Europe/Budapest","Europe/Copenhagen":"(UTC+01:00) Europe/Copenhagen","Europe/Ljubljana":"(UTC+01:00) Europe/Ljubljana","Europe/Madrid":"(UTC+01:00) Europe/Madrid","Europe/Paris":"(UTC+01:00) Europe/Paris","Europe/Prague":"(UTC+01:00) Europe/Prague","Europe/Rome":"(UTC+01:00) Europe/Rome","Europe/Sarajevo":"(UTC+01:00) Europe/Sarajevo","Europe/Skopje":"(UTC+01:00) Europe/Skopje","Europe/Stockholm":"(UTC+01:00) Europe/Stockholm","Europe/Vienna":"(UTC+01:00) Europe/Vienna","Europe/Warsaw":"(UTC+01:00) Europe/Warsaw","Europe/Zagreb":"(UTC+01:00) Europe/Zagreb","Europe/Athens":"(UTC+02:00) Europe/Athens","Europe/Bucharest":"(UTC+02:00) Europe/Bucharest","Africa/Cairo":"(UTC+02:00) Africa/Cairo","Africa/Harare":"(UTC+02:00) Africa/Harare","Europe/Helsinki":"(UTC+02:00) Europe/Helsinki","Europe/Istanbul":"(UTC+02:00) Europe/Istanbul","Asia/Jerusalem":"(UTC+02:00) Asia/Jerusalem","Europe/Kiev":"(UTC+02:00) Europe/Kiev","Europe/Minsk":"(UTC+02:00) Europe/Minsk","Europe/Riga":"(UTC+02:00) Europe/Riga","Europe/Sofia":"(UTC+02:00) Europe/Sofia","Europe/Tallinn":"(UTC+02:00) Europe/Tallinn","Europe/Vilnius":"(UTC+02:00) Europe/Vilnius","Asia/Baghdad":"(UTC+03:00) Asia/Baghdad","Asia/Kuwait":"(UTC+03:00) Asia/Kuwait","Africa/Nairobi":"(UTC+03:00) Africa/Nairobi","Asia/Riyadh":"(UTC+03:00) Asia/Riyadh","Europe/Moscow":"(UTC+03:00) Europe/Moscow","Asia/Tehran":"(UTC+03:30) Asia/Tehran","Asia/Baku":"(UTC+04:00) Asia/Baku","Europe/Volgograd":"(UTC+04:00) Europe/Volgograd","Asia/Muscat":"(UTC+04:00) Asia/Muscat","Asia/Tbilisi":"(UTC+04:00) Asia/Tbilisi","Asia/Yerevan":"(UTC+04:00) Asia/Yerevan","Asia/Kabul":"(UTC+04:30) Asia/Kabul","Asia/Karachi":"(UTC+05:00) Asia/Karachi","Asia/Tashkent":"(UTC+05:00) Asia/Tashkent","Asia/Kolkata":"(UTC+05:30) Asia/Kolkata","Asia/Kathmandu":"(UTC+05:45) Asia/Kathmandu","Asia/Yekaterinburg":"(UTC+06:00) Asia/Yekaterinburg","Asia/Almaty":"(UTC+06:00) Asia/Almaty","Asia/Dhaka":"(UTC+06:00) Asia/Dhaka","Asia/Novosibirsk":"(UTC+07:00) Asia/Novosibirsk","Asia/Bangkok":"(UTC+07:00) Asia/Bangkok","Asia/Jakarta":"(UTC+07:00) Asia/Jakarta","Asia/Krasnoyarsk":"(UTC+08:00) Asia/Krasnoyarsk","Asia/Chongqing":"(UTC+08:00) Asia/Chongqing","Asia/Hong_Kong":"(UTC+08:00) Asia/Hong_Kong","Asia/Kuala_Lumpur":"(UTC+08:00) Asia/Kuala_Lumpur","Australia/Perth":"(UTC+08:00) Australia/Perth","Asia/Singapore":"(UTC+08:00) Asia/Singapore","Asia/Taipei":"(UTC+08:00) Asia/Taipei","Asia/Ulaanbaatar":"(UTC+08:00) Asia/Ulaanbaatar","Asia/Urumqi":"(UTC+08:00) Asia/Urumqi","Asia/Irkutsk":"(UTC+09:00) Asia/Irkutsk","Asia/Seoul":"(UTC+09:00) Asia/Seoul","Asia/Tokyo":"(UTC+09:00) Asia/Tokyo","Australia/Adelaide":"(UTC+09:30) Australia/Adelaide","Australia/Darwin":"(UTC+09:30) Australia/Darwin","Asia/Yakutsk":"(UTC+10:00) Asia/Yakutsk","Australia/Brisbane":"(UTC+10:00) Australia/Brisbane","Australia/Canberra":"(UTC+10:00) Australia/Canberra","Pacific/Guam":"(UTC+10:00) Pacific/Guam","Australia/Hobart":"(UTC+10:00) Australia/Hobart","Australia/Melbourne":"(UTC+10:00) Australia/Melbourne","Pacific/Port_Moresby":"(UTC+10:00) Pacific/Port_Moresby","Australia/Sydney":"(UTC+10:00) Australia/Sydney","Asia/Vladivostok":"(UTC+11:00) Asia/Vladivostok","Asia/Magadan":"(UTC+12:00) Asia/Magadan","Pacific/Auckland":"(UTC+12:00) Pacific/Auckland","Pacific/Fiji":"(UTC+12:00) Pacific/Fiji"}', true);

@@ -3,6 +3,7 @@
 Contact
 @endsection
 @section('content')
+
 <h4 class="fw-bold py-3 mb-4">Contact</h4>
 <div class="card card-default color-palette-box">
     <div class="card-body">

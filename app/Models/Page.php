@@ -81,20 +81,19 @@ class Page extends Model
         // Add update link if user has permission
         if ($sessionUser && $sessionUser->hasPermission('admin/page/update')) {
             $actionLinks .= sprintf(
-                '<a href="admin/page/update?id=%d" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>',
+                '<a href="admin/page/update?id=%d" class="btn btn-icon pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>',
                 $row->id
             );
         }
-
         // Add view link if user has permission
         if ($sessionUser && $sessionUser->hasPermission('page/')) {
             $actionLinks .= sprintf(
-                '<a target="_blank" href="page/%s" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;',
+                '<a target="_blank" href="page/%s" class="btn btn-icon pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;',
                 htmlspecialchars($row->slug, ENT_QUOTES, 'UTF-8')
             );
         }
 
-        return $actionLinks;
+        return '<div class="d-flex align-items-center">' . $actionLinks . '</div>';
     }
 
     /**
@@ -139,6 +138,5 @@ class Page extends Model
             'next' => 'load',
             'url' => 'admin/pages',
         ];
-        
     }
 }

@@ -122,35 +122,33 @@ class AuthService
         if (!$user) {
             return ['status' => 0, 'message' => 'Email/Phone or password is not valid'];
         }
-        $userData = $user->getData();
         if ($user->status == 0) {
             return ['status' => 0, 'message' => 'Your Account is blocked'];
         }
 
-        if ($userData->login_failed >= config('setting.login_max_attempt') && $userData->login_failed_at > (time() - config('setting.login_ban_time'))) {
-            return ['status' => 0, 'message' => 'Max login attempt exceed. Please Try after ' . ceil((config('setting.login_ban_time') - (time() - $userData->login_failed_at)) / 60) . ' Minutes'];
+        if ($user->login_failed >= config('setting.login_max_attempt') && $user->login_failed_at > (time() - config('setting.login_ban_time'))) {
+            return ['status' => 0, 'message' => 'Max login attempt exceed. Please Try after ' . ceil((config('setting.login_ban_time') - (time() - $user->login_failed_at)) / 60) . ' Minutes'];
         }
 
         $LogObj = new UserActivity();
         if (!$this->checkPassword($postData['password'], $user->password)) {
-            $user->updateData([
-                'login_failed' => $userData->login_failed + 1,
-                'login_failed_at' => time(),
-            ]);
+
+            $user->login_failed = $user->login_failed + 1;
+            $user->login_failed_at = time();
+            $user->save();
 
             $LogObj->add($user->id, 0);
             return ['status' => 0, 'message' => 'Email or password is not valid'];
         }
 
-        if (config('setting.user_email_verify') && $userData->email_verified != '1') {
-            (new \App\Services\TfaService())->sendOTP($user, 'register');
-            return ['status' => 0, 'message' => 'Please verify your email, <a class="noroute" href="' . route('auth/verify', ['type' => 'email', 'code' => base64_encode($user->email)]) . '">Click here</a> to verify your email address.'];
+        if (config('setting.user_email_verify') && $user->email_verified != '1') {
+            (new \App\Services\TfaService())->sendOTP($user, 'verify_account');
+            return ['status' => 0, 'message' => 'Please verify your email, <a class="noroute" href="' . route('site/verify-account', ['code' => base64_encode($user->email)]) . '">Click here</a> to verify your email address.'];
         }
 
-        if ($userData->login_failed) {
-            $user->updateData([
-                'login_failed' => 0,
-            ]);
+        if ($user->login_failed) {
+            $user->login_failed = 0;
+            $user->save();
         }
 
         Auth::guard()->login($user);
@@ -159,8 +157,8 @@ class AuthService
         (new Device())->login($user->id, @$postData['remember']);
         $LogObj->sendNewDeviceMail($user);
 
-        if ($userData->status_tfa == 1) {
-            if (!in_array(@$_COOKIE[config("setting.app_uid") . '_token'], explode(',', $userData->ignore_tfa_device))) {
+        if ($user->status_tfa == 1) {
+            if (!in_array(@$_COOKIE[config("setting.app_uid") . '_token'], explode(',', $user->ignore_tfa_device))) {
                 session(['verify_tfa' => 1]);
                 (new \App\Services\TfaService())->sendOTP($user, 'otp');
                 return ['status' => 1, 'message' => '', 'next' => 'redirect', 'url' =>  route($type?'auth/verify':'admin/auth/verify', ['type' => 'tfa'])];
@@ -205,7 +203,6 @@ class AuthService
         if (!$user) {
             return ['status' => 0, 'message' => 'Email Not Valid'];
         }
-        $userData = $user->getData();
         // Check if the user's account is active
         if ($user->status == 0) {
             return ['status' => 0, 'message' => 'Your Account is blocked'];
@@ -216,18 +213,17 @@ class AuthService
             $tfaService->sendOTP($user, 'otp');
             return ['status' => 1, 'message' => 'Otp sent successfully', 'next' => 'step_2'];
         }
-        if ($userData->otp_failed >= config('setting.login_max_attempt')) {
+        if ($user->otp_failed >= config('setting.login_max_attempt')) {
             return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
         }
-        $result = $tfaService->checkOtp($postData['otp'], $userData->otp);
+        $result = $tfaService->checkOtp($postData['otp'], $user->otp);
         if (!$result['status']) {
-            $user->updateData(['otp_failed', $userData->otp_failed + 1]);
+            $user->otp_failed = $user->otp_failed + 1;
+            $user->save();
             return $result;
         }
-        $user->setData([
-            'otp' => null,
-            'otp_failed' => 0
-        ]);
+        $user->otp = null;
+        $user->otp_failed = 0;
         $user->save();
         Auth::login($user);
 

@@ -19,7 +19,7 @@ class AccountController extends Controller
     {
         return view('site/dashboard');
     }
-    
+
     /**
      * Display the account update form.
      *
@@ -41,7 +41,7 @@ class AccountController extends Controller
      */
     public function save(Request $request)
     {
-        return response()->json((new AccountService())->save($request, auth()->user()));
+        return response()->json((new AccountService())->updateProcess($request, auth()->user()));
     }
 
     /**
@@ -104,7 +104,7 @@ class AccountController extends Controller
     {
         $model = auth()->user();
         return view('admin.account.tfa', compact('model'));
-       // return view('admin/account/tfa', ['user' => auth()->user()]);
+        // return view('admin/account/tfa', ['user' => auth()->user()]);
     }
 
     /**
@@ -181,8 +181,5 @@ class AccountController extends Controller
     public function userActivityList(Request $request)
     {
         return response()->json((new UserActivity())->list($request->all(), auth()->id()));
-        
     }
-
-    
 }

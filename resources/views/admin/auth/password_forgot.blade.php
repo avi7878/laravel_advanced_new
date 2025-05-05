@@ -11,9 +11,9 @@ Forgot Password
                 <div class="card-body">
                     <!-- Logo -->
                     <div class="app-brand justify-content-center mb-6">
-                        <a href="admin/site/password-forgot" class="app-brand-link">
+                        <a href="admin/auth/password-forgot" class="app-brand-link">
                             <span class="app-brand-logo demo">
-                                <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 50px;">
+                                <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 50%;">
                             </span>
                             <span class="app-brand-text demo text-heading fw-bold">{{ Config::get('setting.app_name') }}</span>
                         </a>
@@ -22,7 +22,7 @@ Forgot Password
                     <h4 class="mb-1">Forgot Password</h4>
                     <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
                     {{ view('common/message_alert') }}
-                    <form id="ajax-form" action="{{ route('admin/site/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
+                    <form id="ajax-form" action="{{ route('admin/auth/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
                         {{ csrf_field() }}
                         <input type="hidden" name="step" id="step" value="1">
                         <div id="email-block">
@@ -62,7 +62,7 @@ Forgot Password
                     <br>
                     <div class="text-center">
                         <a href="{{ route('admin/auth/login') }}" class="d-flex justify-content-center">
-                            <i class="icon-base bx bx-chevron-left me-1"></i>
+                            <i class="icon-base bx bx-chevron-left me-1"> </i>
                             Back to login
                         </a>
                     </div>
@@ -99,20 +99,23 @@ Forgot Password
                     }
                     if (response.status) {
                         if (response.message) {
-                            app.showMessageWithCallback(response.message,"success").then(function(){
-                                if (response.next == 'redirect') {
+                            app.showConfirmationPopup({
+                                title: "",
+                                text: response.message,
+                                type: "success"
+                            }).then(function() {
+                                if (response.next == 'step_2') {
+                                    $('#otp-block').show();
+                                    $('#email-block').hide();
+                                    $('#step').val('2');
+                                } else if (response.next == 'step_3') {
+                                    $('#password-block').show();
+                                    $('#otp-block').hide();
+                                    $('#step').val('3');
+                                } else if (response.next == 'redirect') {
                                     window.location.href = response.url;
                                 }
                             });
-                            if (response.next == 'step_2') {
-                                $('#otp-block').show();
-                                $('#email-block').hide();
-                                $('#step').val('2');
-                            } else if (response.next == 'step_3') {
-                                $('#password-block').show();
-                                $('#otp-block').hide();
-                                $('#step').val('3');
-                            } 
                         }
                     } else if (response.message) {
                         app.showMessage(response.message, "error");

@@ -24,6 +24,11 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        // Check if the user is already authenticated
+        if (Auth::check()) {
+            return redirect($this->general->authRedirectUrl(config('setting.admin_login_redirect_url')));
+        }
+        // Check if the user is already authenticated via cookie
         $userToken = $request->cookie(config('setting.app_uid') . '_user_token');
         if ($userToken && !$this->general->rateLimit('remember_login')) {
             $result = (new AuthService())->loginByAuthToken($userToken);

@@ -15,21 +15,21 @@ const pjax = {
      * @param {boolean} [scroll=true] - Whether to scroll to top
      */
     loadPage(url, cache = false, scroll = true) {
-        if(url!=window.location.href){
+        if (url != window.location.href) {
             window.history.pushState({}, "", url);
         }
         //cache code
         const cachedPage = AppCache.get(url);
-        if(cachedPage){
+        if (cachedPage) {
             this.updateContent(cachedPage);
             if (!scroll) $(window).scrollTop(0);
-            if(cache){return false;}
-        }else{
+            if (cache) { return false; }
+        } else {
             this.$mainContainer.css("min-height", this.$mainContainer.height()).html('<div class="loading-text">Loading...</div>');
         }
 
         const ajaxUrl = `${url}${url.includes("?") ? "&" : "?"}partial=1&layout=${this.$mainContainer.data("layout")}`;
-        
+
         $.ajax({
             url: ajaxUrl,
             method: "GET",
@@ -40,12 +40,12 @@ const pjax = {
                     window.location.href = url;
                 } else {
                     //cache start
-                    if(cachedPage==response){
+                    if (cachedPage == response) {
                         return false;
                     }
-                    AppCache.set(url,response);
+                    AppCache.set(url, response);
                     //cache end
-                    
+
                     this.updateContent(response, scroll);
                     if (!scroll) $(window).scrollTop(0);
                 }
@@ -70,6 +70,31 @@ const pjax = {
         this.$mainContainer.html(html).css("min-height", 0);
         $("title").text($("#main-content").data("title"));
         runDocumentReady();
+        this.updateActiveMenuByUrl();
+    },
+
+    /**
+     * Update active and open classes on menu based on current URL
+     */
+    updateActiveMenuByUrl() {
+        const currentUrl = window.location.href;
+        // Remove existing active and open classes
+        // $(".menu-item").removeClass("active");
+        // Find menu links matching current URL
+        const matchingLinks = $(".menu-link").filter(function () {
+            return this.href === currentUrl;
+        });
+        if (matchingLinks.length) {
+            matchingLinks.each(function () {
+                const $link = $(this);
+                $('.menu-item').removeClass('open');
+                $link.parent().parent().parent().parent().find('.active').removeClass('active');
+                if ($link.parent().parent().parent().hasClass('menu-item')) {
+                    $link.parent().parent().parent().addClass('active open');
+                }
+                $link.parent().addClass("active");
+            });
+        }
     },
 
     /**
@@ -79,15 +104,15 @@ const pjax = {
         $(document).on("click", "a.pjax", (e) => {
             const target = e.currentTarget;
             const href = target.href;
-            
+
             if (!href || href.match(/#|javascript:void|undefined/)) return;
             if (e.ctrlKey || target.target === "_blank") return window.open(href, "_blank");
-            
+
             e.preventDefault();
-            
+
             const scroll = target.getAttribute("data-pjax-scroll") !== "false";
             const cache = target.hasAttribute("data-pjax-cache");
-            
+
             this.loadPage(href, cache, scroll);
             this.updateLinkClass(target);
         });
@@ -98,10 +123,8 @@ const pjax = {
      * @param {HTMLElement} target - The clicked link element
      */
     updateLinkClass(target) {
-        target=$(target);
+        target = $(target);
         if (target.hasClass("menu-link")) {
-            $(".menu-item").removeClass("active");
-            target.parent().addClass("active");
         }
     },
 
@@ -114,10 +137,8 @@ const pjax = {
 
         this.routeLinks();
         window.addEventListener("popstate", () => this.loadPage(window.location.href));
-
     }
 };
-
 /**
  * Initialize pjax when DOM is ready
  * @listens DOMContentLoaded

@@ -73,16 +73,18 @@ class EmailTemplate extends Model
 
         // Add update link if user has permission
         if ($sessionUser && $sessionUser->hasPermission('admin/email-template/update')) {
-            $actionLinks .= '<a href="admin/email-template/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>';
+            $actionLinks .= '<a href="admin/email-template/update?id=' . $row->id . '" class="btn btn-icon pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>';
         }
 
         // Add view link if user has permission
         if ($sessionUser && $sessionUser->hasPermission('admin/email-template/view')) {
-            $actionLinks .= '<a target="_blank" href="admin/email-template/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;';
+            $actionLinks .= '<a target="_blank" href="admin/email-template/view?id=' . $row->id . '" class="btn btn-icon pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;';
         }
 
-        return $actionLinks;
+        return '<div class="d-flex align-items-center">' . $actionLinks . '</div>';
     }
+
+
 
 
     /**
@@ -93,7 +95,6 @@ class EmailTemplate extends Model
      */
     public function store(array $postData): array
     {
-
         $rules = [
             'title' => 'required|string|max:255',
             'subject' => 'required|string|max:255',
@@ -155,16 +156,16 @@ class EmailTemplate extends Model
             return ['subject' => '', 'body' => ''];
         }
         $body = $template->body;
+        $subject = $template->subject;
         if ($data) {
+            $data['app_name'] = config('app.name');
             foreach ($data as $key => $value) {
                 $body = str_replace('{{' . $key . '}}', $value, $body);
+                $subject = str_replace('{{' . $key . '}}', $value, $subject);
             }
         }
-        $body = str_replace('{{app_name}}', config('app.name'), $body);
-        $template->subject = str_replace('{{app_name}}', config('app.name'), $template->subject);
-
         //add header footer 
-        $body = view('email/template', ['subject' => $template->subject, 'body' => $body])->render();
-        return ['subject' => $template->subject, 'body' => $body];
+        $body = view('email/template', ['subject' => $subject, 'body' => $body])->render();
+        return ['subject' => $subject, 'body' => $body];
     }
 }

@@ -152,7 +152,8 @@ class UserController extends Controller
     public function revokeAll()
     {
         $model = Auth::user();
-        $model->updateData(['ignore_tfa_device', '']);
+        $model->ignore_tfa_device = '';
+        $model->save();
         return response()->json(['status' => 1, 'message' => 'Your devices revoked successfully.']);
     }
 }

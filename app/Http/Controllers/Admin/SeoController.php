@@ -49,8 +49,6 @@ class SeoController extends Controller
         return response()->json([
             'status' => 1,
             'message' => 'Sitemap updated successfully.',
-            'next' => 'load',
-            'url' => 'admin/seo/meta',
         ]);
     }
 

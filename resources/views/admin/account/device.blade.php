@@ -4,28 +4,31 @@ Device
 @endsection
 @section('content')
 
-
-<?= view('admin/account/component/account_block'); ?>
-  <!-- Content -->
-
-
-  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Device /</span> List</h4>
-
-<!-- Invoice List Table -->
-<div class="card">
-  <div class="card-datatable table-responsive">
-    <table class="datatable-list-table table border-top" id="data-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Client</th>
-          <th>IP</th>
-          <th>Location</th>
-          <th>Last Activity</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-    </table>
+<div class="row">
+  <div class="col-md-12">
+    <?= view('admin/account/component/account_block'); ?>
+          <!-- Content -->
+        {{-- <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Device /</span> List</h4> --}}
+            <!-- Invoice List Table -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="mb-1"><span class="text-muted fw-light">Device /</span> List</h5>
+        </div>  
+          <div class="card-datatable table-responsive">
+            <table class="datatable-list-table table border-top" id="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Client</th>
+                  <th>IP</th>
+                  <th>Location</th>
+                  <th>Last Activity</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+      </div>
   </div>
 </div>
 

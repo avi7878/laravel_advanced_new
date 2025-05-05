@@ -36,7 +36,7 @@ const app = {
         }
     },
 
-    
+
     /**
      * Shows a modal view loaded from a URL
      * @param {string} url - URL to fetch modal content
@@ -92,7 +92,7 @@ const app = {
         }
     },
 
-    
+
 
     /**
      * Performs an AJAX action without confirmation
@@ -184,7 +184,6 @@ const app = {
         const $form = $(form);
         this.ajaxFileRequest($form.attr("action"), new FormData($form[0]), cb);
     },
-
     ajaxFilePost: function (url, postData, cb) {
         postData.append(CSRF_NAME, CSRF_TOKEN);
         app.ajaxFileRequest(url, postData, cb);
@@ -258,12 +257,13 @@ const app = {
      * @param {Object} response - Server response
      */
     ajaxSuccess: function (response) {
+        app.hideLoading();
         if (response.status) {
             if (response.message) {
-                app.showMessage(response.message,'success');
-                setTimeout(function () {    
+                app.showMessage(response.message, 'success');
+                setTimeout(function () {
                     app.nextAction(response);
-                },2000);
+                }, 2000);
             } else {
                 app.nextAction(response);
             }
@@ -276,7 +276,8 @@ const app = {
      * Default AJAX error handler
      */
     ajaxError: function () {
-        app.showMessage("Something went wrong. Please try again later.","error");
+        app.showMessage("Something went wrong. Please try again later.", "error");
+        app.hideLoading();
     },
 
     /**
@@ -292,8 +293,8 @@ const app = {
         $('#common-loader').hide();
     },
 
-    showMessage: function (message,type) {
-        var toastHtml=`
+    showMessage: function (message, type) {
+        var toastHtml = `
         <div class="bs-toast toast toast-placement-ex m-2 fade bg-__type__ top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
             <div class="toast-header">
                 <i class="icon-base bx bx-bell me-2"></i>
@@ -302,15 +303,23 @@ const app = {
             </div>
             <div class="toast-body">__message__</div>
         </div>`;
-        var title=type.charAt(0).toUpperCase() + type.slice(1);
-        $('#common-toast').html(app.dataToHtml(toastHtml, {message:message,title:title,type:type}));
+        var title = type.charAt(0).toUpperCase() + type.slice(1);
+        type = type.replace('error', 'danger');
+        $('#common-toast').html(app.dataToHtml(toastHtml, { message: message, title: title, type: type }));
         setTimeout(function () {
             $('#common-toast').html('');
-        }, 3000);   
+        }, 5000);
         // Swal.fire(title,message,type);
     },
-
-    showConfirmationPopup : function (params) {
+    showMessageWithCallback: function (message, type) {
+        app.showMessage(message, type);
+        return new Promise((resolve, reject) => {
+            setTimeout(function () {
+                resolve(true);
+            }, 2000);
+        });
+    },
+    showConfirmationPopup: function (params) {
         return new Promise((resolve, reject) => {
             if (confirm(params.text)) {
                 resolve(true);
@@ -427,7 +436,7 @@ const app = {
         return "";
     },
 
-    validateFile: function(file, allowedExtensions=['png', 'jpg', 'jpeg', 'webp', 'gif']) {
+    validateFile: function (file, allowedExtensions = ['png', 'jpg', 'jpeg', 'webp', 'gif']) {
         if (!file || !file.name) {
             return { status: 0, message: "No file provided" };
         }
@@ -919,7 +928,7 @@ class ImageCrop {
     setCropFile(file) {
         var validationResult = app.validateFile(file);
         if (!validationResult.status) {
-            app.showMessage("File is not valid! Please select only the following formats: [png, gif, jpeg, webp, jpg]","error");
+            app.showMessage("File is not valid! Please select only the following formats: [png, gif, jpeg, webp, jpg]", "error");
             return false;
         }
         if (this.cropperObj) {

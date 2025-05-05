@@ -2,7 +2,7 @@
 if (isset($_GET['partial']) && $_GET['partial']) {
   if (isset($_GET['layout']) && $_GET['layout'] == 'blank') {
 ?>
-    <div id="main-content" data-title="@yield('title') | {{ Config::get('setting.app_name') }}">
+    <div id="main-content" data-title="@php if($metaData['title']){echo $metaData['title'];}else{ @endphp@yield('title') | {{config('setting.app_name')}}@php }@endphp">
       {{ view('common/message_alert') }}
       @stack('styles')
       @yield('content')
@@ -36,12 +36,14 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
     <!-- Icons -->
+    <link rel="stylesheet" href="theme/assets/vendor/fonts/iconify-icons.css" />
+
     <link rel="stylesheet" href="theme/assets/vendor/fonts/fontawesome.css" />
     <link rel="stylesheet" href="theme/assets/vendor/fonts/tabler-icons.css" />
     <link rel="stylesheet" href="theme/assets/vendor/fonts/flag-icons.css" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="theme/assets/vendor/css/rtl/core.css" />
+    <link rel="stylesheet" href="theme/assets/vendor/css/core.css" />
     <link rel="stylesheet" href="theme/assets/vendor/css/rtl/theme-default.css" />
     <link rel="stylesheet" href="theme/assets/css/demo.css" />
 
@@ -89,13 +91,13 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     </div>
     <!-- Layout wrapper -->
     <div id="main-container" data-layout="blank">
-      <div id="main-content" data-title="<?= @$title; ?> | {{config('app.name')}}">
+      <div id="main-content" data-title="@php if($metaData['title']){echo $metaData['title'];}else{ @endphp@yield('title') | {{config('setting.app_name')}}@php }@endphp">
         @yield('content')
       </div>
     </div>
 
     <!-- / Layout wrapper -->
-    <div class="modal fade" id="common-modal">
+    <div id="common-modal" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content" id="common-modal-content">
         </div>

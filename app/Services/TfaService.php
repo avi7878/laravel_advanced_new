@@ -87,7 +87,9 @@ class TfaService
         }
 
         $otp = $this->generateOtp();
-        $user->updateData(['otp' => $otp . '_' . time(), 'otp_failed' => 0]);
+        $user->otp = $otp . '_' . time();
+        $user->otp_failed = 0;
+        $user->save();
         (new General())->sendEmail($user->email, 'otp', [
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
@@ -148,35 +150,36 @@ class TfaService
             return ['status' => 0, 'message' => 'Your Account is blocked'];
         }
 
-        $userData = $user->getData();
-        if ($userData->otp_failed >= config('setting.login_max_attempt')) {
+        if ($user->otp_failed >= config('setting.login_max_attempt')) {
             return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
         }
 
-        $result = $this->checkOtp($postData['otp'], $userData->otp);
+        $result = $this->checkOtp($postData['otp'], $user->otp);
         if (!$result['status']) {
-            $user->updateData(['otp_failed' => $userData->otp_failed + 1]);
+            $user->otp_failed = $user->otp_failed + 1;
+            $user->save();
             return $result;
         }
 
         if ($postData['type'] == 'tfa') {
             if (@$postData['skip_tfa']) {
-                $ignoredDevices = explode(',', $userData->ignore_tfa_device);
+                $ignoredDevices = explode(',', $user->ignore_tfa_device);
                 $token = $_COOKIE[config('setting.app_uid') . '_token'] ?? null;
                 if ($token && !in_array($token, $ignoredDevices)) {
                     $ignoredDevices[] = $token;
                     $ignoredDevices = array_filter($ignoredDevices);
                     $ignoredDevices = array_unique($ignoredDevices);
-                    $user->setData(['ignore_tfa_device' => implode(',', $ignoredDevices)]);
+                    $user->ignore_tfa_device = implode(',', $ignoredDevices);
                 }
             }
             Session::forget('verify_tfa');
         }else if ($postData['type'] == 'new_email') {
-            $user->email=$userData->new_email;
-            $user->phone=$userData->new_phone;
+            $user->email=$user->new_email;
+            $user->phone=$user->new_phone;
         }
 
-        $user->setData(['otp' => '', 'otp_failed' => 0]);
+        $user->otp = '';
+        $user->otp_failed = 0;
         $user->save();
         $redirectUrl = config('setting.login_redirect_url');
         return ['status' => 1, 'message' => 'OTP verified successfully.', 'next' => 'redirect', 'url' => $redirectUrl];

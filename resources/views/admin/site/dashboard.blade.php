@@ -49,7 +49,7 @@ Dashboard
       <div class="card-body">
         <div class="d-flex align-items-center mb-2">
           <div class="avatar me-4">
-            <span class="avatar-initial rounded bg-label-success "><i class="icon-base bx bx-user icon-lg"></i></span>
+            <span class="avatar-initial rounded bg-label-success "><i class="icon-base bx bx-user-check icon-lg"></i></span>
           </div>
           <h4 class="mb-0">{{ $activeUser }}</h4>
         </div>
@@ -62,7 +62,7 @@ Dashboard
       <div class="card-body">
         <div class="d-flex align-items-center mb-2">
           <div class="avatar me-4">
-            <span class="avatar-initial rounded bg-label-danger"><i class="icon-base bx bx-user icon-lg"></i></span>
+            <span class="avatar-initial rounded bg-label-danger"><i class="icon-base bx bx-user-x icon-lg"></i></span>
           </div>
           <h4 class="mb-0">{{ $deactiveUser }}</h4>
         </div>

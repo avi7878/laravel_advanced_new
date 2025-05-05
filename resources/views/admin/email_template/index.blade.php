@@ -13,7 +13,7 @@ Email Template
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="admin/dashboard" >Dashboard</a>
+        <a href="admin/dashboard">Dashboard</a>
       </li>
       <li class="breadcrumb-item active">Email Template</li>
     </ol>
@@ -26,9 +26,9 @@ Email Template
     <h4 class="align-middle d-sm-inline-block d-none">Email Template</h4>
   </div>
   <div class="card-datatable table-responsive">
-    <table class="dt-fixedheader table table-bordered table-responsive" id="data-table">
+    <table class=" table table-bordered table-responsive" id="data-table">
       <thead>
-       
+
         <tr>
           <th>#</th>
           <th>Title</th>
@@ -47,15 +47,14 @@ Email Template
 @endsection
 @push('scripts')
 <script>
-   documentReady(function() {
+  documentReady(function() {
     datatableObj = $('#data-table').DataTable({
       stateSave: true,
       ajax: dataTableAjax({
         url: '{{route("admin/email-template/list")}}',
         dataSrc: 'data'
       }),
-      columns: [
-        {
+      columns: [{
           data: "id",
           responsivePriority: 6
         }, //,visible:false

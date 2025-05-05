@@ -5,20 +5,20 @@ Forgot Password
 @section('content')
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner py-6">
+        <div class="authentication-inner py-4">
             <div class="card">
                 <div class="card-body">
                     <!-- Logo -->
-                    <div class="app-brand justify-content-center mb-6">
-                        <a href="site/password-forgot" class="app-brand-link">
+                    <div class="app-brand justify-content-center mb-4 mt-2">
+                        <a href="site/password-forgot" class="app-brand-link d-flex align-items-center">
                             <span class="app-brand-logo demo">
-                                <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 200%;">
+                                <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 50px;">
                             </span>
-                            <span class="app-brand-text demo text-heading fw-bold">{{ Config::get('setting.app_name') }}</span>
+                            <span class="app-brand-text demo text-body fw-bold ms-1">{{ Config::get('setting.app_name') }}</span>
                         </a>
                     </div>
                     <!-- /Logo -->
-                    <h4 class="mb-1">Forgot Password</h4>
+                    <h4 class="mb-1">Forgot Password? 🔒</h4>
                     <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
                     {{ view('common/message_alert') }}
                     <form id="ajax-form" action="{{ route('site/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
@@ -58,10 +58,10 @@ Forgot Password
                         </div>
                         <button type="submit" class="btn btn-primary d-grid w-100 waves-effect waves-light">Submit</button>
                     </form>
-                    <br>
+                   
                     <div class="text-center">
                         <a href="{{ route('login') }}" class="d-flex justify-content-center">
-                            <i class="ti ti-chevron-left scaleX-n1-rtl"></i>
+                            <i class="icon-base bx bx-chevron-left me-1"></i>
                             Back to login
                         </a>
                     </div>
@@ -97,23 +97,20 @@ Forgot Password
                         }
                         if (response.status) {
                             if (response.message) {
-                                app.showConfirmationPopup({
-                                    title: "",
-                                    text: response.message,
-                                    type: "success"
-                                }).then(function() {
-                                    if (response.next == 'step_2') {
-                                        $('#otp-block').show();
-                                        $('#email-block').hide();
-                                        $('#step').val('2');
-                                    } else if (response.next == 'step_3') {
-                                        $('#password-block').show();
-                                        $('#otp-block').hide();
-                                        $('#step').val('3');
-                                    } else if (response.next == 'redirect') {
+                                app.showMessageWithCallback(response.message, "success").then(function() {
+                                    if (response.next == 'redirect') {
                                         window.location.href = response.url;
                                     }
                                 });
+                                if (response.next == 'step_2') {
+                                    $('#otp-block').show();
+                                    $('#email-block').hide();
+                                    $('#step').val('2');
+                                } else if (response.next == 'step_3') {
+                                    $('#password-block').show();
+                                    $('#otp-block').hide();
+                                    $('#step').val('3');
+                                }
                             }
                         } else if (response.message) {
                             app.showMessage(response.message, "error");

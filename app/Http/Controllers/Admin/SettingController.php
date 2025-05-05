@@ -82,7 +82,7 @@ class SettingController extends Controller
     public function cacheClear(Request $request)
     {
         (new Setting())->clearCache();
-        return redirect('admin/setting/update')->with('success', 'Setting cache cleared');
+        return response()->json(['status' => 1, 'message' => 'Setting cache cleared']);
     }
 
     /**
@@ -93,6 +93,7 @@ class SettingController extends Controller
      */
     public function smtp(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'host' => 'required|string',
             'username' => 'required|string',
@@ -217,8 +218,8 @@ class SettingController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 0, 'message' => $this->general->getError($validator)]);
         }
-
-        $this->general->sendMail($request->input('email'), 'email | ' . config('setting.app_name'), view('/email/admin/admin-email')->render());
+        $subject = 'Test Admin';
+        $this->general->sendMail($request->input('email'), 'email | ' . config('setting.app_name'), view('email/admin/template', compact('subject'))->render());
         return response()->json(['status' => 1, 'message' => 'Email Sent Successfully']);
     }
 }

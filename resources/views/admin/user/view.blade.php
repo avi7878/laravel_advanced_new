@@ -92,7 +92,7 @@ User View
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-registered"></i>
               <span class="fw-medium mx-2">Register Ip:</span>
-              <span class="small">{{ $model->getData()->registered_ip }}</span>
+              <span class="small">{{ $model->registered_ip }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-flag"></i>
@@ -101,7 +101,7 @@ User View
             </li>
           </ul>
           <div class="d-flex justify-content-center">
-            <a href="user/update?id={{$_GET['id']}}" class="btn btn-primary me-3 pjax">Edit</a>
+            <a href="admin/user/update?id={{$_GET['id']}}" class="btn btn-primary me-3 pjax">Edit</a>
             <button onclick="app.confirmAction(this);" data-action="admin/user/delete?id={{$_GET['id']}}" class="btn btn-label-danger">Delete</button>
           </div>
         </div>

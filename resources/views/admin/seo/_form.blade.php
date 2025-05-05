@@ -5,51 +5,61 @@
     <div class="row">
         <div class="col-md-6">
             <div class="mb-3">
-                <label class="body" for="url">URL (Without Domain Name) Ex.abc/def <span class="star">*</span></label>
+                <label class="form-label" for="url">URL (Without Domain Name) Ex.abc/def <span class="text-danger">*</span></label>
                 <div class="input-group input-group-merge">
                     <input type="text" class="form-control" id="url" placeholder="Enter URL Without Domain Name" name="url" value="{{ @$model->url }}" required />
                 </div>
             </div>
             <div class="mb-3">
-                <label class="body" for="title">Title <span class="star">*</span></label>
+                <label class="form-label" for="title">Title <span class="text-danger">*</span></label>
                 <div class="input-group input-group-merge">
                     <input type="text" class="form-control" id="title" placeholder="Title" name="title" value="{{ @$model->title }}" required />
                 </div>
             </div>
             <div class="mb-3">
-                <label class="body" for="description">Description <span class="star">*</span></label>
-                <div class="input-group input-group-merge">
+                <label class="form-label" for="description">Description <span class="text-danger">*</span></label>
                     <textarea class="form-control" id="description" placeholder="Description" name="description" required>{{ @$model->description }}</textarea>
-                </div>
             </div>
             <div class="mb-3">
-                <label class="body" for="keyword">Keyword <span class="star">*</span></label>
+                <label class="form-label" for="keyword">Keyword <span class="text-danger">*</span></label>
                 <div class="input-group input-group-merge">
                     <input type="text" class="form-control" id="keyword" placeholder="Keyword" name="keyword" value="{{ @$model->keyword }}" required />
                 </div>
             </div>
         </div>
+       
         <div class="col-md-6">
             <div class="mb-3">
+            <small class="fw-medium d-block">Site Map</small>
+            <div class="form-check form-check-inline mt-4">
+                <input class="form-check-input" type="radio" name="site_map" id="frequency_enabled" value="1" data-bs-toggle="collapse" data-bs-target="#collapseFrequency" aria-expanded="false" aria-controls="collapseFrequency" <?= (@$model->sitemap_enable == 1) ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="frequency_enabled">Enable</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="site_map" id="frequency_disabled" value="0" data-bs-toggle="collapse" data-bs-target="#collapseFrequency" aria-expanded="false" aria-controls="collapseFrequency" <?= (@$model->sitemap_enable == 0) ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="frequency_disabled">Disable</label>
+            </div>
+            </div>
+            {{-- <div class="mb-3">
                 <label class="body">Site Map</label>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="site_map" id="frequency_enabled" value="1" data-bs-toggle="collapse" data-bs-target="#collapseFrequency" aria-expanded="false" aria-controls="collapseFrequency" <?= (@$model->sitemap_enable == 1) ? 'checked' : ''; ?>>
                     <label class="form-check-label" for="frequency_enabled">
                         Enable
                     </label>
-                </div>
+                </div>Disable
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="site_map" id="frequency_disabled" value="0" data-bs-toggle="collapse" data-bs-target="#collapseFrequency" aria-expanded="false" aria-controls="collapseFrequency" <?= (@$model->sitemap_enable == 0) ? 'checked' : ''; ?>>
                     <label class="form-check-label" for="frequency_disabled">
-                        Disable
+                        
                     </label>
                 </div>
-            </div>
+            </div> --}}
             <div class="collapse <?= (@$model->sitemap_enable == 1) ? 'show' : ''; ?>" id="collapseFrequency">
                 <div class="mb-3">
-                    <label class="body" for="frequency">Frequency</label>
-                    <select class="form-control" name="frequency">
-                        <option></option>
+                    <label class="form-label" for="frequency">Frequency</label>
+                        <select class="form-select" data-style="btn-default" name="frequency">
+                        <option>Select Frequency</option>
                         <option value="weekly" <?php if (@$model->change_frequency === 'weekly') {
                                                     echo 'selected';
                                                 } ?>>Weekly</option>
@@ -62,11 +72,11 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="body" for="priority">Priority</label>
+                    <label class="form-label" for="priority">Priority</label>
                     <input type="number" class="form-control" id="priority" placeholder="Priority" name="priority" value="{{ @$model->priority }}" />
                 </div>
                 <div class="mb-3">
-                    <label class="body" for="priority">Last Modified</label>
+                    <label class="form-label" for="priority">Last Modified</label>
                     <input type="datetime" class="form-control" id="priority" placeholder="Priority" name="last_modified" value="{{Carbon\Carbon::now()->format('Y-m-d')." ".Carbon\Carbon::now()->format('H:i:a')}}" />
                 </div>
             </div>

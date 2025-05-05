@@ -18,13 +18,12 @@
         <div>
           <h5 class="card-title mb-0 customer-chart">New Users</h5>
         </div>
-        <div>
-            <select class="form-control" id="periodSelect" onchange="userChartDataUpdate(this.value)">
+            <select class="form-select w-30"  data-style="btn-default"
+             id="periodSelect" onchange="userChartDataUpdate(this.value)">
                 <option value="day">Last 7 Days</option>
                 <option value="month">Last 6 Months</option>
                 <option value="year" selected>Last 12 Months</option>
             </select>
-        </div>
       </div>
       <div class="card-body">
         <canvas id="userChart"></canvas>

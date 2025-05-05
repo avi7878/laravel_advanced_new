@@ -23,7 +23,7 @@ Email Template Update
         <h4 class="align-middle d-sm-inline-block d-none">Email Update</h4>
     </div>
     <div class="card-body">
-        <?= view('admin/email_template/_form', compact('model')) ?>
+        <?= view('admin/email_template/_form', compact('model','example')) ?>
     </div>
 </div>
 @endsection

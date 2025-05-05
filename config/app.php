@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => getTimezone(),
+    'timezone' => getClientTimezone(env('APP_TIMEZONE', 'en')),
 
     /*
     |--------------------------------------------------------------------------

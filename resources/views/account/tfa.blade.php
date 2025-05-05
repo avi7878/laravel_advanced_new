@@ -3,15 +3,14 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="row">
             {{ view('account/component/account_block',compact('model')) }}
-        </div>
+       
         <div class="col-lg-12 col-md-12">
             <div class="edit-profile_wrapper">
                 <div class="main-card mb-3 card">
                     <div class="card-header">
                         <h5>Two Factor Authentication</h5>
-                        @if($model && $model->getData()->status_tfa)
+                        @if($model && $model->status_tfa)
                         <b>Your Account Two Factor Authentication is Enabled</b><br><br>
                         <button
                             data-action="{{ route('account/tfa-status-change') }}"
@@ -67,6 +66,7 @@
 
             </div>
         </div>
+        
     </div>
 </div>
 @endsection

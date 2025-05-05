@@ -33,7 +33,7 @@ class AccountService
         $validator = Validator::make($postData, [
             'first_name' => 'required|alpha|max:255',
             'last_name' => 'required|alpha|max:255',
-            'phone' => 'required|digits:10|numeric',
+            'phone' => 'required|digits:10|numeric|unique:user,phone',
             'email' => 'required|email|unique:user,email',
             'password' => [
                 'required',
@@ -51,7 +51,7 @@ class AccountService
         }
 
         $ip = $general->getClientIp();
-        $userObj=new User();
+        $userObj = new User();
         $user = $userObj->create([
             'first_name' => $postData['first_name'],
             'last_name' => $postData['last_name'],
@@ -61,7 +61,7 @@ class AccountService
             'country' => $general->getIpInfoCountry($ip),
             'status'      => 1,
             'timezone' => config('app.timezone'),
-            'data' => $userObj->setData(['registered_ip' => $ip])
+            'registered_ip' => $ip
         ]);
 
         (new UserActivity())->add($user->id, 3);
@@ -109,17 +109,18 @@ class AccountService
         if ($user->status == 0) {
             return ['status' => 0, 'message' => 'Your Account is blocked'];
         }
-        $userData = $user->getData();
-        if ($userData->otp_failed >= config('setting.login_max_attempt')) {
+        if ($user->otp_failed >= config('setting.login_max_attempt')) {
             return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
         }
-        $result = $tfaService->checkOtp($postData['otp'], $userData->otp);
+        $result = $tfaService->checkOtp($postData['otp'], $user->otp);
         if (!$result['status']) {
-            $user->updateData(['otp_failed' => $userData->otp_failed + 1]);
+            $user->otp_failed = $user->otp_failed + 1;
+            $user->save();
             return $result;
         }
 
-        $user->setData(['email_verified' => 1, 'otp' => '']);
+        $user->email_verified = 1;
+        $user->otp = '';
         $user->save();
         return ['status' => 1, 'message' => 'OTP verified successfully.', 'next' => 'redirect', 'url' => 'login'];
     }
@@ -168,20 +169,20 @@ class AccountService
         if (!$user) {
             return ['status' => 0, 'message' => 'Email Not Valid'];
         }
-        $userData = $user->getData();
         $tfaService = new TfaService();
         if ($step == 1) {
             $tfaService->sendOTP($user, 'forgot_password');
             return ['status' => 1, 'message' => 'Otp sent successfully', 'next' => 'step_2'];
         }
 
-        if ($userData->otp_failed >= config('setting.login_max_attempt')) {
+        if ($user->otp_failed >= config('setting.login_max_attempt')) {
             return ['status' => 0, 'message' => 'Too many attempts, please try again later.'];
         }
 
-        $result = $tfaService->checkOtp($postData['otp'], $userData->otp);
+        $result = $tfaService->checkOtp($postData['otp'], $user->otp);
         if (!$result['status']) {
-            $user->updateData(['otp_failed', $userData->otp_failed + 1]);
+            $user->otp_failed = $user->otp_failed + 1;
+            $user->save();
             return $result;
         }
 
@@ -190,9 +191,9 @@ class AccountService
         } else {
             $user->update([
                 'password' => (new AuthService())->encryptPassword($postData['password']),
-                'data' => $user->setData(['otp', '']),
+                'data' => $user->otp='',
             ]);
-            return ['status' => 1, 'message' => 'Password reset successfully. You can now log in', 'next' => 'redirect', 'url' => 'login'];
+            return ['status' => 1, 'message' => 'Password reset successfully. You can now log in', 'next' => 'redirect', 'url' => 'admin/auth/login'];
         }
     }
 
@@ -223,8 +224,10 @@ class AccountService
             'last_name' => $request->input('last_name'),
         ]);
 
-        if($request->input('phone') != $user->phone || $request->input('email') != $user->email) {
-            $user->updateData(['new_phone'=>$request->input('phone'),'new_email'=>$request->input('email')]);
+        if ($request->input('phone') != $user->phone || $request->input('email') != $user->email) {
+            $user->new_phone = $request->input('phone');
+            $user->new_email = $request->input('email');
+            $user->save();
             (new \App\Services\TfaService())->sendOTP($user, 'otp');
             return ['status' => 1, 'message' => 'Account Updated Successfully', 'next' => 'redirect', 'url' => 'auth/verify?type=new_email'];
         }
@@ -319,7 +322,8 @@ class AccountService
      */
     public function revokeAllTFADevices(User $user): array
     {
-        $user->updateData(['ignore_tfa_device' => '']);
+        $user->ignore_tfa_device = '';
+        $user->save();
         return ['status' => 1, 'message' => 'Your Devices Revoked Successfully.', 'next' => 'refresh'];
     }
 }

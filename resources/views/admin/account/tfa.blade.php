@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('admin.layouts.main')
 @section('title', 'Profile')
 @section('content')
 
@@ -12,7 +12,7 @@
                 <div class="main-card mb-3 card">
                     <div class="card-header">
                         <h5>Two Factor Authentication</h5>
-                        @if($model && $model->getData()->status_tfa)
+                        @if($model && $model->status_tfa)
                         <b>Your Account Two Factor Authentication is Enabled</b><br><br>
                         <button
                             data-action="{{ route('account/tfa-status-change') }}"

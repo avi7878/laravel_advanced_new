@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\DB;
 use App\Services\PermissionService;
 use App\Services\AuthService;
 
-
 class User extends Authenticatable
 {
-
 
     protected $table = 'user';
     protected $primaryKey = 'id';
@@ -52,58 +50,24 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->type== 0 ? true : false;
+        return $this->type == 0 ? true : false;
     }
 
     public function isSuperAdmin()
     {
-        return $this->type ==0 && $this->role == 1 ? true : false;
+        return $this->type == 0 && $this->role == 1 ? true : false;
+    }
+    public function getPermissionListData(): array
+    {
+        return (new PermissionService())->getPermissionListData();
     }
 
-    public function hasPermission($permission='')
+    public function hasPermission($permission = '')
     {
-        if($this->isSuperAdmin()){
+        if ($this->isSuperAdmin()) {
             return true;
         }
-        return (new PermissionService())->hasPermission($permission,$this->permission); 
-    }
-
-    public function defaultData(){
-        $data=new \stdClass();
-        $data->status_tfa=0;
-        $data->ignore_tfa_device='';
-        $data->otp='';
-        $data->otp_failed=0;
-        $data->login_failed=0;
-        $data->login_failed_at='';
-        $data->email_verified='';
-        $data->registered_ip='';
-        return $data;
-    }
-
-    public function getData(){
-        if($this->data){
-            return json_decode($this->data);
-        }else{
-            return $this->defaultData();            
-        }
-    }
-
-    public function updateData($newData){
-        $data=$this->getData();
-        foreach($newData as $key=>$value){
-            $data->{$key}=$value;
-        }
-        $this->update(['data' => json_encode($data)]);
-    }
-
-    public function setData($newData){
-        $data=$this->getData();
-        foreach($newData as $key=>$value){
-            $data->{$key}=$value;
-        }
-        $this->data=json_encode($data);
-        return $this->data;
+        return (new PermissionService())->hasPermission($permission, $this->permission);
     }
 
     public function getStatusBadge($status)
@@ -135,9 +99,8 @@ class User extends Authenticatable
             if ($row->image) {
                 $result['data'][$key]->image = '<a href="upload/profile/' . $row->image . '" data-toggle="lightbox" data-title="Image" class = "noroute" target = "_blank">
                 <img style="width:30px;height:30px" src="' . $imageUrl . '" class="h-auto rounded-circle" alt="blog image"></a>';
-                
             }
-             // Concatenate first and last names
+            // Concatenate first and last names
             $result['data'][$key]->first_name = $row->first_name . ' ' . $row->last_name;
             $result['data'][$key]->permission = $row->permission;
             // Set user status badge
@@ -226,9 +189,10 @@ class User extends Authenticatable
         return $result;
     }
 
-   
+
     public function storeAdmin(array $postData): array
     {
+
         $general = new General();
         $id = $postData['id'] ?? null;
         $existingPassword = $postData['pass'] ?? null;
@@ -269,7 +233,7 @@ class User extends Authenticatable
             if (!$uploadResult['status']) {
                 return $uploadResult;
             }
-            $image=$uploadResult['file_name'];
+            $image = $uploadResult['file_name'];
             if ($image) {
                 if ($model->image) {
                     $general->deleteFile($model->image, 'profile');
@@ -277,7 +241,6 @@ class User extends Authenticatable
                 $model->image = $image;
             }
         }
-
         // Set model attributes
         $model->first_name = $postData['first_name'];
         $model->last_name = $postData['last_name'];
@@ -322,7 +285,7 @@ class User extends Authenticatable
         $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255', 
+            'email' => 'required|email|max:255',
             'phone' => 'required|digits:10|numeric',
             'status' => 'required|boolean',
         ];
@@ -349,7 +312,7 @@ class User extends Authenticatable
             if (!$uploadResult['status']) {
                 return $uploadResult;
             }
-            $image=$uploadResult['file_name'];
+            $image = $uploadResult['file_name'];
             if ($image) {
                 if ($model->image) {
                     $general->deleteFile($model->image, 'profile');
@@ -361,12 +324,11 @@ class User extends Authenticatable
         $model->first_name = $postData['first_name'];
         $model->last_name = $postData['last_name'];
         $model->email = $postData['email'];
-        $model->phone = $postData['phone'] ;
+        $model->phone = $postData['phone'];
         $model->country = $postData['country'] ?? null;
         $model->status = $postData['status'];
         $model->role = $postData['role'];
-        $model->role = $postData['role'];
-        $model->setData(['registered_ip'=>$general->getClientIp()]);
+        $model->registered_ip = $general->getClientIp();
         // Encrypt password if provided
         if (!empty($postData['password'])) {
             $model->password = (new AuthService())->encryptPassword($postData['password']);
