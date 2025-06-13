@@ -3,7 +3,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     if (isset($_GET['layout']) && $_GET['layout'] == 'main') {
         $metaData = $general->getMetaData();
 ?>
-        <div id="main-content" data-title="@php if($metaData['title']){echo $metaData['title'];}else{ @endphp@yield('title') | {{config('setting.app_name')}}@php }@endphp">
+        <div id="main-content" data-title="@php if($metaData['title']){echo $metaData['title'];}else{ @endphp @yield('title') | {{config('setting.app_name')}}@php } @endphp">
             {{ view('common/message_alert') }}
             @stack('styles')
             @yield('content')
@@ -21,7 +21,8 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     }
     ?>
     <!DOCTYPE html>
-    <html lang="{{ Config::get('app.locale') }}" class="layout-navbar-fixed layout-wide"  data-assets-path="theme/assets/" data-template="front-pages">
+    <html lang="{{ Config::get('app.locale') }}" class="layout-navbar-fixed layout-wide" data-assets-path="theme/assets/" data-template="front-pages">
+
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -45,17 +46,13 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <link rel="stylesheet" href="theme/assets/vendor/libs/pickr/pickr-themes.css">
         <link rel="stylesheet" href="theme/assets/vendor/css/core.css" class="template-customizer-core-css  " />
         <link rel="stylesheet" href="theme/assets/css/demo.css" />
-       
         <!-- Core CSS -->
-        <link rel="stylesheet" href="theme/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
         <!-- Vendors CSS -->
         <link rel="stylesheet" href="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-     
-        {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.css" integrity="sha512-Of+yU7HlIFqXQcG8Usdd67ejABz27o7CRB1tJCvzGYhTddCi4TZLVhh9tGaJCwlrBiodWCzAx+igo9oaNbUk5A==" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+
         <!-- Page CSS -->
         <link rel="stylesheet" href="assets/css/common.css?cache=off">
         <!-- Helpers -->
-        <script src="theme/assets/vendor/libs/@form-validation/bootstrap5.js"></script>
         <script src="theme/assets/vendor/js/helpers.js"></script>
         <script src="theme/assets/vendor/js/template-customizer.js"></script>
         <script src="theme/assets/js/front-config.js"></script>
@@ -73,8 +70,9 @@ if (isset($_GET['partial']) && $_GET['partial']) {
                 documentReadyFunctions.push(fn);
             }
         </script>
-        {{-- {!! config('setting.header_content') !!} --}}
+        {!! config('setting.header_content') !!}
     </head>
+
     <body>
         <div id="common-loader" style="display:none;">
             <div class="common-loader-conetent">
@@ -84,52 +82,51 @@ if (isset($_GET['partial']) && $_GET['partial']) {
             </div>
             <div class="common-loader-backdrop"></div>
         </div>
-        
+
         <!-- Layout wrapper -->
         <div class="layout-wrapper layout-content-navbar layout-without-menu">
-             <!-- Layout container -->
-                <div class="layout-container">
-                    <!-- Layout page -->
-                        <div class="layout-page">
-                            <!-- Navbar -->
-                            {{ view('layouts/component/main_navbar',compact('sessionUser')) }}
-                            <!-- / Navbar -->
-                
-                            <!-- Content wrapper -->
-                            <div class="content-wrapper">
-                                    <!-- Content -->
-                                    <div class="container-xxl flex-grow-1 container-p-y">
-                                        <div id="main-container" data-layout="main">
-                                            <div id="main-content" data-title="@php if($metaData['title']){echo $metaData['title'];}else{ @endphp@yield('title') | {{config('setting.app_name')}}@php }@endphp">
-                                                {{ view('common/message_alert') }}
-                                                @yield('content')
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/ Content -->
-                                    <!-- Footer -->
-                                    <footer class="content-footer footer bg-footer-theme">
-                                        <div class="container-xxl">
-                                            <div class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
-                                                <div class="mb-2 mb-md-0">
-                                                    ©{{date('Y')}} , made by <a href="{{route('home')}}" target="_blank" class="fw-semibold footer-link">{{ config('setting.app_name') }}</a>
-                                                </div>
-                                                <div class="d-none d-lg-inline-block">
-                                                    <a target="_blank" href="page/terms-condition" class="footer-link me-4">Terms & Condition</a>
-                                                    <a target="_blank" href="page/Cullen-Patrick" class="footer-link me-4">Cullen Patrick</a>
-                                                    <a target="_blank" href="page/privacy-policy" class="footer-link">Privacy Policy</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </footer>
-                                    <!-- / Footer -->
-                                    <div class="content-backdrop fade"></div>
+            <!-- Layout container -->
+            <div class="layout-container">
+                <!-- Layout page -->
+                <div class="layout-page">
+                    <!-- Navbar -->
+                    {{ view('layouts/component/main_navbar',compact('sessionUser')) }}
+                    <!-- / Navbar -->
+
+                    <!-- Content wrapper -->
+                    <div class="content-wrapper">
+                        <!-- Content -->
+                        <div class="container-xxl flex-grow-1 container-p-y">
+                            <div id="main-container" data-layout="main">
+                                <div id="main-content" data-title="@php if($metaData['title']){echo $metaData['title'];}else{ @endphp@yield('title') | {{config('setting.app_name')}}@php }@endphp">
+                                    {{ view('common/message_alert') }}
+                                    @yield('content')
+                                </div>
                             </div>
-                            <!--/ Content wrapper -->  
                         </div>
-                    <!--/ Layout page -->
+                        <!--/ Content -->
+                        <!-- Footer -->
+                        <footer class="content-footer footer bg-footer-theme">
+                            <div class="container-xxl">
+                                <div class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
+                                    <div class="mb-2 mb-md-0">
+                                        ©{{date('Y')}} , made by <a href="{{route('home')}}" target="_blank" class="fw-semibold footer-link">{{ config('setting.app_name') }}</a>
+                                    </div>
+                                    <div class="d-none d-lg-inline-block">
+                                        <a target="_blank" href="page/terms-condition" class="footer-link me-4 pjax">Terms & Condition</a>
+                                        <a target="_blank" href="page/privacy-policy" class="footer-link pjax">Privacy Policy</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+                        <!-- / Footer -->
+                        <div class="content-backdrop fade"></div>
+                    </div>
+                    <!--/ Content wrapper -->
                 </div>
-              <!--/ Layout container -->
+                <!--/ Layout page -->
+            </div>
+            <!--/ Layout container -->
             <!-- Overlay -->
             <div class="layout-overlay layout-menu-toggle"></div>
             <!-- Drag Target Area To SlideIn Menu On Small Screens -->
@@ -146,14 +143,12 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <div id="common-toast"></div>
         <!-- Toast with Placements -->
         <!-- Core JS -->
-        {{-- {{view('common/cookie_consent')}} --}}
+        {{ view('common/cookie_consent') }}
         <!-- build:js assets/vendor/js/core.js -->
         <script src="theme/assets/vendor/libs/jquery/jquery.js"></script>
         <script src="theme/assets/vendor/libs/popper/popper.js"></script>
         <script src="theme/assets/vendor/js/bootstrap.js"></script>
         <script src="theme/assets/js/front-main.js"></script>
-        {{-- <script src="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script> --}}
-        {{-- <script src="theme/assets/vendor/js/menu.js"></script> --}}
         <!-- endbuild -->
         <!-- Main JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -166,7 +161,8 @@ if (isset($_GET['partial']) && $_GET['partial']) {
                 runDocumentReady();
             });
         </script>
-        {{-- {!! config('setting.footer_content') !!} --}}
+        {!! config('setting.footer_content') !!}
     </body>
+
     </html>
 <?php } ?>

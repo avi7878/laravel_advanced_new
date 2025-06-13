@@ -12,9 +12,6 @@
     'login_ban_time' => env('LOGIN_BAN_TIME', 60),
 
     'login_redirect_url'=>'dashboard',
-    'adimn_login_redirect_url'=>'admin/dashboard',
-    'mail_from_address' => env('MAIL_FROM_ADDRESS'),
-    'mail_from_name' => env('MAIL_FROM_NAME'),
 
     'user_email_verify'=>true,
     'google_recaptcha'=>true,

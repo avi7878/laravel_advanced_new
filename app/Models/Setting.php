@@ -35,15 +35,44 @@ class Setting extends Model
      */
     public $timestamps = false;
 
-    
+    /**
+     * Retrieves the value of a setting by key.
+     *
+     * @param string $key The key of the setting.
+     * @return string|bool The value of the setting if found, false otherwise.
+     */
+    public function getOne(string $key): string|bool
+    {
+        $setting = $this->where('key', $key)->first();
+        return $setting ? $setting->value : false;
+    }
+
+    /**
+     * Sets a setting by key. If the setting does not exist, it is created.
+     * If the setting exists and its value differs, it is updated.
+     *
+     * @param string $key The key of the setting.
+     * @param string $value The value to set or update.
+     * @return void
+     */
+    public function setOne(string $key, string $value): void
+    {
+        $setting = $this->firstOrNew(['key' => $key]);
+        if ($setting->exists && $setting->value === $value) {
+            return; // No update necessary
+        }
+        $setting->value = $value;
+        $setting->save();
+    }
+
     /**
      * Updates the value of an existing setting by key if it differs from the current value.
      *
      * @param string $key The key of the setting.
-     * @param string $value The new value to update.
+     * @param string|null $value The new value to update.
      * @return void
      */
-    public function updateOne(string $key, string $value): void
+    public function updateOne(string $key, string|null $value): void
     {
         $setting = $this->where('key', $key)->first();
 
@@ -78,17 +107,18 @@ class Setting extends Model
     }
 
     /**
-     * Retrieves all settings with a file attribute and organizes them by file name.
+     * Retrieves all settings from the database and returns them as an associative array.
+     * The keys are the setting keys, and the values are the corresponding setting values.
      *
-     * @return array An associative array of settings, keyed by 'file.key'.
+     * @return array An associative array of all settings.
      */
     public function allSettings(): array
     {
         $data = [];
-        $options = $this->whereNotNull('file')->get();
+        $options = $this->where('type', 0)->get();
 
         foreach ($options as $row) {
-            $data[$row['file'] . '.' . $row['key']] = $row['value'];
+            $data[$row['key']] = $row['value'];
         }
 
         return $data;
@@ -115,24 +145,84 @@ class Setting extends Model
      */
     public function store(array $postData): array
     {
-        $settingData=$this->allSettings();
-        $postData=array_merge($settingData,$postData);
-
-        $validator = Validator::make($postData, [
-            'date_format' => 'required|string',
-            'date_time_format' => 'required|string',
-            'timezone' => 'required|string',
-            'user_email_verify' => 'required|boolean',
-            'user_login_with_otp' => 'required|boolean',
-            'admin_email' => 'required|email',
-            'cookie_consent' => 'required|boolean',
-        ]);
-
-        if ($validator->fails()) {
-            return ['status' => 0,'message' => $validator->errors()->first()];
+        // $settingData=$this->allSettings();
+        // $postData=array_merge($settingData,$postData);
+        if ($postData['type'] == 'general') {
+            $validator = Validator::make($postData, [
+                'setting_app_name' => 'required|string',
+                'setting_date_format' => 'required|string',
+                'setting_date_time_format' => 'required|string',
+                'setting_user_email_verify' => 'required|boolean',
+                'setting_user_login_with_otp' => 'required|boolean',
+                'setting_admin_email' => 'required|email',
+                'setting_cookie_consent' => 'required|boolean',
+            ]);
+            $updateData = [
+                'setting.app_name' => $postData['setting_app_name'],
+                'setting.date_format' => $postData['setting_date_format'],
+                'setting.date_time_format' => $postData['setting_date_time_format'],
+                'setting.user_email_verify' => $postData['setting_user_email_verify'],
+                'setting.user_login_with_otp' => $postData['setting_user_login_with_otp'],
+                'setting.admin_email' => $postData['setting_admin_email'],
+                'setting.cookie_consent' => $postData['setting_cookie_consent'],
+            ];
+        } else if ($postData['type'] == 'smtp') {
+            $validator = Validator::make($postData, [
+                'mail_mailers_smtp_host' => 'required|string',
+                'mail_mailers_smtp_username' => 'required|string',
+                'mail_mailers_smtp_password' => 'required|string',
+                'mail_mailers_smtp_encryption' => 'required|string',
+                'mail_mailers_smtp_port' => 'required|integer',
+                'mail_from_address' => 'required|email',
+                'mail_from_name' => 'required|string',
+            ]);
+            $updateData = [
+                'mail.mailers.smtp.host' => $postData['mail_mailers_smtp_host'],
+                'mail.mailers.smtp.username' => $postData['mail_mailers_smtp_username'],
+                'mail.mailers.smtp.password' => $postData['mail_mailers_smtp_password'],
+                'mail.mailers.smtp.encryption' => $postData['mail_mailers_smtp_encryption'],
+                'mail.mailers.smtp.port' => $postData['mail_mailers_smtp_port'],
+                'mail.from.address' => $postData['mail_from_address'],
+                'mail.from.name' => $postData['mail_from_name'],
+            ];
+        } else if ($postData['type'] == 'captcha') {
+            $validator = Validator::make($postData, [
+                'setting_google_recaptcha' => 'required|string',
+                'setting_google_recaptcha_secret_key' => 'required|string',
+                'setting_google_recaptcha_public_key' => 'required|string',
+            ]);
+            $updateData = [
+                'setting.google_recaptcha' => $postData['setting_google_recaptcha'],
+                'setting.google_recaptcha_secret_key' => $postData['setting_google_recaptcha_secret_key'],
+                'setting.google_recaptcha_public_key' => $postData['setting_google_recaptcha_public_key'],
+            ];
+        } else if ($postData['type'] == 'social') {
+            $validator = Validator::make($postData, [
+                'services_google_client_id' => 'required|string',
+                'services_google_client_secret' => 'required|string',
+                'services_google_login' => 'required|boolean',
+            ]);
+            $updateData = [
+                'services.google_client_id' => $postData['services_google_client_id'],
+                'services.google_client_secret' => $postData['services_google_client_secret'],
+                'services.google_login' => $postData['services_google_login'],
+            ];
+        } else if ($postData['type'] == 'content') {
+            $validator = Validator::make($postData, [
+                'setting_header_content' => 'string|nullable',
+                'setting_footer_content' => 'string|nullable',
+            ]);
+            $updateData = [
+                'setting.header_content' => $postData['setting_header_content'],
+                'setting.footer_content' => $postData['setting_footer_content'],
+            ];
         }
 
-        $this->updateAll($postData);
+        if ($validator->fails()) {
+            return ['status' => 0, 'message' => $validator->errors()->first()];
+        }
+
+        $this->updateAll($updateData);
 
         return [
             'status' => 1,

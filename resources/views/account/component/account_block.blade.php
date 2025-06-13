@@ -1,7 +1,7 @@
 
 <!-- Navbar pills -->
 
-        <div class="nav-align-top">
+        <div class="nav-align-top pt-3">
             <ul class="nav nav-pills flex-column flex-md-row mb-6 gap-md-0 gap-2">
                 <li class="nav-item ">
                     <a class="nav-link pjax {{ $general->routeMatchClass('account/update') }}" href="account/update"><i class="icon-base bx bx-user icon-sm me-1_5"></i>Account</a>

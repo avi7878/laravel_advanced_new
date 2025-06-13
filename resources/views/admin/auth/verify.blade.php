@@ -10,7 +10,7 @@ Login with Otp
       <div class="card-body">
         <!-- Logo -->
         <div class="app-brand justify-content-center mb-4 mt-2">
-          <a href="index.html" class="app-brand-link gap-2">
+          <a href="index.html" class="app-brand-link gap-2 pjax">
             <span class="app-brand-logo demo">
               <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 200%;">
             </span>
@@ -29,7 +29,7 @@ Login with Otp
         <form class="ajax-form" action="{{route('auth/verify-process')}}" method="post">
           {{ csrf_field() }}
           <div class="mb-3">
-            <label class="form-label">OTP</label>
+            <label class="form-label">OTP<span class="text-danger">*</span></label>
             <input name="otp" type="number" class="form-control" required maxlength="6" minlength="6" autofocus />
           </div>
           <div class="mb-3">
@@ -40,11 +40,11 @@ Login with Otp
           </div>
           <button class="btn btn-primary d-grid w-100 mb-3">Submit</button>
           <div class="form-group mb-8">
-            <a href="{{route('logout')}}" class="btn btn-default d-grid w-100 noroute">Logout</a>
+            <a href="{{route('logout')}}" class="btn btn-default d-grid w-100 noroute pjax">Logout</a>
           </div>
           <div class="text-center">
             Didn't get the code?
-            <a href="javascript:void(0)" onclick="resendOtp()" id="resend-otp-link">Resend</a>
+            <a href="javascript:void(0)" onclick="resendOtp()" id="resend-otp-link" class="pjax">Resend</a>
           </div>
         </form>
       </div>

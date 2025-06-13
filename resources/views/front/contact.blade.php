@@ -15,7 +15,7 @@ Contact
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="body" for="basic-icon-default-fullname">Name</label>
+                                <label class="body" for="basic-icon-default-fullname">Name <span class="text-danger">*</span></label>
                                 <div class="">
                                     <input type="text" class="form-control simple" placeholder="Name" name="name" required>
                                 </div>
@@ -23,7 +23,7 @@ Contact
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="body" for="basic-icon-default-fullname">Email</label>
+                                <label class="body" for="basic-icon-default-fullname">Email <span class="text-danger">*</span></label>
                                 <div class="">
                                     <input type="email" class="form-control simple" placeholder="Email" name="email" required>
                                 </div>
@@ -31,7 +31,7 @@ Contact
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="body" for="basic-icon-default-fullname">Subject</label>
+                                <label class="body" for="basic-icon-default-fullname">Subject <span class="text-danger">*</span></label>
                                 <div class="">
                                     <input type="text" class="form-control simple" placeholder="Subject" name="subject" required>
                                 </div>
@@ -39,7 +39,7 @@ Contact
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="body" for="basic-icon-default-fullname">Message</label>
+                                <label class="body" for="basic-icon-default-fullname">Message <span class="text-danger">*</span></label>
                                 <div class="">
                                     <textarea name="message" placeholder="Message" class="form-control simple" required></textarea><br>
                                 </div>
@@ -61,10 +61,52 @@ Contact
 @endsection
 @push('scripts')
 <script type="text/javascript">
+jQuery.validator.addMethod("noDisposableEmail", v => !["mailinator.com","tempmail.com","10minutemail.com","guerrillamail.com","fakeinbox.com"].includes((v.split('@')[1]||"").toLowerCase()), "Disposable email addresses are not allowed.");
     documentReady(function() {
         $('.ajax-contact-form').validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 2    
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    noDisposableEmail: true
+                },
+                subject: {
+                    required: true,
+                    minlength: 5
+                },
+                message: {
+                    required: true,
+                    minlength: 10
+                }
+            },
+            messages: {
+                name: {
+                    required: "Please enter your name",
+                    minlength: "Your name must consist of at least 2 characters"
+                },
+                email: {
+                    required: "Please enter a valid email address",
+                    email: "Please enter a valid email address",
+                    noDisposableEmail: "Please enter a valid email"
+                },
+                subject: {
+                    required: "Please enter a subject",
+                    minlength: "Your subject must consist of at least 5 characters"
+                },
+                message: {
+                    required: "Please enter a message",
+                    minlength: "Your message must consist of at least 10 characters"
+                }
+            },
             submitHandler: function(form) {
                 app.ajaxForm(form);
+                try {
+                    grecaptcha.reset();
+                } catch (e) {}
             }
         })
     });

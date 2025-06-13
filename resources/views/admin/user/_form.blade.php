@@ -1,8 +1,4 @@
-    <style>
-.star {
-    color: red;
-}
-
+<style>
 .input-group.error .input-group-text {
     border-color: #dc3545;
     /* Bootstrap danger color */
@@ -19,7 +15,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-fullname">First Name <span
-                                    class="star">*</span></label>
+                                    class="text-danger">*</span></label>
                             <div class="input-group input-group-merge">
                                 <input type="text" class="form-control" id="basic-icon-default-first-name"
                                     placeholder="First Name" name="first_name" aria-label="first_name"
@@ -30,7 +26,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-fullname">Last Name <span
-                                    class="star">*</span></label>
+                                    class="text-danger">*</span></label>
                             <div class="input-group input-group-merge">
                                 <input type="text" class="form-control" id="basic-icon-default-last-name"
                                     placeholder="Last Name" name="last_name" aria-label="Name"
@@ -41,7 +37,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-fullname">Email <span
-                                    class="star">*</span></label>
+                                    class="text-danger">*</span></label>
                             <div class="input-group input-group-merge">
                                 <input type="email" class="form-control" id="basic-icon-default-fullname"
                                     placeholder="Email" name="email" aria-label="Name" value="{{ @$model->email }}" />
@@ -49,18 +45,22 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-password">Password</label>
-                            <div class="input-group input-group-merge">
-                                <input type="password" class="form-control" id="basic-icon-default-password"
-                                    placeholder="Password" name="password" autocomplete="new-password" />
+                        <div class="mb-3 form-password-toggle form-control-validation">
+                            <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="password" class="form-control" id="password"
+                                    placeholder="Password" name="password" autocomplete="password"  value="{{ @$model->password }}"  />
+                                     <span class="input-group-text cursor-pointer">
+                                              <i class="icon-base bx bx-hide"></i></span>
                             </div>
+                             <label id="password-error" class="error" for="password" style="display:none;"></label>
                         </div>
                     </div>
+                    
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-fullname">Status <span
-                                    class="star">*</span></label>
+                                    class="text-danger">*</span></label>
                                 <select class="form-select" data-style="btn-default" name="status"
                                     aria-label="Status">
                                     <option value="1" <?php if (@$model->status == 1) {
@@ -85,7 +85,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-fullname">Phone Number <span
-                                    class="star">*</span></label>
+                                    class="text-danger">*</span></label>
                             <div class="input-group input-group-merge">
                                 <input type="number" class="form-control" id="basic-icon-default-phone-number"
                                     placeholder="Phone Number" name="phone" aria-label="Name"
@@ -122,82 +122,89 @@
 
     @push('scripts')
     <script type="text/javascript">
-documentReady(function() {
-    jQuery.validator.addMethod("alphaOnly", function(value, element) {
-        return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
-    }, "Please enter only alphabetic characters");
+    jQuery.validator.addMethod("noDisposableEmail", v => !["mailinator.com","tempmail.com","10minutemail.com","guerrillamail.com","fakeinbox.com"].includes((v.split('@')[1]||"").toLowerCase()), "Disposable email addresses are not allowed.");
+    documentReady(function() {
+        jQuery.validator.addMethod("alphaOnly", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
+        }, "Please enter only alphabetic characters");
 
-    $('#ajax-form').validate({
-        rules: {
-            first_name: {
-                required: true,
-                alphaOnly: true,
-                minlength: 2
+        $('#ajax-form').validate({
+            rules: {
+                first_name: {
+                    required: true,
+                    alphaOnly: true,
+                    minlength: 2
+                },
+                last_name: {
+                    required: true,
+                    alphaOnly: true,
+                    minlength: 2
+                },
+                password: {
+                    required: true,
+                    minlength: 6,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    noDisposableEmail: true
+                },
+                status: {
+                    required: true,
+                },
+                phone: {
+                    required: true,
+                    minlength: 10
+                },
             },
-            last_name: {
-                required: true,
-                alphaOnly: true,
-                minlength: 2
+            messages: {
+                first_name: {
+                    required: "Please enter the first name",
+                    minlength: "Please enter at least 2 characters"
+                },
+                last_name: {
+                    required: "Please enter the last name",
+                    minlength: "Please enter at least 2 characters"
+                },
+                email: {
+                    required: "Please enter the email",
+                    email: "Please enter a valid email address",
+                    noDisposableEmail: "Please enter a valid Email domain"
+                },
+                password: {
+                    required: "Please enter the password",
+                    minlength: "Please enter at least 6 characters"
+                },
+                status: {
+                    required: "Please select the status",
+                },
+                phone: {
+                    required: "Please enter the phone number",
+                    minlength: "Please enter at least 10 digits"
+                },
             },
-            password: {
-                minlength: 6
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            status: {
-                required: true,
-            },
-            phone: {
-                required: true,
-                minlength: 10
-            },
-        },
-        messages: {
-            first_name: {
-                required: "Please enter the first name",
-                minlength: "Please enter at least 2 characters"
-            },
-            last_name: {
-                required: "Please enter the last name",
-                minlength: "Please enter at least 2 characters"
-            },
-            email: {
-                required: "Please enter the email",
-                email: "Please enter a valid email address",
-            },
-            status: {
-                required: "Please select the status",
-            },
-            phone: {
-                required: "Please enter the phone number",
-                minlength: "Please enter at least 10 digits"
-            },
-        },
 
-        submitHandler: function(form) {
-            app.ajaxFileForm(form);
-        },
-
-        errorPlacement: function(error, element) {
-            error.insertAfter(element.closest('.mb-3'));
-        },
-        highlight: function(element, errorClass, validClass) {
-            if ($(element).attr('name') === 'password') {
-                $(element).closest('.input-group').addClass('error');
-            } else {
-                $(element).addClass(errorClass).removeClass(validClass);
-            }
-        },
-        unhighlight: function(element, errorClass, validClass) {
-            if ($(element).attr('name') === 'password') {
-                $(element).closest('.input-group').removeClass('error');
-            } else {
-                $(element).removeClass(errorClass).addClass(validClass);
-            }
-        }
+            submitHandler: function(form) {
+                app.ajaxFileForm(form);
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+                $(element)
+                    .closest('.input-group')
+                    .find('.input-group-text')
+                    .addClass('error');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+                $(element)
+                    .closest('.input-group')
+                    .find('.input-group-text')
+                    .removeClass('error');
+            },
+            errorPlacement: function(error, element) {
+                error.insertAfter(element.closest('.mb-3'));
+            },
+        });
     });
-});
     </script>
     @endpush

@@ -89,7 +89,9 @@ class AccountController extends Controller
      */
     public function tfa()
     {
-        return view('account/tfa', ['model' => auth()->user()]);
+        $model = auth()->user();
+        
+        return view('account/tfa',compact('model'));
     }
 
     /**
@@ -173,5 +175,13 @@ class AccountController extends Controller
     }
 
 
-    
+     public function accountDeactivate()
+    {
+        $model = auth()->user();
+        $model->status = 0;
+         Auth::logout();
+        $model->update();
+        return redirect('logout');
+
+    }
 }

@@ -7,6 +7,7 @@ use App\Models\UserActivity;
 use App\Services\AccountService;
 use App\Services\TfaService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
@@ -181,5 +182,15 @@ class AccountController extends Controller
     public function userActivityList(Request $request)
     {
         return response()->json((new UserActivity())->list($request->all(), auth()->id()));
+    }
+    
+    public function accountDeactivate()
+    {
+        $model = auth()->user();
+        $model->status = 0;
+        Auth::logout();
+        $model->update();
+        return redirect('logout');
+
     }
 }

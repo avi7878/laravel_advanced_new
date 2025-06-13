@@ -11,7 +11,6 @@ String.prototype.replaceAll = function (search, replacement) {
  * @description Core application utility functions for handling AJAX, UI interactions, and data manipulation
  */
 const app = {
-
     /**
      * Handles the next action based on AJAX response
      * @param {Object} response - Server response object
@@ -36,13 +35,12 @@ const app = {
         }
     },
 
-
     /**
      * Shows a modal view loaded from a URL
      * @param {string} url - URL to fetch modal content
      */
     showModalView: function (url) {
-        //cache code 
+        //cache code
         const cachedPage = AppCache.get(url);
         if (cachedPage) {
             this.setModalContent(cachedPage);
@@ -56,7 +54,7 @@ const app = {
             url,
             method: "GET",
             success: (response) => {
-                //cache start 
+                //cache start
                 if (cachedPage && cachedPage == response) {
                     return false;
                 }
@@ -69,7 +67,7 @@ const app = {
                 // Run any necessary initializationf
                 runDocumentReady();
             },
-            error: this.ajaxError
+            error: this.ajaxError,
         });
     },
 
@@ -91,8 +89,6 @@ const app = {
             this.commonModel.modal("hide");
         }
     },
-
-
 
     /**
      * Performs an AJAX action without confirmation
@@ -128,22 +124,24 @@ const app = {
      * @param {Function} cb - Callback function
      */
     ajaxConfirm: function (url, postData, cb) {
-        app.showConfirmationPopup({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-            cancelButtonText: "No",
-            customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-secondary"
-            }
-        }).then((result) => {
-            if (result) {
-                this.ajaxPost(url, postData, cb);
-            }
-        });
+        app
+            .showConfirmationPopup({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary",
+                },
+            })
+            .then((result) => {
+                if (result) {
+                    this.ajaxPost(url, postData, cb);
+                }
+            });
     },
 
     /**
@@ -161,7 +159,7 @@ const app = {
             method: "GET",
             dataType: "json",
             success: this.ajaxSuccess,
-            error: this.ajaxError
+            error: this.ajaxError,
         });
     },
 
@@ -206,16 +204,15 @@ const app = {
                 this.hideLoading();
                 cb(response);
             },
-            error: this.ajaxError
+            error: this.ajaxError,
         });
     },
 
-
     /**
-         * Core AJAX request handler
-         * @param {string} url - Target URL
-         * @param {Object} postData - Data to send
-         * @param {Function} cb - Callback function
+     * Core AJAX request handler
+     * @param {string} url - Target URL
+     * @param {Object} postData - Data to send
+     * @param {Function} cb - Callback function
      */
     ajaxFileRequest: function (url, postData, cb) {
         if (cb === undefined) {
@@ -237,16 +234,14 @@ const app = {
         });
     },
 
-
-
     nextAction: function (response) {
         if (response.next === undefined) {
             return false;
         }
-        if (response.next.match(',')) {
-            response.next.split(',').forEach(function (next) {
+        if (response.next.match(",")) {
+            response.next.split(",").forEach(function (next) {
                 app.runNextAction(next, response);
-            })
+            });
         } else {
             app.runNextAction(response.next, response);
         }
@@ -260,7 +255,7 @@ const app = {
         app.hideLoading();
         if (response.status) {
             if (response.message) {
-                app.showMessage(response.message, 'success');
+                app.showMessage(response.message, "success");
                 setTimeout(function () {
                     app.nextAction(response);
                 }, 2000);
@@ -285,12 +280,12 @@ const app = {
      */
     showLoading: function () {
         //Swal.showLoading();
-        $('#common-loader').show();
+        $("#common-loader").show();
     },
 
     hideLoading: function () {
         // Swal.close();
-        $('#common-loader').hide();
+        $("#common-loader").hide();
     },
 
     showMessage: function (message, type) {
@@ -304,10 +299,12 @@ const app = {
             <div class="toast-body">__message__</div>
         </div>`;
         var title = type.charAt(0).toUpperCase() + type.slice(1);
-        type = type.replace('error', 'danger');
-        $('#common-toast').html(app.dataToHtml(toastHtml, { message: message, title: title, type: type }));
+        type = type.replace("error", "danger");
+        $("#common-toast").html(
+            app.dataToHtml(toastHtml, { message: message, title: title, type: type })
+        );
         setTimeout(function () {
-            $('#common-toast').html('');
+            $("#common-toast").html("");
         }, 5000);
         // Swal.fire(title,message,type);
     },
@@ -359,14 +356,17 @@ const app = {
      */
     renderHtmlData: function (template, data) {
         if (!template) return "";
-        return data.reduce((html, item) => html + this.dataToHtml(template, item), "");
+        return data.reduce(
+            (html, item) => html + this.dataToHtml(template, item),
+            ""
+        );
     },
 
     /**
      * Resource loading utilities
      */
     addCSS: function (urls) {
-        urls.forEach(url => {
+        urls.forEach((url) => {
             if (!$(`link[href="${url}"]`).length) {
                 $("body").append(`<link href="${url}" rel="stylesheet">`);
             }
@@ -374,7 +374,7 @@ const app = {
     },
 
     addJS: function (urls) {
-        urls.forEach(url => {
+        urls.forEach((url) => {
             if (!$(`script[src="${url}"]`).length) {
                 $("body").append(`<script src="${url}"></script>`);
             }
@@ -398,7 +398,10 @@ const app = {
 
         if (script.readyState) {
             script.onreadystatechange = function () {
-                if (script.readyState === "loaded" || script.readyState === "complete") {
+                if (
+                    script.readyState === "loaded" ||
+                    script.readyState === "complete"
+                ) {
                     script.onreadystatechange = null;
                     callback();
                 }
@@ -415,7 +418,7 @@ const app = {
      */
     setCookie: function (cname, cvalue, exdays) {
         const d = new Date();
-        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
         const expires = `expires=${d.toUTCString()}`;
         document.cookie = `${cname}=${cvalue}; ${expires};path=/`;
     },
@@ -423,10 +426,10 @@ const app = {
     getCookie: function (cname) {
         const name = `${cname}=`;
         const decodedCookie = decodeURIComponent(document.cookie);
-        const ca = decodedCookie.split(';');
+        const ca = decodedCookie.split(";");
 
         for (let c of ca) {
-            while (c.charAt(0) === ' ') {
+            while (c.charAt(0) === " ") {
                 c = c.substring(1);
             }
             if (c.indexOf(name) === 0) {
@@ -436,14 +439,20 @@ const app = {
         return "";
     },
 
-    validateFile: function (file, allowedExtensions = ['png', 'jpg', 'jpeg', 'webp', 'gif']) {
+    validateFile: function (
+        file,
+        allowedExtensions = ["png", "jpg", "jpeg", "webp", "gif"]
+    ) {
         if (!file || !file.name) {
             return { status: 0, message: "No file provided" };
         }
 
         // Convert allowed extensions array to a regex
-        var pattern = "\\.(" + allowedExtensions.map(ext => ext.replace('.', '')).join('|') + ")$";
-        var re = new RegExp(pattern, 'i');
+        var pattern =
+            "\\.(" +
+            allowedExtensions.map((ext) => ext.replace(".", "")).join("|") +
+            ")$";
+        var re = new RegExp(pattern, "i");
 
         if (!re.test(file.name)) {
             return { status: 0, message: "File type is not allowed" };
@@ -458,10 +467,11 @@ const app = {
      * @returns {string} Random ID
      */
     makeId: function (length) {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const characters =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         return Array.from({ length }, () =>
             characters.charAt(Math.floor(Math.random() * characters.length))
-        ).join('');
+        ).join("");
     },
 
     /**
@@ -480,7 +490,7 @@ const app = {
         if (this.getCookie(`${APP_UID}_tz`) !== tz) {
             this.setCookie(`${APP_UID}_tz`, tz, 30);
         }
-    }
+    },
 };
 
 $(document).ready(function () {
@@ -505,66 +515,6 @@ function runDocumentReady() {
 }
 
 /**
- * A class for managing dynamic content loading and interactions with a target HTML element.
- */
-class View {
-    /**
-     * Target element where content will be dynamically loaded.
-     * @type {string}
-     */
-    target = "";
-    /**
-     * Initializes the View class with a target element.
-     * @param {string} target - Selector for the target element.
-     */
-    init(target) {
-        this.target = $(target);
-    }
-    /**
-     * Clears the content of the target element.
-     */
-    clear() {
-        this.target.html('');
-    }
-    /**
-     * Loads content into the target element via an AJAX GET request.
-     * @param {string} url - The URL to fetch the content from.
-     */
-    load(url) {
-        var target = this.target;
-        const cachedPage = AppCache.get(url);
-        if (cachedPage) {
-            this.setModalContent(response);
-            this.showModal();
-            runDocumentReady();
-        } else {
-            target.html('<div class="loading-text">Loading...</div>');
-        }
-        $.ajax({
-            url: url,
-            method: "get",
-            success: function (response) {
-                //cache start
-                if (cachedPage === response) {
-                    return false;
-                }
-                AppCache.set(url, response);
-                //cache end
-                target.html(response);
-                runDocumentReady();
-            },
-            error: function (e) {
-                app.showMessage(
-                    "Something went wrong. Pelase Try after sometime.",
-                    "error"
-                );
-            },
-        });
-    }
-}
-
-
-/**
  * AppCache class for storing and retrieving page data in sessionStorage.
  */
 class AppCache {
@@ -575,7 +525,7 @@ class AppCache {
      * @returns {string} - The Base64 encoded key.
      */
     static encodeKey(key) {
-        return btoa(key.replace($('base').attr('href')));
+        return btoa(key.replace($("base").attr("href")));
     }
 
     /**
@@ -639,6 +589,64 @@ class AppCache {
     }
 }
 
+/**
+ * A class for managing dynamic content loading and interactions with a target HTML element.
+ */
+class View {
+    /**
+     * Target element where content will be dynamically loaded.
+     * @type {string}
+     */
+    target = "";
+    /**
+     * Initializes the View class with a target element.
+     * @param {string} target - Selector for the target element.
+     */
+    init(target) {
+        this.target = $(target);
+    }
+    /**
+     * Clears the content of the target element.
+     */
+    clear() {
+        this.target.html("");
+    }
+    /**
+     * Loads content into the target element via an AJAX GET request.
+     * @param {string} url - The URL to fetch the content from.
+     */
+    load(url) {
+        var target = this.target;
+        const cachedPage = AppCache.get(url);
+        if (cachedPage) {
+            this.setModalContent(response);
+            this.showModal();
+            runDocumentReady();
+        } else {
+            target.html('<div class="loading-text">Loading...</div>');
+        }
+        $.ajax({
+            url: url,
+            method: "get",
+            success: function (response) {
+                //cache start
+                if (cachedPage === response) {
+                    return false;
+                }
+                AppCache.set(url, response);
+                //cache end
+                target.html(response);
+                runDocumentReady();
+            },
+            error: function (e) {
+                app.showMessage(
+                    "Something went wrong. Pelase Try after sometime.",
+                    "error"
+                );
+            },
+        });
+    }
+}
 
 /**
  * A class for managing AJAX-based pagination functionality.
@@ -663,7 +671,7 @@ class Pagination {
      * Pagination type (e.g., normal or load-more).
      * @type {number}
      */
-    type = 0;
+    type = 1; // 1: link pagination, 2: load more, 3: load old , 4: scroll
     /**
      * Data sent with AJAX requests.
      * @type {object}
@@ -675,7 +683,7 @@ class Pagination {
         search: "",
         filter: {},
         filter_extra: {},
-    }
+    };
 
     /**
      * Initializes the pagination with URL and container ID.
@@ -690,16 +698,13 @@ class Pagination {
         this.ajaxContainer = $(ajaxContainerId);
 
         var urlParam = new URLSearchParams(new URL(window.location.href).search);
-        this.postData.filter = urlParam.get('filter');
-        this.postData.page = urlParam.get('page');
+        this.postData.filter = urlParam.get("filter");
+        this.postData.page = urlParam.get("page");
         if (this.postData.filter == "") {
             this.postData.filter = {};
         } else if (typeof this.postData.filter == "object") {
         } else {
-            this.postData.filter = this.postData.filter.replaceAll(
-                "&quot;",
-                '"'
-            );
+            this.postData.filter = this.postData.filter.replaceAll("&quot;", '"');
             this.postData.filter = JSON.parse(this.postData.filter);
         }
         if (this.initLoadData) {
@@ -713,13 +718,13 @@ class Pagination {
     }
 
     /**
- * Initializes the pagination functionality by setting the URL for AJAX requests 
- * and the container where the paginated data will be loaded. 
- * Then, it triggers the data loading process.
- *
- * @param {string} url - The URL for AJAX requests to fetch paginated data.
- * @param {string} ajaxContainer - The selector or DOM element where the data will be injected.
- */
+     * Initializes the pagination functionality by setting the URL for AJAX requests
+     * and the container where the paginated data will be loaded.
+     * Then, it triggers the data loading process.
+     *
+     * @param {string} url - The URL for AJAX requests to fetch paginated data.
+     * @param {string} ajaxContainer - The selector or DOM element where the data will be injected.
+     */
     initPagination(url, ajaxContainer) {
         // Set the AJAX URL and container for future use
         this.ajaxUrl = url;
@@ -734,7 +739,7 @@ class Pagination {
         var _this = this;
 
         //cache start
-        const cacheKey = _this.ajaxUrl + '|' + JSON.stringify(_this.postData)
+        const cacheKey = _this.ajaxUrl + "|" + JSON.stringify(_this.postData);
         let cachedPage = false;
         if (cacheEnabled) {
             cachedPage = AppCache.get(cacheKey);
@@ -742,7 +747,7 @@ class Pagination {
                 if (_this.type == 0) {
                     _this.ajaxContainer.html(cachedPage);
                 } else {
-                    _this.ajaxContainer.find('.pagination-load-more').remove();
+                    _this.ajaxContainer.find(".pagination-load-more").remove();
                     _this.ajaxContainer.append(cachedPage);
                 }
                 _this.ajaxContainer.find(".page-link").click(function () {
@@ -758,7 +763,9 @@ class Pagination {
                 _this.ajaxContainer.css("min-height", _this.ajaxContainer.height());
                 _this.ajaxContainer.html('<div class="loading-text">Loading...</div>');
             } else {
-                _this.ajaxContainer.find(".page-link").text('<div class="loading-text">Loading...</div>');
+                _this.ajaxContainer
+                    .find(".page-link")
+                    .text('<div class="loading-text">Loading...</div>');
             }
         }
         $.ajax({
@@ -776,7 +783,7 @@ class Pagination {
                     _this.ajaxContainer.html(response);
                     _this.ajaxContainer.css("min-height", 0);
                 } else {
-                    _this.ajaxContainer.find('.pagination-load-more').remove();
+                    _this.ajaxContainer.find(".pagination-load-more").remove();
                     _this.ajaxContainer.append(response);
                 }
                 _this.ajaxContainer.find(".page-link").click(function () {
@@ -791,35 +798,38 @@ class Pagination {
     }
     /**
      * Loads the list of data for the specified page.
-     * 
+     *
      * @param {number} page - The page number to load.
      */
     loadList(page) {
         this.postData.page = page;
-        this.loadData();// Fetch the data based on updated page
-        app.setUrl(window.location.href, { page: page });// Update the URL to reflect the page number
+        this.loadData(); // Fetch the data based on updated page
+        app.setUrl(window.location.href, { page: page }); // Update the URL to reflect the page number
     }
     /**
      * Sorts the data by the specified field and direction.
-     * 
+     *
      * @param {string} field - The field by which to sort the data.
      * @param {string} direction - The direction to sort the data (e.g., 'asc' or 'desc').
      */
     sort(field, direction) {
         this.postData.sort.field = field;
         this.postData.sort.direction = direction;
-        this.loadList(1);// Reset to the first page after sorting
-        app.setUrl(window.location.href, { page: 1, sort: field + "-" + direction });// Update the URL with sort parameters
+        this.loadList(1); // Reset to the first page after sorting
+        app.setUrl(window.location.href, {
+            page: 1,
+            sort: field + "-" + direction,
+        }); // Update the URL with sort parameters
     }
     /**
      * Searches the data based on the provided search value.
-     * 
+     *
      * @param {string} value - The search value to filter the data by.
      */
     search(value) {
         this.postData.search = value;
-        this.loadList(1);// Reset to the first page after search
-        app.setUrl(window.location.href, { page: 1, search: value });// Update the URL with search parameters
+        this.loadList(1); // Reset to the first page after search
+        app.setUrl(window.location.href, { page: 1, search: value }); // Update the URL with search parameters
     }
 
     filterClear() {
@@ -831,33 +841,32 @@ class Pagination {
     }
     /**
      * Filters the data based on a key-value pair. If the value is empty or the same as the current filter, it removes the filter.
-     * 
+     *
      * @param {string} key - The key to filter the data by.
      * @param {string} value - The value to filter the data by.
      */
     filter(key, value) {
-        if (value == '' || this.postData.filter[key] == value) {
-            delete this.postData.filter[key];// Remove filter if value is empty or matches the existing one
+        if (value == "" || this.postData.filter[key] == value) {
+            delete this.postData.filter[key]; // Remove filter if value is empty or matches the existing one
         } else {
-            this.postData.filter[key] = value;// Add or update the filter with the new value
+            this.postData.filter[key] = value; // Add or update the filter with the new value
         }
-        this.loadList(1);// Reset to the first page after filtering
+        this.loadList(1); // Reset to the first page after filtering
         app.setUrl(window.location.href, {
             page: 1,
-            filter: JSON.stringify(this.postData.filter),// Update the URL with the current filters
+            filter: JSON.stringify(this.postData.filter), // Update the URL with the current filters
         });
-
     }
     /**
      * Handles filtering for multiple values. It adds or removes values from the filter based on whether they are already included.
-     * 
+     *
      * @param {string} key - The key to filter the data by.
      * @param {string} value - The value to filter by, potentially multiple values separated by commas.
      */
     filterMultiple(key, value) {
         var oldData = this.postData.filter[key];
         if (oldData) {
-            oldData = oldData.split(',');
+            oldData = oldData.split(",");
             // Remove the value if it's already in the filter, else add it
             if (oldData.indexOf(value) >= 0) {
                 oldData = $.grep(oldData, function (v) {
@@ -866,22 +875,21 @@ class Pagination {
             } else {
                 oldData.push(value);
             }
-            value = oldData.join(',');
+            value = oldData.join(",");
         }
-        this.filter(key, value);// Apply the updated filter
-
+        this.filter(key, value); // Apply the updated filter
     }
     /**
      * Submits the filter form and updates the list accordingly.
-     * 
+     *
      * @param {HTMLFormElement} form - The form element containing the filter data.
      */
     filterFormSubmit(form) {
-        this.postData.filter = $(form).serializeObject();// Serialize the form data into an object
-        this.loadList(1);// Reset to the first page after form submission
+        this.postData.filter = $(form).serializeObject(); // Serialize the form data into an object
+        this.loadList(1); // Reset to the first page after form submission
         app.setUrl(window.location.href, {
             page: 1,
-            filter: JSON.stringify(this.postData.filter),// Update the URL with the serialized filter
+            filter: JSON.stringify(this.postData.filter), // Update the URL with the serialized filter
         });
     }
 }
@@ -889,9 +897,9 @@ class Pagination {
  * Handles image cropping functionality using the Cropper.js library.
  */
 class ImageCrop {
-    cropTarget = false;// HTML element for image cropping
-    cropperObj = false;// Cropper.js instance
-    uploadPath = "";// Server upload URL
+    cropTarget = false; // HTML element for image cropping
+    cropperObj = false; // Cropper.js instance
+    uploadPath = ""; // Server upload URL
     cropperConfig = {
         aspectRatio: 1,
         cropBoxResizable: false,
@@ -928,7 +936,10 @@ class ImageCrop {
     setCropFile(file) {
         var validationResult = app.validateFile(file);
         if (!validationResult.status) {
-            app.showMessage("File is not valid! Please select only the following formats: [png, gif, jpeg, webp, jpg]", "error");
+            app.showMessage(
+                "File is not valid! Please select only the following formats: [png, gif, jpeg, webp, jpg]",
+                "error"
+            );
             return false;
         }
         if (this.cropperObj) {
@@ -1056,9 +1067,9 @@ var fileDropBox = {
         );
     },
     /**
-    * Handles file selection.
-    * @param {FileList} files - The selected files.
-    */
+     * Handles file selection.
+     * @param {FileList} files - The selected files.
+     */
     selectFiles: function (files) {
         var previewHtml = "";
         $.each(files, function (index, file) {
@@ -1095,7 +1106,7 @@ var fileDropBox = {
         } else if (type.match("image")) {
             previewHtml += '<img class="image-preview" src="' + url + '" />';
         } else {
-            previewHtml += '<a href="' + url + '">' + name + "</a>";
+            previewHtml += '<a href="' + url + '" class="pjax">' + name + "</a>";
         }
         previewHtml +=
             '<button onclick="fileDropBox.removeFile(this);" data-file-name="' +
@@ -1103,9 +1114,7 @@ var fileDropBox = {
             '" type="button" class="" style="display: flex;justify-content: center;align-items: end;"><i class="fa-solid fa-xmark"></i></button>';
         if (id) {
             previewHtml +=
-                '<input type="hidden" name="file_old[]" value="' +
-                id +
-                '"></input>';
+                '<input type="hidden" name="file_old[]" value="' + id + '"></input>';
         }
         previewHtml += "</div>";
         return previewHtml;
@@ -1131,7 +1140,6 @@ var fileDropBox = {
     },
 };
 
-
 /**
  * Extends jQuery with a utility to serialize a form into a JSON object.
  */
@@ -1141,8 +1149,7 @@ var fileDropBox = {
             json = {},
             push_counters = {},
             patterns = {
-                validate:
-                    /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
+                validate: /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
                 key: /[a-zA-Z0-9_]+|(?=\[\])/g,
                 push: /^$/,
                 fixed: /^\d+$/,
@@ -1150,12 +1157,12 @@ var fileDropBox = {
             };
 
         /**
-    * Builds a nested object structure.
-    * @param {object|array} base - Base object or array to modify.
-    * @param {string|number} key - Key or index.
-    * @param {any} value - Value to assign.
-    * @returns {object|array} Updated object or array.
-    */
+         * Builds a nested object structure.
+         * @param {object|array} base - Base object or array to modify.
+         * @param {string|number} key - Key or index.
+         * @param {any} value - Value to assign.
+         * @returns {object|array} Updated object or array.
+         */
         this.build = function (base, key, value) {
             base[key] = value;
             return base;
@@ -1179,16 +1186,9 @@ var fileDropBox = {
                 reverse_key = this.name;
             while ((k = keys.pop()) !== undefined) {
                 // Adjust reverse_key
-                reverse_key = reverse_key.replace(
-                    new RegExp("\\[" + k + "\\]$"),
-                    ""
-                );
+                reverse_key = reverse_key.replace(new RegExp("\\[" + k + "\\]$"), "");
                 if (k.match(patterns.push)) {
-                    merge = self.build(
-                        [],
-                        self.push_counter(reverse_key),
-                        merge
-                    );
+                    merge = self.build([], self.push_counter(reverse_key), merge);
                 } else if (k.match(patterns.fixed)) {
                     merge = self.build([], k, merge);
                 } else if (k.match(patterns.named)) {
@@ -1200,7 +1200,6 @@ var fileDropBox = {
         return json;
     };
 })(jQuery);
-
 
 /**custom functions */
 
@@ -1262,10 +1261,10 @@ function previewImage(input, target) {
     $(target).attr("src", URL.createObjectURL(input.files[0]));
 }
 
-
 function dataTableAjax(params) {
     return function (data, callback, settings) {
         data = { ...data, ...params.data };
+
         let cacheKey = params.url + JSON.stringify(data);
         let cachedData = AppCache.getData(cacheKey);
         if (cachedData) {
@@ -1273,6 +1272,7 @@ function dataTableAjax(params) {
         }
         // Always fetch fresh data in the background
         data[CSRF_NAME] = CSRF_TOKEN;
+
         $.ajax({
             url: params.url,
             type: params.method,
@@ -1293,7 +1293,7 @@ function dataTableAjax(params) {
             },
             error: function () {
                 console.error("Error fetching data.");
-            }
+            },
         });
-    }
+    };
 }

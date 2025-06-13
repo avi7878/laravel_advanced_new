@@ -40,6 +40,11 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['middleware' => ['web', 'user']], function () {
     Route::get('dashboard', '\App\Http\Controllers\SiteController@dashboard')->name('dashboard');
+    Route::get('/get-qr-modal', '\App\Http\Controllers\AuthController@getTotpModel')->name('get-qr-modal');
+    Route::get('otp.verify', '\App\Http\Controllers\AuthController@verifyOtpModal')->name('otp.verify');
+    Route::post('otp.confirm', '\App\Http\Controllers\AuthController@optVerifyProcess')->name('otp.confirm');
+    Route::get('backup-code', '\App\Http\Controllers\AuthController@backupCode')->name('backup-code');
+    Route::get('backup-codes.regenerate', '\App\Http\Controllers\AuthController@optVerifyProcess')->name('backup-codes.regenerate');
 
     Route::get('account/update', '\App\Http\Controllers\AccountController@update')->name('account/update');
     Route::post('account/update-process', '\App\Http\Controllers\AccountController@updateProcess')->name('account/update-process');
@@ -58,6 +63,8 @@ Route::group(['middleware' => ['web', 'user']], function () {
 
     Route::get('account/user-activity', '\App\Http\Controllers\AccountController@userActivity')->name('account/user-activity');
     Route::post('account/user-activity-list', '\App\Http\Controllers\AccountController@userActivityList')->name('account/user-activity-list');
+    Route::post('account/deactivate', '\App\Http\Controllers\Admin\AccountController@accountDeactivate')->name('account/deactivate');
+
 });
 
 
@@ -98,8 +105,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
 
     Route::get('account/user-activity', '\App\Http\Controllers\Admin\AccountController@userActivity')->name('admin/account/user-activity');
     Route::any('account/user-activity-list', '\App\Http\Controllers\Admin\AccountController@userActivityList')->name('admin/account/user-activity-list');
+    Route::post('account/deactivate', '\App\Http\Controllers\Admin\AccountController@accountDeactivate')->name('admin/account/deactivate');
 
-    Route::get('users', '\App\Http\Controllers\Admin\UserController@index')->name('admin/user');
+
+    Route::get('user', '\App\Http\Controllers\Admin\UserController@index')->name('admin/user');
     Route::any('user/list', '\App\Http\Controllers\Admin\UserController@list')->name('admin/user/list');
     Route::get('user/create', '\App\Http\Controllers\Admin\UserController@create')->name('admin/user/create');
     Route::get('user/update', '\App\Http\Controllers\Admin\UserController@update')->name('admin/user/update');
@@ -135,11 +144,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
     Route::post('setting/save', '\App\Http\Controllers\Admin\SettingController@save')->name('admin/setting/save');
     Route::post('setting/save-logo', '\App\Http\Controllers\Admin\SettingController@saveLogo')->name('admin/setting/save-logo');
     Route::get('setting/cache-clear', '\App\Http\Controllers\Admin\SettingController@cacheClear')->name('admin/setting/cache-clear');
-    Route::post('setting/mailprocess', '\App\Http\Controllers\Admin\SettingController@mailprocess')->name('admin/setting/mailprocess');
-    Route::post('setting/smtp', '\App\Http\Controllers\Admin\SettingController@smtp')->name('admin/setting/smtp');
-    Route::post('setting/captcha', '\App\Http\Controllers\Admin\SettingController@captcha')->name('admin/setting/captcha');
-    Route::post('setting/social', '\App\Http\Controllers\Admin\SettingController@social')->name('admin/setting/social');
-    Route::post('setting/content', '\App\Http\Controllers\Admin\SettingController@content')->name('admin/setting/content');
+    Route::post('setting/mail-process', '\App\Http\Controllers\Admin\SettingController@mailProcess')->name('admin/setting/mail-process');
 
 
     Route::get('user-activity', '\App\Http\Controllers\Admin\UserActivityController@index')->name('admin/user-activity');
@@ -156,4 +161,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
     Route::post('email-template/save', '\App\Http\Controllers\Admin\EmailTemplateController@save')->name('admin/email-template/save');
     Route::post('email-template/save-file', '\App\Http\Controllers\Admin\EmailTemplateController@saveFile')->name('admin/email-template/save-file');
     Route::get('email-template/create', '\App\Http\Controllers\Admin\EmailTemplateController@create')->name('admin/email-template/create');
+
+    // Route::get('/get-qr-modal',' \App\Http\Controllers\QrcodeControlle@getModel')->name('get/qr/modal');
+
 });

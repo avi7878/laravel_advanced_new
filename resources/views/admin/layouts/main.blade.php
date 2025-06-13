@@ -29,7 +29,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>@yield('title') | {{ config('setting.app_name') }}</title>
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ config('setting.app_favicon') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ $general->getFileUrl(config('setting.app_favicon'),'logo') }}" type="image/x-icon">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,13 +41,12 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <link rel="stylesheet" href="theme/assets/vendor/fonts/iconify-icons.css" />
 
     <!-- Core CSS -->
+    <link rel="stylesheet" href="theme/assets/vendor/libs/pickr/pickr-themes.css">
     <link rel="stylesheet" href="theme/assets/vendor/css/core.css" />
     <link rel="stylesheet" href="theme/assets/css/demo.css" />
-    <link rel="stylesheet" href="theme/assets/vendor/libs/pickr/pickr-themes.css">
-    <link rel="stylesheet" href="theme/assets/vendor/libs/bootstrap-select/bootstrap-select.css">
+    <link rel="stylesheet" href="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <link rel="stylesheet" href="theme/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
     <link rel="stylesheet" href="theme/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
@@ -67,6 +66,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <script>
     /*Global variables*/
     var APP_UID = '{{config("setting.app_uid")}}';
+    var APP_URL = "{{ URL::to('/') }}/";
     var CSRF_NAME = '_token';
     var CSRF_TOKEN = "{{ Session::token() }}";
     var dataTableObj = false;
@@ -115,8 +115,8 @@ if (isset($_GET['partial']) && $_GET['partial']) {
                             <div
                                 class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
                                 <div class="mb-2 mb-md-0">
-                                    ©{{date('Y')}}, made by <a href="admin/dashboard" target="_self"
-                                        class="footer-link">{{ config('setting.app_name') }}</a>
+                                    ©{{date('Y')}}, made by <a href="admin/dashboard" target="_self" 
+                                        class="footer-link pjax">{{ config('setting.app_name') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +144,6 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <script src="theme/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="theme/assets/vendor/libs/popper/popper.js"></script>
     <script src="theme/assets/vendor/js/bootstrap.js"></script>
-    <script src="theme/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
 
     <script src="theme/assets/vendor/libs/pickr/pickr.js"></script>
     <script src="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>

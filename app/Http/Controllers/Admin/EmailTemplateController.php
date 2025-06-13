@@ -31,16 +31,6 @@ class EmailTemplateController extends Controller
     }
 
     /**
-     * Show the form for creating a new email template.
-     *
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function create(): \Illuminate\Contracts\View\View
-    {
-        return view('admin.email_template.create');
-    }
-
-    /**
      * Show the form for editing an existing email template.
      *
      * @param Request $request

@@ -10,7 +10,7 @@ Seo meta
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="admin/dashboard">Dashboard</a>
+                <a href="admin/dashboard" class="pjax">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">Seo meta</li>
         </ol>
@@ -54,7 +54,6 @@ Seo meta
                             <col data-dt-column="3" style="width: 359.812px;">
                             <col data-dt-column="4" style="width: 343.792px;">
                             <col data-dt-column="5" style="width: 147.958px;">
-                            <col data-dt-column="6" style="width: 147.917px;">
                             <col data-dt-column="7" style="width: 170.229px;">
                             <col data-dt-column="8" style="width: 145.562px;">
                         </colgroup>
@@ -64,7 +63,6 @@ Seo meta
                                 <th>Url</th>
                                 <th>Title</th>
                                 <th>Keyword</th>
-                                <th>Discription</th>
                                 <th>Sitemap</th>
                                 <th>Actions</th>
                             </tr>
@@ -87,7 +85,7 @@ Seo meta
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                SiteMap Url : <a href="{{url('sitemap.xml')}}" class="noroute"
+                SiteMap Url : <a href="{{url('sitemap.xml')}}" class="noroute pjax"
                     target="_blank">{{url('sitemap.xml')}}</a>
                 <!-- <button class="btn btn-primary" onclick="app.ajaxGet('admin/seo/sitemap-update');">Update SiteMap</button> -->
             </div>
@@ -119,10 +117,6 @@ documentReady(function() {
             }, //,visible:false
             {
                 data: "keyword",
-                responsivePriority: 4
-            },
-            {
-                data: "description",
                 responsivePriority: 4
             },
             {

@@ -1,4 +1,5 @@
 <?php
+ $metaData = $general->getMetaData();
 if (isset($_GET['partial']) && $_GET['partial']) {
   if (isset($_GET['layout']) && $_GET['layout'] == 'blank') {
 ?>
@@ -12,7 +13,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     echo 'reload';
   }
 } else {
-  $metaData = $general->getMetaData();
+  //$metaData = $general->getMetaData();
   ?>
   <!DOCTYPE html>
   <html lang="{{ Config::get('app.locale') }}" class="light-style layout-navbar-fixed layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="theme/assets/" data-template="vertical-menu-template">
@@ -44,7 +45,6 @@ if (isset($_GET['partial']) && $_GET['partial']) {
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="theme/assets/vendor/css/core.css" />
-    <link rel="stylesheet" href="theme/assets/vendor/css/rtl/theme-default.css" />
     <link rel="stylesheet" href="theme/assets/css/demo.css" />
 
     <!-- Vendors CSS -->
@@ -78,6 +78,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         documentReadyFunctions.push(fn);
       }
     </script>
+    {!! config('setting.header_content') !!}
   </head>
 
   <body>
@@ -131,9 +132,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         runDocumentReady();
       });
     </script>
+    {!! config('setting.footer_content') !!}
   </body>
-
   </html>
-
-
 <?php } ?>

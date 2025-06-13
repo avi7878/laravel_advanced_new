@@ -3,8 +3,6 @@
 Admin
 @endsection
 @section('content')
-
-
 <?php $sessionUser = auth()->user();?>
 <!-- Content -->
 
@@ -14,7 +12,7 @@ Admin
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
         <!-- <a href="admin/dashboard">Dashboard</a> -->
-        <a href="admin/dashboard" >Dashboard</a>
+        <a href="admin/dashboard" class="pjax">Dashboard</a>
       </li>
       <li class="breadcrumb-item active">Admin</li>
     </ol>

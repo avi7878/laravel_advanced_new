@@ -12,7 +12,7 @@ Users
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="{{ route('admin/dashboard') }}">Dashboard</a>
+                <a href="admin/dashboard" class="pjax">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">Users</li>
         </ol>
@@ -32,7 +32,7 @@ Users
                     <div class="dt-buttons btn-group flex-wrap mb-0">
                         <div class="btn-group">
                             @if($sessionUser->hasPermission('admin/user/create'))
-                            <a href="admin/user/create" class="btn create-new btn-primary" tabindex="0"
+                            <a href="admin/user/create" class="btn create-new btn-primary pjax" tabindex="0"
                                 aria-controls="DataTables_Table_0" type="button"><span><span
                                         class="d-flex align-items-center gap-2"><i
                                             class="icon-base bx bx-plus icon-sm"></i> <span

@@ -25,7 +25,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <title>@yield('title') | {{config('setting.app_name')}}</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ config('setting.app_favicon') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ $general->getFileUrl(config('setting.app_favicon'),'logo') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -40,8 +40,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <link rel="stylesheet" href="theme/assets/vendor/fonts/flag-icons.css" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="theme/assets/vendor/css/rtl/core.css" />
-    <link rel="stylesheet" href="theme/assets/vendor/css/rtl/theme-default.css" />
+    <link rel="stylesheet" href="theme/assets/vendor/css/core.css"/>
     <link rel="stylesheet" href="theme/assets/css/demo.css" />
 
     <!-- Vendors CSS -->

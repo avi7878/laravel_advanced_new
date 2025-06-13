@@ -7,11 +7,11 @@ Forgot Password
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner py-6">
-            <div class="card">
+            <div class="card px-sm-6 px-0">
                 <div class="card-body">
                     <!-- Logo -->
-                    <div class="app-brand justify-content-center mb-6">
-                        <a href="admin/site/password-forgot" class="app-brand-link">
+                    <div class="app-brand justify-content-center">
+                        <a href="admin/site/password-forgot" class="app-brand-link gap-2 pjax">
                             <span class="app-brand-logo demo">
                                 <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 50px;">
                             </span>
@@ -19,16 +19,17 @@ Forgot Password
                         </a>
                     </div>
                     <!-- /Logo -->
-                    <h4 class="mb-1">Forgot Password</h4>
+                    <h4 class="mb-1">Forgot Password? 🔒</h4>
                     <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
                     {{ view('common/message_alert') }}
                     <form id="ajax-form" action="{{ route('admin/site/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
                         {{ csrf_field() }}
                         <input type="hidden" name="step" id="step" value="1">
                         <div id="email-block">
-                            <div class="mb-6">
-                                <label class="form-label">Email <span class="star">*</span></label>
+                            <div class="mb-6 form-control-validation fv-plugins-icon-container">
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
                                 <input id="email" type="email" class="form-control" name="email" placeholder="Enter your email" autofocus value="" />
+                                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                 <div class="col-12 recaptcha-block">
                                     {{view('common/recaptcha')}}
                                 </div>
@@ -36,7 +37,7 @@ Forgot Password
                         </div>
                         <div id="otp-block" style="display: none;">
                             <div class="mb-6">
-                                <label class="form-label">OTP <span class="star">*</span></label>
+                                <label class="form-label">OTP <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="otp" placeholder="Enter your otp" autofocus value="" />
                                 <div class="text-center">
                                     <br>
@@ -47,22 +48,31 @@ Forgot Password
                         </div>
                         <div id="password-block" style="display: none;">
                             <div class="mb-6">
-                                <div class="mb-6 ">
-                                    <label class="form-label">Password <span class="star">*</span></label>
-                                    <input type="password" class="form-control" name="password" placeholder="Enter your email" autofocus value="" />
+                                <div class="mb-6 form-password-toggle form-control-validation">
+                                    <label class="form-label">Password <span class="text-danger">*</span></label>
+                                        <div class="input-group input-group-merge has-validation">
+                                             <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" autofocus value="" />
+                                             <span class="input-group-text cursor-pointer">
+                                             <i class="icon-base bx bx-hide"></i></span>
+                                        </div>
+                                         <label id="password-error" class="error" for="password" style="display:none;"></label>
                                 </div>
-                                <div class="mb-6 ">
-                                    <label class="form-label">confirm password <span class="star">*</span></label>
-                                    <input type="password" class="form-control" name="password_confirm" placeholder="Enter your email" value="" />
+                                <div class="mb-6 form-password-toggle form-control-validation">
+                                    <label class="form-label">confirm password <span class="text-danger">*</span></label>
+                                         <div class="input-group input-group-merge has-validation">
+                                            <input type="password" class="form-control" name="password_confirm" id="password_confirm" placeholder="Enter your password" value="" />
+                                             <span class="input-group-text cursor-pointer">
+                                                 <i class="icon-base bx bx-hide"></i></span>
+                                        </div>
+                                         <label id="password_confirm-error" class="error" for="password_confirm" style="display:none;"></label>
                                 </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary d-grid w-100 waves-effect waves-light">Submit</button>
                     </form>
-                    <br>
                     <div class="text-center">
-                        <a href="{{ route('admin/auth/login') }}" class="d-flex justify-content-center">
-                            <i class="icon-base bx bx-chevron-left me-1"></i>
+                        <a href="{{ route('admin/auth/login') }}" class="d-flex justify-content-center pjax">
+                            <i class="icon-base bx bx-chevron-left scaleX-n1-rtl me-1"></i>
                             Back to login
                         </a>
                     </div>
@@ -118,7 +128,29 @@ Forgot Password
                         app.showMessage(response.message, "error");
                     }
                 });
+            },
+              highlight: function(element) {
+            $(element).addClass('is-invalid');
+            $(element)
+                .closest('.input-group')
+                .find('.input-group-text')
+                .addClass('error');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid');
+
+            $(element)
+                .closest('.input-group')
+                .find('.input-group-text')
+                .removeClass('error');
+        },
+        errorPlacement: function(error, element) {
+            if ($(element).closest('.input-group').length) {
+                error.insertAfter($(element).closest('.input-group'));
+            } else {
+                error.insertAfter(element);
             }
+        }
         })
     })
 
@@ -129,4 +161,5 @@ Forgot Password
         })
     }
 </script>
+
 @endpush

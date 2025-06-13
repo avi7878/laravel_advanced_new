@@ -6,7 +6,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="admin/dashboard">Dashboard</a>
+                <a href="admin/dashboard" class="pjax">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">Setting</li>
         </ol>
@@ -35,6 +35,12 @@
                                     data-bs-target="#navs-top-general" aria-controls="navs-top-general"
                                     aria-selected="true">
                                     General
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                    data-bs-target="#navs-top-logo" aria-controls="navs-top-logo" aria-selected="false">
+                                    Logo
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -70,7 +76,19 @@
                                 aria-labelledby="navs-top-general">
                                 <form action="{{ route('admin/setting/save') }}" class="ajax-form" method="post">
                                     {{ csrf_field() }}
+                                    <input type="hidden" name="type" value="general">
                                     <div class="form-row row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">App Name <span
+                                                        class="text-danger">*</span></label>
+                                                <div class="">
+                                                    <input type="text" class="form-control" placeholder="App Name" id="setting_app_name"
+                                                        name="setting_app_name" value="{{ $setting['setting.app_name'] }}"
+                                                        required />
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Admin Contact Email <span
@@ -78,112 +96,96 @@
                                                 <div class="input-group input-group-merge">
                                                     <span class="input-group-text cursor-pointer"><i
                                                             class="icon-base bx bx-envelope"></i></span>
-                                                    <input type="email" id="admin_email" class="form-control"
-                                                        placeholder="Admin Contact Email" name="admin_email"
-                                                        value="{{ config('setting.admin_email') }}" required />
+                                                    <input type="email" id="setting_admin_email" class="form-control"
+                                                        placeholder="Admin Contact Email" name="setting_admin_email"
+                                                        value="{{ $setting['setting.admin_email'] }}" required />
                                                 </div>
-                                                <label id="admin_email-error" class="error" for="admin_email"
-                                                    style="display:none;"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Date Format</label>
-                                                    <select class="form-select" data-style="btn-default"
-                                                        value="{{ config('setting.date_format') }}" name="date_format">
-                                                        <option value="Y-m-d"
-                                                            <?= config('setting.date_format') == 'Y-m-d' ? 'selected' : '' ?>>
-                                                            {{ date('Y-m-d') }}
-                                                        </option>
-                                                        <option value="d-m-Y"
-                                                            <?= config('setting.date_format') == 'd-m-Y' ? 'selected' : '' ?>>
-                                                            {{ date('d-m-Y') }}
-                                                        </option>
-                                                        <option value="m-d-Y"
-                                                            <?= config('setting.date_format') == 'm-d-Y' ? 'selected' : '' ?>>
-                                                            {{ date('m-d-Y') }}
-                                                        </option>
-                                                    </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Timezone</label>
-                                                    <select class="form-select" data-style="btn-default"
-                                                        value="{{ config('setting.timezone') }}" name="timezone">
-                                                        @foreach ($timezonelist as $tzkey => $timezone)
-                                                        <option value="{{ $tzkey }}"
-                                                            {{ config('app.timezone') == $tzkey ? 'selected' : '' }}>
-                                                            {{ $timezone }}
-                                                        </option>
-                                                        @endforeach
-                                                    </select>
+                                                <select class="form-select" data-style="btn-default"
+                                                    value="{{ $setting['setting.date_format'] }}" name="setting_date_format">
+                                                    <option value="Y-m-d"
+                                                        {{ $setting['setting.date_format'] == 'Y-m-d' ? 'selected' : '' }}>
+                                                        {{ date('Y-m-d') }}
+                                                    </option>
+                                                    <option value="d-m-Y"
+                                                        {{ $setting['setting.date_format'] == 'd-m-Y' ? 'selected' : '' }}>
+                                                        {{ date('d-m-Y') }}
+                                                    </option>
+                                                    <option value="m-d-Y"
+                                                        {{ $setting['setting.date_format'] == 'm-d-Y' ? 'selected' : '' }}>
+                                                        {{ date('m-d-Y') }}
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Date Time Format</label>
-                                                    <select class="form-select" data-style="btn-default"
-                                                        value="{{ config('setting.date_time_format') }}"
-                                                        name="date_time_format">
-                                                        <option value="Y-m-d h:i A"
-                                                            <?= config('setting.date_time_format') == 'Y-m-d h:i A' ? 'selected' : '' ?>>
-                                                            {{ date('Y-m-d h:i A') }}
-                                                        </option>
-                                                        <option value="d-m-Y h:i A"
-                                                            <?= config('setting.date_time_format') == 'd-m-Y h:i A' ? 'selected' : '' ?>>
-                                                            {{ date('d-m-Y h:i A') }}
-                                                        </option>
-                                                        <option value="m-d-Y h:i A"
-                                                            <?= config('setting.date_time_format') == 'm-d-Y h:i A' ? 'selected' : '' ?>>
-                                                            {{ date('m-d-Y h:i A') }}
-                                                        </option>
-                                                    </select>
+                                                <select class="form-select" data-style="btn-default"
+                                                    value="{{ $setting['setting.date_time_format'] }}"
+                                                    name="setting_date_time_format">
+                                                    <option value="Y-m-d h:i A"
+                                                        {{ $setting['setting.date_time_format'] == 'Y-m-d h:i A' ? 'selected' : '' }}>
+                                                        {{ date('Y-m-d h:i A') }}
+                                                    </option>
+                                                    <option value="d-m-Y h:i A"
+                                                        {{ $setting['setting.date_time_format'] == 'd-m-Y h:i A' ? 'selected' : '' }}>
+                                                        {{ date('d-m-Y h:i A') }}
+                                                    </option>
+                                                    <option value="m-d-Y h:i A"
+                                                        {{ $setting['setting.date_time_format'] == 'm-d-Y h:i A' ? 'selected' : '' }}>
+                                                        {{ date('m-d-Y h:i A') }}
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Login With OTP</label>
-                                                    <select class="form-select" data-style="btn-default"
-                                                        value="{{ config('setting.user_login_with_otp') }}"
-                                                        name="user_login_with_otp">
-                                                        <option value="1"
-                                                            <?= config('setting.user_login_with_otp') == '1' ? 'selected' : '' ?>>
-                                                            Enable</option>
-                                                        <option value="0"
-                                                            <?= config('setting.user_login_with_otp') == '0' ? 'selected' : '' ?>>
-                                                            Disable</option>
-                                                    </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Email Verify</label>
-                                                    <select class="form-select" data-style="btn-default"
-                                                        value="{{ config('setting.user_email_verify') }}"
-                                                        name="user_email_verify">
-                                                        <option value="1"
-                                                            <?= config('setting.user_email_verify') == '1' ? 'selected' : '' ?>>
-                                                            Enable</option>
-                                                        <option value="0"
-                                                            <?= config('setting.use   r_email_verify') == '0' ? 'selected' : '' ?>>
-                                                            Disable</option>
-                                                    </select>
+                                                <select class="form-select" data-style="btn-default"
+                                                    value="{{ $setting['setting.user_login_with_otp'] }}"
+                                                    name="setting_user_login_with_otp">
+                                                    <option value="1"
+                                                        {{ $setting['setting.user_login_with_otp'] == '1' ? 'selected' : '' }}>
+                                                        Enable</option>
+                                                    <option value="0"
+                                                        {{ $setting['setting.user_login_with_otp'] == '0' ? 'selected' : '' }}>
+                                                        Disable</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Cookie Consent</label>
-                                                    <select class="form-select" data-style="btn-default"
-                                                        value="{{ config('setting.cookie_consent') }}"
-                                                        name="cookie_consent">
-                                                        <option value="1"
-                                                            <?= config('setting.cookie_consent') == '1' ? 'selected' : '' ?>>
-                                                            Enable</option>
-                                                        <option value="0"
-                                                            <?= config('setting.cookie_consent') == '0' ? 'selected' : '' ?>>
-                                                            Disable</option>
-                                                    </select>
+                                                <select class="form-select" data-style="btn-default"
+                                                    value="{{ $setting['setting.cookie_consent'] }}"
+                                                    name="setting_cookie_consent">
+                                                    <option value="1"
+                                                        {{ $setting['setting.cookie_consent'] == '1' ? 'selected' : '' }}>
+                                                        Enable</option>
+                                                    <option value="0"
+                                                        {{ $setting['setting.cookie_consent'] == '0' ? 'selected' : '' }}>
+                                                        Disable</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Email Verify</label>
+                                                <select class="form-select" data-style="btn-default"
+                                                    value="{{ $setting['setting.user_email_verify'] }}"
+                                                    name="setting_user_email_verify">
+                                                    <option value="1"
+                                                        {{ $setting['setting.user_email_verify'] == '1' ? 'selected' : '' }}>
+                                                        Enable</option>
+                                                    <option value="0"
+                                                        {{ $setting['setting.user_email_verify'] == '0' ? 'selected' : '' }}>
+                                                        Disable</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -194,65 +196,140 @@
                                     </div>
                                 </form>
                             </div>
+                            <div class="tab-pane fade" id="navs-top-logo" role="tabpanel">
+                                <div class="row" style="margin-left:0%">
+                                    <div class="col-6">
+                                        <form action="{{ route('admin/setting/save-logo') }}" class="ajax-file-form-logo" method="post" enctype="multipart/form-data">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" name="key" value="setting.app_logo">
+                                            <div class="form-row row">
+                                                <div class="col-md-12">
+                                                    <div id="ajax-content">
+                                                        <div class="col-sm-6 col-lg-4 mb-4">
+                                                            <label class="form-label">App Logo <span
+                                                                    class="text-danger">*</span></label>
+                                                            <div class="col-sm-6 col-lg-4 mb-4">
+                                                                <div class="card">
+                                                                    <img class="card-img-top preview-app-logo"
+                                                                        src="{{ $general->getFileUrl($setting['setting.app_logo'], 'logo') }}"
+                                                                        alt="Card image cap" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <div class="input-group input-group-merge">
+                                                                    <input type="file" required="required"
+                                                                        name="image"
+                                                                        onchange="previewImage(this,'.preview-app-logo')"
+                                                                        class="form-control" accept="image/*"
+                                                                        id="applogo">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <form action="{{ route('admin/setting/save-logo') }}" class="ajax-file-form-favicon" method="post" enctype="multipart/form-data">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" name="key" value="setting.app_favicon">
+                                            <div class="form-row row">
+                                                <div class="col-md-12">
+                                                    <div id="ajax-content">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">App Favicon <span
+                                                                        class="text-danger">*</span></label>
+                                                                <div class="col-sm-6 col-lg-4 mb-4">
+                                                                    <div class="card">
+                                                                        <img class="card-img-top preview-app-fevicon"
+                                                                            src="{{ $general->getFileUrl($setting['setting.app_favicon'], 'logo') }}"
+                                                                            alt="Card image cap" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <div class="input-group input-group-merge">
+                                                                    <input type="file" required name="image"
+                                                                        onchange="previewImage(this,'.preview-app-fevicon')"
+                                                                        class="form-control" accept="image/*"
+                                                                        id="input-app-fevicon">
+                                                                </div>
+                                                                <label id="input-app-fevicon-error" for="input-app-fevicon" class="error"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="tab-pane fade" id="navs-top-mail" role="tabpanel">
-                                <form action="{{ route('admin/setting/smtp') }}" class="ajax-form-mail" method="post">
+                                <form action="{{ route('admin/setting/save') }}" class="ajax-form-mail" method="post">
                                     {{ csrf_field() }}
+                                    <input type="hidden" name="type" value="smtp">
                                     <div class="form-row row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Host <span
                                                         class="text-danger">*</span></label>
-                                                <div class="input-group input-group-merge">
-                                                    <span class="input-group-text cursor-pointer"><i
-                                                            class="icon-base bx bx-envelope"></i></span>
-                                                    <input type="text" class="form-control" placeholder="Host" id="host"
-                                                        name="host" value="{{ config('mail.mailers.smtp.host') }}"
+                                                <div class="">
+                                                    <input type="text" class="form-control" placeholder="Host"
+                                                        name="mail_mailers_smtp_host" value="{{ $setting['mail.mailers.smtp.host'] }}"
                                                         required />
                                                 </div>
-                                                <label id="host-error" class="error" for="host"
-                                                    style="display:none;"></label>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label class="form-label">Encryption</label>
-                                                    <select class="form-select" data-style="btn-default"
-                                                        value="{{ config('setting.encryption') }}" name="encryption">
-                                                        <option value="ssl"
-                                                            <?= config('setting.encryption') == 'ssl' ? 'selected' : '' ?>>
-                                                            SSL</option>
-                                                        <option value="tls"
-                                                            <?= config('setting.encryption') == 'tls' ? 'selected' : '' ?>>
-                                                            TLS</option>
-                                                    </select>
+                                                <select class="form-select" data-style="btn-default"
+                                                    value="{{ $setting['mail.mailers.smtp.encryption'] }}" name="mail_mailers_smtp_encryption">
+                                                    <option value="ssl"
+                                                        {{ $setting['mail.mailers.smtp.encryption'] == 'ssl' ? 'selected' : '' }}>
+                                                        SSL</option>
+                                                    <option value="tls"
+                                                        {{ $setting['mail.mailers.smtp.encryption'] == 'tls' ? 'selected' : '' }}>
+                                                        TLS</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label class="form-label">Port <span
                                                         class="text-danger">*</span></label>
                                                 <div class="input-group input-group-merge">
-                                                    <input type="text" class="form-control" placeholder="Port" id="port"
-                                                        name="port" value="{{ config('mail.mailers.smtp.port') }}"
+                                                    <input type="text" class="form-control" placeholder="Port"
+                                                        name="mail_mailers_smtp_port" value="{{ $setting['mail.mailers.smtp.port'] }}"
                                                         required />
                                                 </div>
-                                                <label id="port-error" class="error" for="port"
-                                                    style="display:none;"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Username <span
                                                         class="text-danger">*</span></label>
-                                                <div class="input-group input-group-merge">
-                                                    <span class="input-group-text"><i
-                                                            class="icon-base bx bx-envelope"></i></span>
+                                                <div class="">
                                                     <input type="text" class="form-control" placeholder="Username"
-                                                        id="username" name="username"
-                                                        value="{{ config('mail.mailers.smtp.username') }}" required />
+                                                        id="mail.mailers.smtp.username" name="mail_mailers_smtp_username"
+                                                        value="{{ $setting['mail.mailers.smtp.username'] }}" required />
                                                 </div>
-                                                <label id="username-error" class="error" for="username"
-                                                    style="display:none;"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -261,26 +338,21 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="input-group input-group-merge">
                                                     <input type="text" class="form-control" placeholder="Password"
-                                                        id="password" name="password"
-                                                        value="{{ config('mail.mailers.smtp.password') }}" required />
+                                                        name="mail_mailers_smtp_password"
+                                                        value="{{ $setting['mail.mailers.smtp.password'] }}" required />
                                                 </div>
-                                                <label id="password-error" class="error" for="password"
-                                                    style="display:none;"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Mail From Name <span
                                                         class="text-danger">*</span></label>
-                                                <div class="input-group input-group-merge">
-                                                    <span class="input-group-text"><i
-                                                            class="icon-base bx bx-envelope"></i></span>
+                                                <div class="">
                                                     <input type="text" class="form-control" placeholder="Mail From Name"
-                                                        id="mail_from_name" name="mail_from_name"
-                                                        value="{{ config('setting.mail_from_name') }}" required />
+                                                        name="mail_from_name"
+                                                        value="{{ $setting['mail.from.name'] }}" required />
                                                 </div>
-                                                <label id="mail_from_name-error" class="error" for="mail_from_name"
-                                                    style="display:none;"></label>
+
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -291,12 +363,10 @@
                                                     <span class="input-group-text"><i
                                                             class="icon-base bx bx-envelope"></i></span>
                                                     <input type="text" class="form-control"
-                                                        placeholder="Mail From Address" id="mail_from_address"
+                                                        placeholder="Mail From Address"
                                                         name="mail_from_address"
-                                                        value="{{ config('setting.mail_from_address') }}" required />
+                                                        value="{{ $setting['mail.from.address'] }}" required />
                                                 </div>
-                                                <label id="mail_from_address-error" class="error"
-                                                    for="mail_from_address" style="display:none;"></label>
                                             </div>
                                         </div>
 
@@ -312,23 +382,24 @@
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="navs-top-recaptcha" role="tabpanel">
-                                <form action="{{ route('admin/setting/captcha') }}" class="ajax-form-captcha"
+                                <form action="{{ route('admin/setting/save') }}" class="ajax-form-captcha"
                                     method="post">
                                     {{ csrf_field() }}
+                                    <input type="hidden" name="type" value="captcha">
                                     <div class="form-row row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Enable</label>
-                                                    <select class="form-select" data-style="btn-default"
-                                                        value="{{ config('setting.google_recaptcha') }}"
-                                                        name="google_recaptcha">
-                                                        <option value="1"
-                                                            <?= config('setting.google_recaptcha') == '1' ? 'selected' : '' ?>>
-                                                            Yes</option>
-                                                        <option value="0"
-                                                            <?= config('setting.google_recaptcha') == '0' ? 'selected' : '' ?>>
-                                                            No</option>
-                                                    </select>
+                                                <select class="form-select" data-style="btn-default"
+                                                    value="{{ $setting['setting.google_recaptcha'] }}"
+                                                    name="setting_google_recaptcha">
+                                                    <option value="1"
+                                                        {{ $setting['setting.google_recaptcha'] == '1' ? 'selected' : '' }}>
+                                                        Yes</option>
+                                                    <option value="0"
+                                                        {{ $setting['setting.google_recaptcha'] == '0' ? 'selected' : '' }}>
+                                                        No</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -337,12 +408,10 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="input-group input-group-merge">
                                                     <input type="text" class="form-control" required
-                                                        value="{{ config('setting.google_recaptcha_secret_key') }}"
-                                                        name="google_recaptcha_secret_key" id="secret_key"
+                                                        value="{{ $setting['setting.google_recaptcha_secret_key'] }}"
+                                                        name="setting_google_recaptcha_secret_key" id="secret_key"
                                                         placeholder="google_recaptcha_secret_key">
                                                 </div>
-                                                <label id="secret_key-error" class="error" for="secret_key"
-                                                    style="display:none;"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -351,12 +420,10 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="input-group input-group-merge">
                                                     <input type="text" class="form-control" required
-                                                        value="{{ config('setting.google_recaptcha_public_key') }}"
-                                                        name="google_recaptcha_public_key" id="public_key"
-                                                        placeholder="google_recaptcha_public_key">
+                                                        value="{{ $setting['setting.google_recaptcha_public_key'] }}"
+                                                        name="setting_google_recaptcha_public_key" id="public_key"
+                                                        placeholder="google recaptcha public key">
                                                 </div>
-                                                <label id="public_key-error" class="error" for="public_key"
-                                                    style="display:none;"></label>
                                             </div>
                                         </div>
 
@@ -369,23 +436,24 @@
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="navs-top-login" role="tabpanel">
-                                <form action="{{ route('admin/setting/social') }}" class="ajax-form-social"
+                                <form action="{{ route('admin/setting/save') }}" class="ajax-form-social"
                                     method="post">
                                     {{ csrf_field() }}
+                                    <input type="hidden" name="type" value="social">
                                     <div class="form-row row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Google Login</label>
-                                                    <select class="form-select" data-style="btn-default"
-                                                        value="{{ config('setting.google_login') }}"
-                                                        name="google_login">
-                                                        <option value="1"
-                                                            <?= config('setting.google_login') == '1' ? 'selected' : '' ?>>
-                                                            Enable</option>
-                                                        <option value="0"
-                                                            <?= config('setting.google_login') == '0' ? 'selected' : '' ?>>
-                                                            Disable</option>
-                                                    </select>
+                                                <select class="form-select" data-style="btn-default"
+                                                    value="{{ $setting['setting.google_login'] }}"
+                                                    name="setting_google_login">
+                                                    <option value="1"
+                                                        {{ $setting['setting.google_login'] == '1' ? 'selected' : '' }}>
+                                                        Enable</option>
+                                                    <option value="0"
+                                                        {{ $setting['setting.google_login'] == '0' ? 'selected' : '' }}>
+                                                        Disable</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -394,9 +462,9 @@
                                                         class="text-danger">*</span></label>
                                                 <div class="input-group input-group-merge">
                                                     <input type="text" class="form-control"
-                                                        value="<?= $setting['services.google_client_id'] ?>" required
-                                                        id="client_id" name="google.client_id"
-                                                        placeholder="google.client_id">
+                                                        value="{{ $setting['services.google_client_id'] }}" required
+                                                        name="services_google_client_id"
+                                                        placeholder="Google client id">
                                                 </div>
                                                 <label id="client_id-error" class="error" for="client_id"
                                                     style="display:none;"></label>
@@ -404,12 +472,12 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Google Client Secreat <span
+                                                <label class="form-label">Google Client Secret <span
                                                         class="text-danger">*</span></label>
                                                 <div class="input-group input-group-merge">
-                                                    <input type="text" class="form-control" required id="client_secret"
-                                                        value="<?= $setting['services.google_client_secret'] ?>"
-                                                        name="google.client_secret" placeholder="google.client_secret">
+                                                    <input type="text" class="form-control" required
+                                                        value="{{ $setting['services.google_client_secret'] }}"
+                                                        name="services_google_client_secret" placeholder="Google client secret">
                                                 </div>
                                                 <label id="client_secret-error" class="error" for="client_secret"
                                                     style="display:none;"></label>
@@ -425,26 +493,24 @@
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="navs-top-content" role="tabpanel">
-                                <form action="{{ route('admin/setting/content') }}" class="ajax-form-content"
+                                <form action="{{ route('admin/setting/save') }}" class="ajax-form-content"
                                     method="post">
                                     {{ csrf_field() }}
+                                    <input type="hidden" name="type" value="content">
                                     <div class="form-row row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Header</label>
-                                                <div class="input-group input-group-merge">
-                                                    <textarea class="form-control" rows="8" name="header_content"
-                                                        placeholder="Header content"><?= $setting['setting.header_content'] ?></textarea>
-                                                </div>
+                                                <textarea class="form-control" rows="8" name="setting_header_content"
+                                                    placeholder="Header content">{{ $setting['setting.header_content'] }}</textarea>
+
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Footer</label>
-                                                <div class="input-group input-group-merge">
-                                                    <textarea class="form-control" rows="8" name="footer_content"
-                                                        placeholder="Footer content"><?= $setting['setting.footer_content'] ?></textarea>
-                                                </div>
+                                                <textarea class="form-control" rows="8" name="setting_footer_content"
+                                                    placeholder="Footer content">{{ $setting['setting.footer_content'] }}</textarea>
                                             </div>
                                         </div>
 
@@ -467,8 +533,7 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="{{ route('admin/setting/mailprocess') }}" id="mail-test-form" method="POST"
-                    onsubmit="event.preventDefault()">
+                <form action="{{ route('admin/setting/mail-process') }}" class="ajax-form-mail-test" method="POST">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Mail</h5>
@@ -477,11 +542,12 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="email" class="form-control" id="email" placeholder="Email Address" name="email"
-                            aria-label="Name" required />
+                        <label class="form-label">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="email" placeholder="Email Address" name="email" aria-label="Name" required />
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-dark btn-reset" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -492,101 +558,47 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
-documentReady(function() {
-    $('.ajax-file-form').validate({
-        submitHandler: function(form) {
-            app.ajaxFileForm(form);
-        }
-    })
-    $('.ajax-form').validate({
-        submitHandler: function(form) {
-            app.ajaxForm(form);
-        }
-    })
-    $('.ajax-form-mail').validate({
-        rules: {
-            host: {
-                required: true,
-
-            },
-            port: {
-                required: true,
-            },
-            username: {
-                required: true,
-            },
-            password: {
-                required: true,
-            },
-            mail_from_name: {
-                required: true,
-            },
-            mail_from_address: {
-                required: true,
+    documentReady(function() {
+        $('.ajax-file-form-logo').validate({
+            submitHandler: function(form) {
+                app.ajaxFileForm(form);
             }
-        },
-        messages: {
-            host: {
-                required: "Please enter the host.",
+        })
+        $('.ajax-file-form-favicon').validate({
+            submitHandler: function(form) {
+                app.ajaxFileForm(form);
             },
-            port: {
-                required: "Please enter the port.",
-            },
-            username: {
-                required: "Please enter the username.",
-            },
-            password: {
-                required: "Please enter the password.",
-            },
-            mail_from_name: {
-                required: "Please enter the mail from name.",
-            },
-            mail_from_address: {
-                required: "Please enter the mail from address.",
+        })
+        $('.ajax-form').validate({
+            submitHandler: function(form) {
+                app.ajaxForm(form);
             }
-        },
-        submitHandler: function(form) {
-            app.ajaxFileForm(form);
-        },
-    })
-    $('.ajax-form-captcha').validate({
-        rules: {
-            google_recaptcha_secret_key: {
-                required: true,
+        })
+        $('.ajax-form-mail').validate({
+            submitHandler: function(form) {
+                app.ajaxForm(form);
             },
-            google_recaptcha_public_key: {
-                required: true,
+        })
+        $('.ajax-form-captcha').validate({
+            submitHandler: function(form) {
+                app.ajaxForm(form);
             },
-        },
-        messages: {
-            google_recaptcha_secret_key: {
-                required: "Please enter the Secret key .",
+        })
+        $('.ajax-form-social').validate({
+            submitHandler: function(form) {
+                app.ajaxForm(form);
             },
-            google_recaptcha_public_key: {
-                required: "Please enter the Public key .",
+        })
+        $('.ajax-form-content').validate({
+            submitHandler: function(form) {
+                app.ajaxForm(form);
             },
-        },
-        submitHandler: function(form) {
-            app.ajaxFileForm(form);
-        },
-    })
-    $('.ajax-form-social').validate({
-        submitHandler: function(form) {
-            app.ajaxFileForm(form);
-        },
-    })
-    $('.ajax-form-content').validate({
-        submitHandler: function(form) {
-            app.ajaxFileForm(form);
-        },
-    })
-
-
-    $('#mail-test-form').validate({
-        submitHandler: function(form) {
-            app.ajaxForm(form);
-        }
-    })
-});
+        })
+        $('.ajax-form-mail-test').validate({
+            submitHandler: function(form) {
+                app.ajaxForm(form);
+            }
+        })
+    });
 </script>
 @endpush

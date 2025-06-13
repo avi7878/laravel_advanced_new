@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -9,6 +10,7 @@ use Illuminate\View\View;
 use App\Models\User;
 use App\Services\AuthService;
 use App\Services\TfaService;
+use App\Helpers\General;
 
 /**
  * Class AuthController
@@ -48,7 +50,7 @@ class AuthController extends Controller
      */
     public function loginProcess(Request $request)
     {
-        return response()->json((new AuthService())->loginProcess($request->only(['email', 'password','remember'])));
+        return response()->json((new AuthService())->loginProcess($request->only(['email', 'password', 'remember'])));
     }
 
     /**
@@ -79,7 +81,7 @@ class AuthController extends Controller
 
 
 
-   
+
     // ----------------- Two-Factor Authentication (TFA) Methods -------------------
     /**
      * Show the TFA verification page.
@@ -147,5 +149,54 @@ class AuthController extends Controller
         $user = (new User())->where('email', $socialUser->email)->first();
         Auth::login($user);
         return redirect($this->general->authRedirectUrl(config('setting.login_redirect_url')));
+    }
+
+    public function getTotpModel(Request $request)
+    {
+        $id = $request->id;
+        $userData = User::find(3);
+        $data = (new TfaService())->generateTotpQrcode($userData->user_name);
+        $secretKey = $data['secretKey'];
+        $qrCode = $data['qrCode'];
+        $qrKey = $secretKey;
+        return view('common.totp_modal', compact('secretKey', 'qrCode', 'qrKey', 'id'));
+    }
+
+    public function verifyOtpModal(Request $request)
+    {
+        $secretKey = $request->secretKey;
+        $id = auth()->user()->id;
+        return view('common/verify_otp_modal', compact('secretKey', 'id'));
+    }
+
+    public function optVerifyProcess(Request $request)
+    {
+        $otp = str_replace(',', '', $request->otp);
+        $secretKey = $request->secretKey;
+        $data = (new TfaService())->verifyTotp($secretKey, $otp);
+
+        if ($data) {
+            $userModel = User::find($request->id);
+            $userModel->totp_secret_key = $secretKey;
+            $backupCodes = [];
+            for ($i = 0; $i < 5; $i++) {
+                $backupCodes[] = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+            }
+
+            $userModel->backup_code = implode(',', $backupCodes);
+
+            $userModel->save();
+            return response()->json(['status' => 1, 'message' => 'Verify successfully.', 'next' => 'refresh']);
+        } else {
+            return response()->json(['status' => 0, 'message' => 'Verify fail.']);
+        }
+    }
+
+
+    public function backupCode()
+    {
+        $user = auth()->user();
+        $backupCode = $user->backup_code;
+        return view('account/backup',compact('backupCode','user'));
     }
 }

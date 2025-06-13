@@ -29,7 +29,7 @@ Login with Otp
                     {{ csrf_field() }}
                     <input type="hidden" name="code" value="{{$code}}">
                     <div class="mb-3">
-                        <label class="form-label">OTP</label>
+                        <label class="form-label">OTP <span class="text-danger">*</span></label>
                         <input name="otp" type="number" class="form-control" required maxlength="6" minlength="6" autofocus />
                     </div>
                     <button class="btn btn-primary d-grid w-100 mb-3">Submit</button>

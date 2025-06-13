@@ -13,7 +13,7 @@ Admin View
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="admin/dashboard" >Dashboard</a>
+        <a href="admin/dashboard" class="pjax">Dashboard</a>
       </li>
       <li class="breadcrumb-item">
         <a href="admin/admin" class="pjax">Admin</a>
@@ -92,7 +92,7 @@ Admin View
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-registered"></i>
               <span class="fw-medium mx-2">Register Ip:</span>
-              <span class="small">{{ $model->registered_ip }}</span>
+              <span class="text-break">{{ $model->registered_ip }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-flag"></i>

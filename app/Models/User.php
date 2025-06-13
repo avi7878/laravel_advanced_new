@@ -36,8 +36,7 @@ class User extends Authenticatable
         'status',
         'created_at',
         'updated_at',
-        'permission',
-        'data'
+        'permission'
     ];
 
     protected $hidden = [
@@ -97,7 +96,7 @@ class User extends Authenticatable
             // Get profile image URL if available
             $imageUrl = (new General())->getFileUrl($row->image, 'profile');
             if ($row->image) {
-                $result['data'][$key]->image = '<a href="upload/profile/' . $row->image . '" data-toggle="lightbox" data-title="Image" class = "noroute" target = "_blank">
+                $result['data'][$key]->image = '<a href="upload/profile/' . $row->image . '" data-toggle="lightbox" data-title="Image" class = "noroute pjax" target = "_blank">
                 <img style="width:30px;height:30px" src="' . $imageUrl . '" class="h-auto rounded-circle" alt="blog image"></a>';
             }
             // Concatenate first and last names
@@ -156,7 +155,7 @@ class User extends Authenticatable
         foreach ($result['data'] as $key => $row) {
             $imageUrl = (new General())->getFileUrl($row->image, 'profile');
             if ($row->image) {
-                $result['data'][$key]->image = '<a href="upload/profile/' . $row->image . '" data-toggle="lightbox" data-title="Image" class = "noroute" target = "_blank">
+                $result['data'][$key]->image = '<a href="upload/profile/' . $row->image . '" data-toggle="lightbox" data-title="Image" class = "noroute pjax" target = "_blank">
                 <img style="width:30px;height:30px" src="' . $imageUrl . '" class="h-auto rounded-circle" alt="blog image"></a>';
             }
             $result['data'][$key]->first_name = $row->first_name . ' ' . $row->last_name;

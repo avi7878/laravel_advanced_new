@@ -70,31 +70,6 @@ const pjax = {
         this.$mainContainer.html(html).css("min-height", 0);
         $("title").text($("#main-content").data("title"));
         runDocumentReady();
-        this.updateActiveMenuByUrl();
-    },
-
-    /**
-     * Update active and open classes on menu based on current URL
-     */
-    updateActiveMenuByUrl() {
-        const currentUrl = window.location.href;
-        // Remove existing active and open classes
-        // $(".menu-item").removeClass("active");
-        // Find menu links matching current URL
-        const matchingLinks = $(".menu-link").filter(function () {
-            return this.href === currentUrl;
-        });
-        if (matchingLinks.length) {
-            matchingLinks.each(function () {
-                const $link = $(this);
-                $('.menu-item').removeClass('open');
-                $link.parent().parent().parent().parent().find('.active').removeClass('active');
-                if ($link.parent().parent().parent().hasClass('menu-item')) {
-                    $link.parent().parent().parent().addClass('active open');
-                }
-                $link.parent().addClass("active");
-            });
-        }
     },
 
     /**
@@ -113,20 +88,47 @@ const pjax = {
             const scroll = target.getAttribute("data-pjax-scroll") !== "false";
             const cache = target.hasAttribute("data-pjax-cache");
 
+            window.history.pushState({}, '', href);
+
             this.loadPage(href, cache, scroll);
-            this.updateLinkClass(target);
+            this.updateActiveMenu(href);
         });
     },
 
     /**
-     * Update link class for pjax-enabled links
-     * @param {HTMLElement} target - The clicked link element
+     * Update link class based on the current URL
+     * @param {string} url - The URL to check against
      */
-    updateLinkClass(target) {
-        target = $(target);
-        if (target.hasClass("menu-link")) {
-        }
+    activeMenuList: '',
+    updateActiveMenu(url) {
+        this.activeMenuList.removeClass("active open");
+        let pjaxurl = url.replace(APP_URL, '').split('?')[0];
+        if (pjaxurl == '') { pjaxurl = 'home'; }
+        this.activeMenuList.each(function (index, element) {
+            element = $(element);
+            // Get the data-active_menu_links attribute, split  each entry
+            let pjaxLinks = [];
+            if (element.data('active_menu_links')) {
+                pjaxLinks = pjaxLinks.concat(element.data('active_menu_links').split(','));
+            }
+            // If no links found, check for nested .active-menu children
+            if (!pjaxLinks.length) {
+                element.find('.active-menu').each(function (i, childElement) {
+                    if ($(childElement).data('active_menu_links')) {
+                        pjaxLinks = pjaxLinks.concat($(childElement).data('active_menu_links').split(','));
+                    }
+                });
+            }
+            if (pjaxLinks.includes(pjaxurl)) {
+                element.addClass("active");
+                const extraClass = element.data('active_menu_class');
+                if (extraClass) {
+                    element.addClass(extraClass);
+                }
+            }
+        });
     },
+
 
     /**
      * Initialize pjax functionality
@@ -134,9 +136,11 @@ const pjax = {
     init() {
         this.$mainContainer = $("#main-container");
         if (!this.$mainContainer.length) return console.error("pjax: Main container not found");
-
         this.routeLinks();
         window.addEventListener("popstate", () => this.loadPage(window.location.href));
+
+        this.activeMenuList = $('.active-menu');
+        this.updateActiveMenu(window.location.href);
     }
 };
 /**

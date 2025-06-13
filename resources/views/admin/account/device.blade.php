@@ -56,6 +56,7 @@ Device
         },
         {
           data: "ip",
+          class:'wrap-td',
           responsivePriority: 2
         },
         {

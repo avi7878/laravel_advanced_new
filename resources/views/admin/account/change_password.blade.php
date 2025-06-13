@@ -3,6 +3,12 @@
 Change password
 @endsection
 @section('content')
+<style>
+    .input-group-text.error {
+    /* background-color: #f8d7da;
+    color: #dc3545;
+    border-color: #dc3545; */
+}</style>
 <div class="row">
     <div class="col-md-12">
         <?= view('admin/account/component/account_block'); ?>
@@ -11,31 +17,39 @@ Change password
             <div class="card-body">
                 <form action="admin/account/password-change-process" method="post" id="ajax-form">
                     {{ csrf_field() }}
-                    <div class="row gx-6">
-
-                        <div class="mb-4 col-12 col-sm-4 form-password-toggle">
+                    <div class="row">
+                        <div class="mb-6 col-md-6 form-password-toggle form-control-validation fv-plugins-icon-container">
                             <label class="form-label" for="currentPassword">Current Password <span class="text-danger">*</span></label>
-                            <div class="input-group-merge">
+                            <div class="input-group input-group-merge has-validation">
                                 <input class="form-control" maxlength="32" minlength="6" type="password" name="current_password" id="current_password" required="required" />
-                                <!-- <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span> -->
+                                 <span class="input-group-text cursor-pointer"><i class="icon-base bx bx-hide"></i></span>
                             </div>
+                        <label id="current_password-error" class="error" for="current_password" style="display:none;"></label>
                         </div>
-                        <div class="mb-4 col-12 col-sm-4 form-password-toggle">
+                    </div>
+                     <div class="row">
+                        <div class="mb-6 col-md-6 form-password-toggle form-control-validation fv-plugins-icon-container fv-plugins-bootstrap5-row-invalid">
                             <label class="form-label" for="newPassword">New Password <span class="text-danger">*</span></label>
-                            <div class="input-group-merge">
+                            <div class="input-group input-group-merge has-validation">
                                 <input class="form-control" maxlength="32" minlength="6" type="password" id="password" name="password" required="required" />
-                                <!-- <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span> -->
+                                 <span class="input-group-text cursor-pointer"><i class="icon-base bx bx-hide"></i></span>
                             </div>
+                         <label id="password-error" class="error" for="password" style="display:none;"></label>
                         </div>
 
-                        <div class="mb-4 col-12 col-sm-4 form-password-toggle">
+                        <div class="mb-6 col-md-6 form-password-toggle form-control-validation fv-plugins-icon-container fv-plugins-bootstrap5-row-invalid">
                             <label class="form-label" for="confirmPassword">Confirm New Password <span class="text-danger">*</span></label>
-                            <div class="input-group-merge">
+                            <div class="input-group input-group-merge has-validation">
                                 <input class="form-control" maxlength="32" minlength="6" type="password" name="confirm_password" id="confirm_password" required="required" />
-                                <!-- <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span> -->
+                                 <span class="input-group-text cursor-pointer"><i class="icon-base bx bx-hide"></i></span>
                             </div>
+                        <label id="confirm_password-error" class="error" for="confirm_password" style="display:none;"></label>
                         </div>
-                        <div style="padding-top: 17px;">
+                         <h6 class="text-body">Password Requirements:</h6>
+                        <ul class="ps-8 mb-0">
+                            <li class="mb-4">Password must be at least 6 characters long.</li>
+                        </ul>
+                        <div class="mt-6">
                             <button type="submit" class="btn btn-primary me-2">Save changes</button>
                             <button type="reset" class="btn btn-dark">Cancel</button>
                         </div>
@@ -53,7 +67,29 @@ Change password
         $('#ajax-form').validate({
             submitHandler: function(form) {
                 app.ajaxForm(form);
+            },
+             highlight: function(element) {
+            $(element).addClass('is-invalid');
+            $(element)
+                .closest('.input-group')
+                .find('.input-group-text')
+                .addClass('error');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+
+                $(element)
+                    .closest('.input-group')
+                    .find('.input-group-text')
+                    .removeClass('error');
+            },
+        errorPlacement: function(error, element) {
+            if ($(element).closest('.input-group').length) {
+                error.insertAfter($(element).closest('.input-group'));
+            } else {
+                error.insertAfter(element);
             }
+        }
         })
     });
 </script>

@@ -1,8 +1,3 @@
-<style>
-.star {
-    color: red;
-}
-</style>
 <form method="post" action="{{ route('admin/admin/save') }}" enctype="multipart/form-data" id="ajax-form">
     @csrf
     <input type="hidden" name="id" value="{{ @$model->id }}">
@@ -52,13 +47,16 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="mb-3">
+                    <div class="mb-3 form-password-toggle">
                         <label class="form-label" for="basic-icon-default-password">Password <span
                             class="text-danger">*</span></label>
-                        <div class="input-group input-group-merge">
+                        <div class="input-group input-group-merge has-validation">
                             <input type="password" class="form-control" id="password" placeholder="Password"
-                                name="password" autocomplete="new-password" readonly  value="{{ @$model->phone }}"/>
-                        </div>
+                                name="password" autocomplete="new-password"   value="{{ @$model->phone }}"/>
+                                <span class="input-group-text cursor-pointer"><i class="icon-base bx bx-hide"></i></span>
+                            </div>
+                        <label id="password-error" class="error" for="password" style="display:none;"></label>
+
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -97,7 +95,7 @@
     </div>
     <div class="col-md-12">
         <div class="mb-3">
-            <h5 class="fw-medium" for="basic-icon-default-fullname">Permission</h5>
+            <h5 class="fw-medium" for="basic-icon-default-fullname">Permission <span class="text-danger">*</span></h5>
         </div>
         @php
         $permissions = collect(explode(',', $model->permission ?? ''))
@@ -147,6 +145,7 @@
 
 @push('scripts')
 <script type="text/javascript">
+jQuery.validator.addMethod("noDisposableEmail", v => !["mailinator.com","tempmail.com","10minutemail.com","guerrillamail.com","fakeinbox.com"].includes((v.split('@')[1]||"").toLowerCase()), "Disposable email addresses are not allowed.");
 documentReady(function() {
     // Add a custom method to validate alphabetic characters
     jQuery.validator.addMethod("alphaOnly", function(value, element) {
@@ -167,6 +166,7 @@ documentReady(function() {
             email: {
                 required: true,
                 email: true,
+                 noDisposableEmail: true
             },
             status: {
                 required: true,
@@ -176,6 +176,7 @@ documentReady(function() {
                 minlength: 10
             },
             password: {
+                required: true,
                 minlength: 6,
                 maxlength: 10
             },
@@ -192,6 +193,7 @@ documentReady(function() {
             email: {
                 required: "Please enter the email",
                 email: "Please enter a valid email address",
+                noDisposableEmail: "Please enter a valid Email domain"
             },
             password: {
                 required: "Please enter the password",
@@ -209,10 +211,29 @@ documentReady(function() {
         submitHandler: function(form) {
             app.ajaxFileForm(form);
         },
+        highlight: function(element) {
+            $(element).addClass('is-invalid');
+            $(element)
+                .closest('.input-group')
+                .find('.input-group-text')
+                .addClass('error');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid');
 
+            $(element)
+                .closest('.input-group')
+                .find('.input-group-text')
+                .removeClass('error');
+        },
         errorPlacement: function(error, element) {
+              if ($(element).closest('.input-group').length) {
+                error.insertAfter($(element).closest('.input-group'));
+            } else {
+                error.insertAfter(element.closest('.mb-3'));
+            }
             // Place the error message under the input field
-            error.insertAfter(element.closest('.mb-3'));
+           // error.insertAfter(element.closest('.mb-3'));
         },
     });
 });

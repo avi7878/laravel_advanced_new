@@ -74,7 +74,7 @@ class Pagination
      *
      * @param Builder $query The query builder instance.
      * @param array $postData The request data.
-     * @param int $type The type of pagination (1: default, 2: load more, 3: scroll).
+     * @param int $type The type of pagination (1: link, 2: load more,  3: load old 4: scroll).
      * @return array The paginated response.
      */
     public function getData(Builder $query, array $postData, int $type = 1): array
@@ -110,18 +110,20 @@ class Pagination
         // Generate pagination links based on pagination type
         if ($type === 1) {
             $response['links'] = $this->getLinks($response['page'], $response['total'], $response['limit']);
-        } elseif ($type === 2 && !$response['data']->isEmpty()) {
-            $response['links'] = $this->getLoadMore($response['page'], $response['limit']);
-        } elseif ($type === 3 && !$response['data']->isEmpty()) {
-            $response['links'] = $this->getScroll($response['page'], $response['limit']);
+        } else if (!$response['data']->isEmpty()) {
+            if(count($response['data']) < $response['limit']){
+                $response['links'] = '';
+            }else{
+                $response['links'] = $this->getLoadMore($response['page'], $type);
+            }
         }
 
         $start = $response['offset'] + 1;
         $end = $response['offset'] + $response['limit'];
-        if ($end > $response['total']) {
+        if ($type == 1 && $end > $response['total']) {
             $end = $response['total'];
+            $response['count'] = "Showing $start-$end of $response[total] items";
         }
-        $response['count'] = "Showing $start-$end of $response[total] items";
         return $response;
     }
 
@@ -148,23 +150,11 @@ class Pagination
      * Generate a "Load More" button for pagination.
      *
      * @param int $page The current page.
-     * @param int $limit The number of records per page.
      * @return string HTML for the "Load More" button.
+     * @param int $type The type of pagination (2: loadmore , 3: loadold, 4: scroll).
      */
-    public function getLoadMore(int $page, int $limit): string
+    public function getLoadMore(int $page, $type): string
     {
-        return '<div class="pagination-load-more"><button class="btn btn-default page-link" data-page="' . ($page + 1) . '">Load More</button></div>';
-    }
-
-    /**
-     * Generate a "Scroll Load More" button for infinite scroll pagination.
-     *
-     * @param int $page The current page.
-     * @param int $limit The number of records per page.
-     * @return string HTML for the "Load More" button with hidden style for infinite scroll.
-     */
-    public function getScroll(int $page, int $limit): string
-    {
-        return '<div class="pagination-load-more" style="display:none"><button class="btn btn-default page-link" data-page="' . ($page + 1) . '">Load More</button></div>';
+        return '<div class="pagination-load-more" ' . $type == 4 ? 'style="display:none"' : '' . '><button class="btn btn-default page-link" data-page="' . ($page + 1) . '">Load More</button></div>';
     }
 }

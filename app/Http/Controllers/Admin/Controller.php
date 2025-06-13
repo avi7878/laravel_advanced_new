@@ -17,7 +17,7 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->general = new General();
-        config($this->general->getAllSettings());
+        $this->general->configSettings();
         \View::share('general', $this->general);
     }
 }

@@ -12,7 +12,7 @@ Forgot Password
                     <div class="app-brand justify-content-center mb-4 mt-2">
                         <a href="site/password-forgot" class="app-brand-link d-flex align-items-center">
                             <span class="app-brand-logo demo">
-                                <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 50px;">
+                                <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo " style="height: 50px;">
                             </span>
                             <span class="app-brand-text demo text-body fw-bold ms-1">{{ Config::get('setting.app_name') }}</span>
                         </a>
@@ -26,7 +26,7 @@ Forgot Password
                         <input type="hidden" name="step" id="step" value="1">
                         <div id="email-block">
                             <div class="mb-6">
-                                <label class="form-label">Email <span class="star">*</span></label>
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
                                 <input id="email" type="email" class="form-control" name="email" placeholder="Enter your email" autofocus value="" />
                                 <div class="col-12 recaptcha-block">
                                     {{view('common/recaptcha')}}
@@ -35,7 +35,7 @@ Forgot Password
                         </div>
                         <div id="otp-block" style="display: none;">
                             <div class="mb-6">
-                                <label class="form-label">OTP <span class="star">*</span></label>
+                                <label class="form-label">OTP <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="otp" placeholder="Enter your otp" autofocus value="" />
                                 <div class="text-center">
                                     <br>
@@ -46,13 +46,23 @@ Forgot Password
                         </div>
                         <div id="password-block" style="display: none;">
                             <div class="mb-6">
-                                <div class="mb-6 ">
-                                    <label class="form-label">Password <span class="star">*</span></label>
-                                    <input type="password" class="form-control" name="password" placeholder="Enter your email" autofocus value="" />
+                                <div class="mb-6 form-password-toggle form-control-validation">
+                                    <label class="form-label">Password <span class="text-danger">*</span></label>
+                                    <div class="input-group input-group-merge has-validation">
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" autofocus value="" />
+                                    <span class="input-group-text cursor-pointer">
+                                        <i class="icon-base bx bx-hide"></i></span>
                                 </div>
-                                <div class="mb-6 ">
-                                    <label class="form-label">confirm password <span class="star">*</span></label>
-                                    <input type="password" class="form-control" name="password_confirm" placeholder="Enter your email" value="" />
+                                <label id="password-error" class="error" for="password" style="display:none;"></label>
+                                </div>
+                                <div class="mb-6 form-password-toggle form-control-validation">
+                                    <label class="form-label">confirm password <span class="text-danger">*</span></label>
+                                     <div class="input-group input-group-merge has-validation">
+                                        <input type="password" class="form-control" name="password_confirm" id="password_confirm" placeholder="Enter your password" value="" />
+                                         <span class="input-group-text cursor-pointer">
+                                              <i class="icon-base bx bx-hide"></i></span>
+                                    </div>
+                                 <label id="password_confirm-error" class="error" for="password_confirm" style="display:none;"></label>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +70,7 @@ Forgot Password
                     </form>
                    
                     <div class="text-center">
-                        <a href="{{ route('login') }}" class="d-flex justify-content-center">
+                        <a href="{{ route('login') }}" class="d-flex justify-content-center pjax">
                             <i class="icon-base bx bx-chevron-left me-1"></i>
                             Back to login
                         </a>
@@ -127,4 +137,5 @@ Forgot Password
             })
         }
     </script>
+
     @endpush

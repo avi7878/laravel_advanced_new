@@ -7,20 +7,11 @@
     </div>
 
     <div class="navbar-nav-right d-flex align-items-center justify-content-end" id="navbar-collapse">
-        <!-- <div class="navbar-nav align-items-center me-auto">
-            <div class="nav-item d-flex align-items-center">
-                <span class="w-px-22 h-px-22"><i class="icon-base bx bx-search icon-md"></i></span>
-                <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2 d-md-block d-none" placeholder="Search..." aria-label="Search...">
-            </div>
-        </div>
-     -->
         <ul class="navbar-nav flex-row align-items-center ms-md-auto">
             <!-- User -->
-            <li class="nav-item lh-1 me-4">
-
-            </li>
+            <li class="nav-item lh-1 me-4"></li>
             <!-- Style Switcher -->
-            {{-- <li class="nav-item dropdown me-2 me-xl-0">
+            <li class="nav-item dropdown me-2 me-xl-0">
                 <a class="nav-link dropdown-toggle hide-arrow"  id="nav-theme" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <i class="icon-base bx bx-sun icon-md theme-icon-active"></i>
                 </a>
@@ -42,7 +33,7 @@
                     </li>
                     
                 </ul>
-            </li>  --}}
+            </li> 
             <!-- / Style Switcher-->
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -87,7 +78,7 @@
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item  " href="{{ route('admin/auth/logout') }}">
+                        <a class="dropdown-item" href="{{ route('admin/auth/logout') }}">
                             <i class="icon-base bx bx-power-off icon-md me-3"></i>
                             <span class="align-middle">Log Out</span>
                         </a>
@@ -97,10 +88,4 @@
             <!--/ User -->
         </ul>
     </div>
-
-    <!-- Search Small Screens -->
-    {{-- <div class="navbar-search-wrapper search-input-wrapper d-none">
-        <input type="text" class="form-control search-input container-xxl border-0" placeholder="Search..." aria-label="Search..." />
-        <i class="ti ti-x ti-sm search-toggler cursor-pointer"></i>
-    </div> --}}
 </nav>

@@ -24,34 +24,40 @@ Register Your Account
                     <form class="mb-3" action="{{route('site/register-process')}}" method="POST" id="ajax-form">
                         @csrf
                         <div class="mb-3">
-                            <label for="username" class="form-label">First Name <span class="star">*</span></label>
+                            <label for="username" class="form-label">First Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="first_name" name="first_name" value="{{old('first_name')}}" required placeholder="Enter your first name" maxlength="255" autofocus />
                         </div>
                         <div class="mb-3">
-                            <label for="username" class="form-label">Last Name <span class="star">*</span></label>
+                            <label for="username" class="form-label">Last Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="last_name" maxlength="255" name="last_name" required placeholder="Enter your last name"  />
                         </div>
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Phone Number <span class="star">*</span></label>
+                            <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="phone" maxlength="255" name="phone" required placeholder="Enter your Phone Number"  />
                         </div>
                         
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email <span class="star">*</span></label>
+                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email" />
                         </div>
-                        <div class="mb-3 form-password-toggle">
-                            <label class="form-label" for="password">Password <span class="star">*</span></label>
-                            <div class=" input-group-merge">
+                        <div class="mb-3 form-password-toggle form-control-validation">
+                            <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-merge has-validation">
                                 <input type="password" id="password" class="form-control" required name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                 <span class="input-group-text cursor-pointer">
+                                              <i class="icon-base bx bx-hide"></i></span>
                             </div>
+                             <label id="password-error" class="error" for="password" style="display:none;"></label>
                         </div>
 
-                        <div class="mb-3 form-password-toggle">
-                            <label class="form-label" for="password">Confirm Password <span class="star">*</span></label>
-                            <div class=" input-group-merge">
-                                <input type="password" id="password_confirm" class="form-control" required name="password_confirm" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password_confirm" />
+                        <div class="mb-3 form-password-toggle form-control-validation">
+                            <label class="form-label" for="password_confirm">Confirm Password <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-merge has-validation">
+                                <input type="password" id="password_confirm" class="form-control" required  name="password_confirm" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password_confirm" />
+                                <span class="input-group-text cursor-pointer">
+                                              <i class="icon-base bx bx-hide"></i></span>
                             </div>
+                              <label id="password_confirm-error" class="error" for="password_confirm" style="display:none;"></label>
                         </div>
 
                         <div class="col-12">
@@ -88,6 +94,7 @@ Register Your Account
 @endsection
 @push('scripts')
 <script>
+jQuery.validator.addMethod("noDisposableEmail", v => !["mailinator.com","tempmail.com","10minutemail.com","guerrillamail.com","fakeinbox.com"].includes((v.split('@')[1]||"").toLowerCase()), "Disposable email addresses are not allowed.");
     documentReady(function() {
         $('#ajax-form').validate({
             rules: 
@@ -98,7 +105,8 @@ Register Your Account
                 },
                 email: {
                     required: true,
-                    email: true
+                    email: true,
+                     noDisposableEmail: true
                 },
                 password: {
                     minlength: 6,
@@ -121,7 +129,9 @@ Register Your Account
                 email: 
                 {
                     required: "Please Enter Your Email.",
-                    email: "Please enter a valid email address."
+                    email: "Please enter a valid email address.",
+                    noDisposableEmail: "Please enter a valid Email domain"
+
                 },
                 password: {
                     required: "Please Enter Your Password",
@@ -141,8 +151,24 @@ Register Your Account
                         app.showMessage(response.message, "error");
                     }
                 });
-            }
+            },
+            highlight: function(element) {
+            $(element).addClass('is-invalid');
+            $(element)
+                .closest('.input-group')
+                .find('.input-group-text')
+                .addClass('error');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid');
+
+            $(element)
+                .closest('.input-group')
+                .find('.input-group-text')
+                .removeClass('error');
+        },
         })
     })
 </script>
+
 @endpush

@@ -10,7 +10,7 @@ Login with Otp
       <div class="card-body">
         <!-- Logo -->
         <div class="app-brand justify-content-center mb-4 mt-2">
-          <a href="index.html" class="app-brand-link gap-2">
+          <a href="index.html" class="app-brand-link gap-2 pjax">
             <span class="app-brand-logo demo">
               <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 200%;">
             </span>
@@ -43,7 +43,7 @@ Login with Otp
           @endif
           <button class="btn btn-primary d-grid w-100 mb-3">Submit</button>
           <div class="form-group mb-8">
-            <a href="{{route('logout')}}" class="btn btn-default d-grid w-100 noroute">Logout</a>
+            <a href="{{route('logout')}}" class="btn btn-default d-grid w-100 noroute ">Logout</a>
           </div>
           <div class="text-center">
             Didn't get the code?

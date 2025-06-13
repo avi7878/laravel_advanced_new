@@ -13,7 +13,7 @@ Device
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="admin/dashboard" >Dashboard</a>
+        <a href="admin/dashboard" class="pjax">Dashboard</a>
       </li>
       <li class="breadcrumb-item active">Device</li>
     </ol>
@@ -26,12 +26,12 @@ Device
     <h4 class="align-middle d-sm-inline-block d-none">Device </h4>
   </div>
   <div class="card-datatable table-responsive">
-    <table class="datatable-list-table table border-top" id="data-table">
+    <table class="datatable-list-table table border-top " id="data-table">
       <thead>
         <tr>
           <th>#</th>
           <th>Name</th>
-          <th>Email</th>
+          <th class="text-break">Email</th>
           <th>Client</th>
           <th>IP</th>
           <th>Location</th>
@@ -67,6 +67,7 @@ Device
         },
         {
           data: "email",
+           class:'wrap-td',
           responsivePriority: 2
         },
         {
@@ -76,6 +77,7 @@ Device
         },
         {
           data: "ip",
+          class:'wrap-td',
           responsivePriority: 3
         },
         {

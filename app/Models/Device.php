@@ -225,7 +225,8 @@ class Device extends Model
             $result['data'][$key]->location = $general->getIpLocation($row->ip);
             $result['data'][$key]->client = (new General())->deviceName($row->client) . ' ' . ($row->device_uid == @$_COOKIE[config("setting.app_uid") . '_token'] ? ' (This Device)' : '');
             $result['data'][$key]->last_activity = date(config('setting.date_format'), @$row->last_activity ? $row->last_activity : $row->updated_at);
-            $result['data'][$key]->action = '<button style="border: none; background: none;"  onclick="app.confirmAction(this);" data-action="account/device-logout?id='.$row->id .'"  class="text-body pjax" title="logout"><i class="bx bx-log-out icon-base"></i></button>';
+            $result['data'][$key]->action = '<button style="border: none; background: none;"  onclick="app.confirmAction(this);" data-action="account/device-logout?id='.$row->id .'"  class="text-body pjax" title="logout">                    <svg class="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:22px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+</button>';
         } 
         return $result;
     }
@@ -271,7 +272,8 @@ class Device extends Model
             $result['data'][$key]->action = '';
             if ($sessionUser->hasPermission('admin/device/logout')) {
                 $result['data'][$key]->action .= '
-                <button style="border: none; background: none;" onclick="app.confirmAction(this);" data-action="admin/device/logout?id=' . $row->deviceId . '" class="text-body pjax" title="logout"><i class="bx bx-log-out icon-base"></i></button>';
+                <button style="border: none; background: none;" onclick="app.confirmAction(this);" data-action="admin/device/logout?id=' . $row->deviceId . '" class="text-body pjax" title="logout">                    <svg class="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:22px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+</button>';
             }
         }
         return $result;

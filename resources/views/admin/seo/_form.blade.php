@@ -40,21 +40,6 @@
                 <label class="form-check-label" for="frequency_disabled">Disable</label>
             </div>
             </div>
-            {{-- <div class="mb-3">
-                <label class="body">Site Map</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="site_map" id="frequency_enabled" value="1" data-bs-toggle="collapse" data-bs-target="#collapseFrequency" aria-expanded="false" aria-controls="collapseFrequency" <?= (@$model->sitemap_enable == 1) ? 'checked' : ''; ?>>
-                    <label class="form-check-label" for="frequency_enabled">
-                        Enable
-                    </label>
-                </div>Disable
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="site_map" id="frequency_disabled" value="0" data-bs-toggle="collapse" data-bs-target="#collapseFrequency" aria-expanded="false" aria-controls="collapseFrequency" <?= (@$model->sitemap_enable == 0) ? 'checked' : ''; ?>>
-                    <label class="form-check-label" for="frequency_disabled">
-                        
-                    </label>
-                </div>
-            </div> --}}
             <div class="collapse <?= (@$model->sitemap_enable == 1) ? 'show' : ''; ?>" id="collapseFrequency">
                 <div class="mb-3">
                     <label class="form-label" for="frequency">Frequency</label>
@@ -83,7 +68,7 @@
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
-    <a href="admin/seo/meta" class="btn btn-dark" style="color:white;">Back</a>
+    <a href="admin/seo/meta" class="btn btn-dark pjax" style="color:white;">Back</a>
 </form>
 
 @push('scripts')

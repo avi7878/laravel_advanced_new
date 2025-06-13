@@ -4,44 +4,43 @@ Home
 @endsection
 @section('content')
 <h4 class="fw-bold py-3 mb-4">Dashboard</h4>
-<div class="row mb-5">
-    <div class="col-md">
-        <div class="card mb-3">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img class="card-img card-img-left" src="theme/assets/img/elements/9.jpg" alt="Card image" />
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">
-                            This is a wider card with supporting text below as a natural lead-in to additional content.
-                            This content is a little bit longer.
-                        </p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
+<div class="row mb-12 g-6">
+            <div class="col-md-6 col-lg-4">
+            <div class="card h-100">
+                <img class="card-img-top" src="theme/assets/img/elements/2.png" alt="Card image cap">
+                <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                </p>
+                <a href="javascript:void(0)" class="btn btn-outline-primary">Go somewhere</a>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="col-md">
-        <div class="card mb-3">
-            <div class="row g-0">
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">
-                            This is a wider card with supporting text below as a natural lead-in to additional content.
-                            This content is a little bit longer.
-                        </p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                <img class="card-img-top" src="theme/assets/img/elements/5.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+                    <a href="javascript:void(0)" class="btn btn-outline-primary">Go somewhere</a>
                 </div>
-                <div class="col-md-4">
-                    <img class="card-img card-img-right" src="theme/assets/img/elements/12.jpg" alt="Card image" />
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                <img class="card-img-top" src="theme/assets/img/elements/4.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+                    <a href="javascript:void(0)" class="btn btn-outline-primary">Go somewhere</a>
+                </div>
+                </div>
+            </div>
+  
 </div>
 @endsection

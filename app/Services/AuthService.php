@@ -142,8 +142,9 @@ class AuthService
         }
 
         if (config('setting.user_email_verify') && $user->email_verified != '1') {
+          
             (new \App\Services\TfaService())->sendOTP($user, 'verify_account');
-            return ['status' => 0, 'message' => 'Please verify your email, <a class="noroute" href="' . route('site/verify-account', ['code' => base64_encode($user->email)]) . '">Click here</a> to verify your email address.'];
+            return ['status' => 0, 'message' => 'Please verify your email, <a class="noroute pjax" href="' . route('site/verify-account', ['code' => base64_encode($user->email)]) . '">Click here</a> to verify your email address.'];
         }
 
         if ($user->login_failed) {
@@ -157,15 +158,16 @@ class AuthService
         (new Device())->login($user->id, @$postData['remember']);
         $LogObj->sendNewDeviceMail($user);
 
-        if ($user->status_tfa == 1) {
-            if (!in_array(@$_COOKIE[config("setting.app_uid") . '_token'], explode(',', $user->ignore_tfa_device))) {
-                session(['verify_tfa' => 1]);
-                (new \App\Services\TfaService())->sendOTP($user, 'otp');
-                return ['status' => 1, 'message' => '', 'next' => 'redirect', 'url' =>  route($type?'auth/verify':'admin/auth/verify', ['type' => 'tfa'])];
-            }
-        }
-        
-        return ['status' => 1, 'message' => 'Login success', 'next' => 'redirect', 'url' => $general->authRedirectUrl($type? config('setting.login_redirect_url') : config('setting.adimn_login_redirect_url'))];
+        // if ($user->status_tfa == 1) {
+        //     if (!in_array(@$_COOKIE[config("setting.app_uid") . '_token'], explode(',', $user->ignore_tfa_device))) {
+        //         session(['verify_tfa' => 1]);
+        //         (new \App\Services\TfaService())->sendOTP($user, 'otp');
+        //         return ['status' => 1, 'message' => '', 'next' => 'redirect', 'url' =>  route($type?'auth/verify':'admin/auth/verify', ['type' => 'tfa'])];
+        //     }
+        // }
+      
+        $redirectUrl = $general->authRedirectUrl($type ? config('setting.login_redirect_url','dashboard') : config('setting.admin_login_redirect_url', 'admin/dashboard'));    
+        return ['status' => 1, 'message' => 'Login success', 'next' => 'redirect', 'url' => $redirectUrl];
     }
 
     /**

@@ -274,7 +274,7 @@ class General
         $rule = 'file|mimetypes:image/*|max:' . $size;
         switch ($type) {
             case 'image':
-                $rule = 'file|mimes:jpeg,jpg,png,gif,webp,bmp,svg|max:' . $size;
+                $rule = 'file|mimes:jpeg,jpg,png,gif,webp,bmp,svg,ico|max:' . $size;
                 break;
             case 'pdf':
                 $rule = 'file|mimes:pdf|max:1024';
@@ -283,7 +283,7 @@ class General
                 $rule = 'file|mimes:pdf,xlsx,doc,docx|max:1024';
                 break;
             case 'all':
-                $rule = 'file|mimes:pdf,xlsx,doc,docx,jpeg,jpg,png,gif,webp,bmp,svg|max:1024';
+                $rule = 'file|mimes:pdf,xlsx,doc,docx,jpeg,jpg,png,gif,webp,bmp,svg,ico|max:1024';
                 break;
         }
         return $rule;
@@ -295,12 +295,12 @@ class General
      * @param string $type The type of file (profile, setting, blog, etc.).
      * @return string
      */
-    public function getfilePath($type = 'setting')
+    public function getfilePath($type = 'profile')
     {
         return match ($type) {
             'profile' => 'profile/',
             'email' => 'email/',
-            'setting' => 'setting/',
+            'logo' => 'logo/',
             default => 'temp/',
         };
     }
@@ -312,7 +312,7 @@ class General
      */
     public function getNoFile($type = 'setting')
     {
-        return \Illuminate\Support\Facades\Storage::url('setting/no-image.jpg');
+        return \Illuminate\Support\Facades\Storage::url('no-image.jpg');
     }
 
     /**
@@ -323,7 +323,7 @@ class General
      * @param string|null $subDir Subdirectory under the type's path.
      * @return string
      */
-    public function getFileUrl($file, $type = 'setting')
+    public function getFileUrl($file, $type = 'profile')
     {
         if ($file) {
             $path = $this->getfilePath($type);
@@ -349,7 +349,7 @@ class General
      * @return void
      */
 
-    public function deleteFile($file, $type = 'setting')
+    public function deleteFile($file, $type = 'profile')
     {
         if ($file) {
             $path = $this->getfilePath($type);
@@ -367,18 +367,28 @@ class General
      * @param \Illuminate\Http\UploadedFile $file The file to upload.
      * @param int $type The file type identifier.
      * @param string|null $subDir Optional subdirectory under the type's path.
+     * @param string $name Optional name for the uploaded file.
      * @return array
      */
 
-    public function uploadFile($file, $type = 'setting')
+    public function uploadFile($file, $type = 'profile', $subDir = '', $name = '')
     {
         $fileDir = $this->getfilePath($type);
-        $dateDir = date('Y/m');
-        \Illuminate\Support\Facades\Storage::makeDirectory($fileDir . $dateDir);
+        if ($subDir != '') {
+            if ($subDir == 'date') {
+                $subDir = date('Y/m');
+            }
+            \Illuminate\Support\Facades\Storage::makeDirectory($fileDir . $subDir);
+        }
         try {
-            $fileResult = \Illuminate\Support\Facades\Storage::put($fileDir . $dateDir, $file);
+            if ($name == '') {
+                $name = \Illuminate\Support\Str::random(32) . '.' . $file->getClientOriginalExtension();
+            } else if ($name == 'same') {
+                $name = $file->getClientOriginalName();
+            }
+            $fileResult = \Illuminate\Support\Facades\Storage::putFileAs($fileDir . $subDir, $file, $name);
             if ($fileResult) {
-                return ['status' => 1, 'file_name' => str_replace($fileDir, '', $fileResult), 'name' => $file->getClientOriginalName()];
+                return ['status' => 1, 'message' => 'File uploaded successfully', 'file_name' => trim(str_replace($fileDir, '', $fileResult), '/'), 'file_type' => $file->getClientMimeType(), 'size' => $file->getSize(), 'name' => $file->getClientOriginalName(), 'extension' => $file->getClientOriginalExtension()];
             } else {
                 return ['status' => 0, 'message' => 'File upload failed'];
             }
@@ -399,83 +409,84 @@ class General
     {
 
         $templateData = (new \App\Models\EmailTemplate())->getEmailTemplate($template, $data);
-        return $this->sendMail($to, $templateData['subject'], $templateData['body']);
-    }
-
-    /**
-     * Sends a confirmation email for a new registration.
-     *
-     * @param string $email User's email address.
-     * @param string $subject The email subject.
-     * @param string $view The view for the email body.
-     * @param array $data Data to be passed to the view.
-     * @return array
-     */
-
-    public function sendMail(string $to, string $subject, string $body)
-    {
         if (function_exists("proc_open")) {
             // Dispatch email job (queue must be running)
-            \App\Jobs\SendEmail::dispatchAfterResponse($to, $subject, $body);
+            \App\Jobs\SendEmail::dispatchAfterResponse($to, $templateData['subject'], $templateData['body']);
             return ['status' => 1, 'message' => 'Email dispatched to queue'];
         } else {
-            try {
-                // Log email data for debugging
-                \Log::info("Sending Email to: " . $to);
-                \Log::info("Subject: " . $subject);
-                \Log::info("Body: " . $body);
-                // Send email immediately
-                \Mail::send('email/layouts/container', compact('body'), function ($message) use ($to, $subject) {
-                    $message->from(config('mail.from.address'), config('mail.from.name'))
-                        ->to($to)
-                        ->subject($subject);
-                });
+            // return $this->sendEmailSMTP($to, $templateData['subject'], $templateData['body']);
+            return $this->sendMailApi($to, $templateData['subject'], $templateData['body']);
+        }
+    }
 
-                return ['status' => 1, 'message' => 'Email sent successfully'];
-            } catch (\Exception $e) {
-                \Log::error("Email Failed: " . $to . " | " . $subject . " | " . $e->getMessage());
-                return ['status' => 0, 'message' => $e->getMessage()];
-            }
+    public function sendEmailSMTP(string $to, string $subject, string $body){
+        try {
+            // Log email data for debugging
+            \Log::info("Sending Email to: " . $to . ' : ' . $subject);
+            // Send email immediately
+            // \Mail::send('email/layouts/container', compact('body'), function ($message) use ($to, $subject) {
+            //     $message->from(config('mail.from.address'), config('mail.from.name'))
+            //         ->to($to)
+            //         ->subject($subject);
+            // });
+
+            $transport = new \Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport(
+                config('mail.mailers.smtp.host'),
+                config('mail.mailers.smtp.port'),
+                config('mail.mailers.smtp.encryption') === 'ssl'
+            );
+            $transport->setUsername(config('mail.mailers.smtp.username'));
+            $transport->setPassword(config('mail.mailers.smtp.password'));
+            // Now pass the transport directly to the Mailer
+            $laravelMailer = new \Illuminate\Mail\Mailer(
+                config('mail.default'),
+                app('view'),
+                $transport,
+                app('events')
+            );
+            $laravelMailer->send('email/layouts/container', ['body' => $body], function ($message) use ($to, $subject) {
+                $message->from(config('mail.from.address'), config('mail.from.name'))
+                    ->to($to)
+                    ->subject($subject);
+            });
+
+            \Log::info('Email Sent : ' . $to . ' : ' . $subject);
+            return ['status' => 1, 'message' => 'Email sent successfully'];
+        } catch (\Exception $e) {
+            \Log::error("Email Failed : " . $to . " : " . $subject . " : " . $e->getMessage());
+            return ['status' => 0, 'message' => $e->getMessage()];
         }
     }
 
 
     /**
-     * Sends an email using the external mail API.
+     * Sends an email using the Tribital Mailer API.
      *
-     * This method sends an email by making a POST request to the specified mailer API endpoint.
-     * It merges the provided data with additional SMTP configuration settings and an API key.
-     *
-     * @param array $data An associative array containing the email details:
-     *                    - 'from' (string): The sender's email address.
-     *                    - 'from_name' (string): The sender's name.
-     *                    - 'to' (string): The recipient's email address.
-     *                    - 'to_name' (string): The recipient's name.
-     *                    - 'subject' (string): The subject of the email.
-     *                    - 'body' (string): The body content of the email.
-     *
-     * @return array|null The response from the mailer API, decoded from JSON to an associative array,
-     *                    or null if the response could not be decoded.
+     * @param string $to The recipient's email address.
+     * @param string $subject The email subject.
+     * @param string $body The email body content.
+     * @return array
      */
-    public function sendMailApi($data)
+    public function sendMailApi(string $to, string $subject, string $body)
     {
-        // self::sendMailApi([
-        //     'from' => config('setting.mail_from_address'),
-        //     'from_name' => config('setting.mail_from_name'),
-        //     'to' => $to, // Changed from $email to $to
-        //     'to_name' => '',
-        //     'subject' => $subject,
-        //     'body' => $body, // Corrected from $view and $data
-        // ]);
+        // Log email data for debugging
+        \Log::info("Sending Email to: " . $to . ' : ' . $subject);
 
-        $data = array_merge($data, [
+        $data = [
+            'to' => $to,
+            'subject' => $subject,
+            'body' => $body,
+        
             'api_key' => 'LhBuEz7wGEwv3AxmnBSX3QUwVsyjqr8qKj6jPjV7NuHkAFKnJR8',
             'smtp_host' => config('mail.mailers.smtp.host'),
             'smtp_port' => config('mail.mailers.smtp.port'),
             'smtp_encryption' => config('mail.mailers.smtp.encryption'),
             'smtp_username' => config('mail.mailers.smtp.username'),
             'smtp_password' => config('mail.mailers.smtp.password'),
-        ]);
+            'from' => config('mail.from.address'),
+            'from_name' => config('mail.from.name'),
+            'to_name' => '',
+        ];
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.tribital.com/mailer/send.php',
@@ -490,7 +501,14 @@ class General
         ));
         $response = curl_exec($curl);
         curl_close($curl);
-        return @json_decode($response, true);
+        $result=@json_decode($response, true);
+        if($result['status']){
+            \Log::info('Email Sent : ' . $to . ' : ' . $subject);
+            return ['status' => 1, 'message' => 'Email sent successfully'];
+        }else{
+            \Log::error("Email Failed : " . $to . " : " . $subject . " : " . $result['message']);
+            return ['status' => 0, 'message' => $result['message']];
+        }
     }
 
     public function verifyEmail($email)
@@ -533,32 +551,6 @@ class General
         } catch (\Exception $e) {
         }
         return $result;
-    }
-
-    public function generateTFAQrcode($userName)
-    {
-        $secret = $this->generateTotpSecret();
-        $issuer = config('app.name');
-        $qrCodeData = "otpauth://totp/$issuer:$userName?secret=$secret&issuer=$issuer";
-        $qrCode = (new \App\Helper\QrGenerator())->render_svg('qr', $qrCodeData, []);
-        return [
-            'qrCode' => $qrCode,
-            'secretKey' => $secret,
-        ];
-    }
-
-    function verifyTotp($secret, $code, $discrepancy = 1)
-    {
-        $currentTimeSlice = floor(time() / 30);
-
-        for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
-            $validCode = $this->get_totp_code($secret, $currentTimeSlice + $i);
-            if ($validCode === $code) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function getTimezooneList()

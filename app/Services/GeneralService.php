@@ -146,7 +146,7 @@ class GeneralService
         if ($validator->fails()) {
             return ['status'=>0,'message'=> $validator->errors()->first()];
         }
-        $general->sendMail(config("setting.admin_email"),'Contact | ' . config('app.name'),view('email.contact',$postData)->render());
+        $general->sendEmail(config("setting.admin_email"), 'admin_contact', $postData);
 
         return ['status' => 1,'message' => 'Submit request successfully','next' => 'refresh'];
     }

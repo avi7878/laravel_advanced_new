@@ -9,7 +9,7 @@ Log
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="admin/dashboard" >Dashboard</a>
+                <a href="admin/dashboard" class="pjax">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">Log</li>
         </ol>
@@ -62,6 +62,7 @@ Log
                 },
                 {
                     data: "email",
+                     class:'wrap-td',
                     responsivePriority: 4
                 },
                 {
@@ -71,6 +72,7 @@ Log
                 },
                 {
                     data: "ip",
+                     class:'wrap-td',
                     responsivePriority: 4,
                     sortable: false
                 },
