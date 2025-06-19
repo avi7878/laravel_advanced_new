@@ -45,7 +45,9 @@ Route::group(['middleware' => ['web', 'user']], function () {
     Route::post('otp.confirm', '\App\Http\Controllers\AuthController@optVerifyProcess')->name('otp.confirm');
     Route::get('backup-code', '\App\Http\Controllers\AuthController@backupCode')->name('backup-code');
     Route::get('backup-codes.regenerate', '\App\Http\Controllers\AuthController@optVerifyProcess')->name('backup-codes.regenerate');
-
+   Route::get('/copy-secret-key', '\App\Http\Controllers\AuthController@getTotpModel')->name('copy.secret.key');
+       Route::post('/remove-totp', '\App\Http\Controllers\AuthController@removeTotp')->name('remove-totp');
+       
     Route::get('account/update', '\App\Http\Controllers\AccountController@update')->name('account/update');
     Route::post('account/update-process', '\App\Http\Controllers\AccountController@updateProcess')->name('account/update-process');
     Route::get('account/image', '\App\Http\Controllers\AccountController@image')->name('account/image');
@@ -89,7 +91,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
 
     Route::get('account/tfa', '\App\Http\Controllers\Admin\AccountController@tfa')->name('admin/account/tfa');
     Route::post('account/tfa-status-change', '\App\Http\Controllers\Admin\AccountController@tfaStatusChange')->name('admin/account/tfa-status-change');
-    Route::post('account/revoke-all', '\App\Http\Controllers\AccountController@revokeAll')->name('account/revoke-all');
+    Route::post('account/revoke-all', '\App\Http\Controllers\Admin\AccountController@revokeAll')->name('admin/account/revoke-all');
 
     Route::get('account/update', '\App\Http\Controllers\Admin\AccountController@update')->name('admin/account/update');
     Route::post('account/save', '\App\Http\Controllers\Admin\AccountController@save')->name('admin/account/save');
@@ -116,6 +118,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'admin']], function (
     Route::get('user/view', '\App\Http\Controllers\Admin\UserController@view')->name('admin/user/view');
     Route::post('user/delete', '\App\Http\Controllers\Admin\UserController@delete')->name('admin/user/delete');
     Route::post('user/change_status', '\App\Http\Controllers\Admin\UserController@changeStatus')->name('admin/user/change_status');
+    Route::post('user/autologin', '\App\Http\Controllers\Admin\UserController@autoLogin')->name('admin/user/autologin');
 
     Route::get('admin', '\App\Http\Controllers\Admin\AdminController@index')->name('admin/admin');
     Route::post('admin/list', '\App\Http\Controllers\Admin\AdminController@list')->name('admin/admin/list');

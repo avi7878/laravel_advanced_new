@@ -195,7 +195,6 @@ class TfaService
             $user->email = $user->new_email;
             $user->phone = $user->new_phone;
         }
-
         $user->otp = '';
         $user->otp_failed = 0;
         $user->save();

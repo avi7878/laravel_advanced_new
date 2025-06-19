@@ -94,6 +94,10 @@ class PermissionService
                         'title' => 'Delete',
                         'key' => 'admin/admin/delete'
                     ],
+                      [
+                        'title' => 'Autologin',
+                        'key' => 'admin/admin/autologin'
+                    ],
                 ]
             ],
             [
@@ -120,6 +124,7 @@ class PermissionService
                         'title' => 'Delete',
                         'key' => 'admin/user/delete'
                     ],
+                    
                 ]
             ],
             [

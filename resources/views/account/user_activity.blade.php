@@ -37,12 +37,12 @@ Log
 @endsection
 @push('scripts')
 <script>
+documentReady(function() {
 app.addCSS([
     'theme/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css',
     'theme/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css'
 ])
 app.addJS(['theme/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js']);
-documentReady(function() {
     datatableObj = $('#data-table').DataTable({
         ajax: {
             url: '{{route("account/user-activity-list")}}',

@@ -113,12 +113,12 @@ class AuthService
         if ($validator->fails()) {
             return ['status' => 0, 'message' => $validator->errors()->first()];
         }
-
-        $user = User::where(function ($query) use ($postData) {
+        $userModel = new User();
+        $user = $userModel::where(function ($query) use ($postData) {
             $query->where('email', $postData['email'])
                 ->orWhere("phone", $postData['email']);
-        })->where('type', $type)->first();
-        
+        })->whereIn('role', $type ? $userModel->userRole : $userModel->adminRole)->first();
+
         if (!$user) {
             return ['status' => 0, 'message' => 'Email/Phone or password is not valid'];
         }
@@ -142,9 +142,8 @@ class AuthService
         }
 
         if (config('setting.user_email_verify') && $user->email_verified != '1') {
-          
             (new \App\Services\TfaService())->sendOTP($user, 'verify_account');
-            return ['status' => 0, 'message' => 'Please verify your email, <a class="noroute pjax" href="' . route('site/verify-account', ['code' => base64_encode($user->email)]) . '">Click here</a> to verify your email address.'];
+            return ['status' => 0, 'message' => 'Please verify your email, <a class="noroute" href="' . route('site/verify-account', ['code' => base64_encode($user->email)]) . '">Click here</a> to verify your email address.'];
         }
 
         if ($user->login_failed) {
@@ -158,13 +157,13 @@ class AuthService
         (new Device())->login($user->id, @$postData['remember']);
         $LogObj->sendNewDeviceMail($user);
 
-        // if ($user->status_tfa == 1) {
-        //     if (!in_array(@$_COOKIE[config("setting.app_uid") . '_token'], explode(',', $user->ignore_tfa_device))) {
-        //         session(['verify_tfa' => 1]);
-        //         (new \App\Services\TfaService())->sendOTP($user, 'otp');
-        //         return ['status' => 1, 'message' => '', 'next' => 'redirect', 'url' =>  route($type?'auth/verify':'admin/auth/verify', ['type' => 'tfa'])];
-        //     }
-        // }
+        if ($user->status_tfa == 1) {
+            if (!in_array(@$_COOKIE[config("setting.app_uid") . '_token'], explode(',', $user->ignore_tfa_device))) {
+                session(['verify_tfa' => 1]);
+                (new \App\Services\TfaService())->sendOTP($user, 'otp');
+                return ['status' => 1, 'message' => '', 'next' => 'redirect', 'url' =>  route($type?'auth/verify':'admin/auth/verify', ['type' => 'tfa'])];
+            }
+        }
       
         $redirectUrl = $general->authRedirectUrl($type ? config('setting.login_redirect_url','dashboard') : config('setting.admin_login_redirect_url', 'admin/dashboard'));    
         return ['status' => 1, 'message' => 'Login success', 'next' => 'redirect', 'url' => $redirectUrl];
@@ -201,7 +200,8 @@ class AuthService
         }
 
         // Fetch user by email
-        $user = User::where('email', $postData['email'])->where('type', 1)->first();
+        $userModel = new User();
+        $user = $userModel::where('email', $postData['email'])->whereIn('role', $userModel->userRole)->first();
         if (!$user) {
             return ['status' => 0, 'message' => 'Email Not Valid'];
         }

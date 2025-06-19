@@ -25,6 +25,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        
         return view('admin/user/index');
     }
 
@@ -156,4 +157,45 @@ class UserController extends Controller
         $model->save();
         return response()->json(['status' => 1, 'message' => 'Your devices revoked successfully.']);
     }
+    
+    
+public function autoLogin(Request $request)
+{
+    $id = $request->query('id');  // Get ?id=xxx from URL
+
+    $user = User::find($id);
+
+    if (!$user) {
+        return redirect()->route('login')->with('error', 'User not found.');
+    }
+
+    // Optional: You can check status if needed
+    // if ($user->status != 1) {
+    //     return redirect()->route('login')->with('error', 'User is inactive.');
+    // }
+
+    // Login the user and remember them
+    Auth::guard('web')->login($user, true);
+
+    return redirect()->route('dashboard')->with('success', 'You have successfully logged in.');
 }
+
+}
+
+//  public function autoLogin(Request $request)
+//   {
+// dd($request);
+//           $id = $request->query('id');  // get ?id=xxx from URL
+//     $user = User::where('id', $id)->first();
+//     dd($user);
+//     if ($user) {
+//       Auth::guard('web')->login($user, true);
+
+//       return redirect()->route('dashboard')
+//         ->withSuccess('You have Successfully logged in');
+//     }
+
+//     return redirect()->route('login')->withSuccess('Oppes! You have entered invalid credentials');
+//   }
+// }
+

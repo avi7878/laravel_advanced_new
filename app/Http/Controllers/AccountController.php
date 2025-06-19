@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\User;
 use App\Models\UserActivity;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
+use App\Helpers\General;
+use Illuminate\Support\Facades\DB;
+
 
 class AccountController extends Controller
 {
@@ -87,12 +91,24 @@ class AccountController extends Controller
     /**
      * Show TFA settings page.
      */
-    public function tfa()
+
+       public function tfa()
     {
         $model = auth()->user();
-        
-        return view('account/tfa',compact('model'));
+        //  $devices = Device::where('user_id', $model->id)->where('device_uid', @$_COOKIE[config("setting.app_uid") . '_token'])->get();
+          $devices = DB::table('device')
+                ->leftjoin('user', 'device.device_uid', '=', 'user.ignore_tfa_device')
+                ->where('user.ignore_tfa_device', $model->ignore_tfa_device)
+                ->select('device.*','user.ignore_tfa_device')
+                ->get();
+
+         foreach ($devices as $key => $device) {
+            $devices[$key]->client =  (new General())->deviceName($device->client) . ' ' . ($device->device_uid == @$_COOKIE[config("setting.app_uid") . '_token'] ? ' (This Device)' : '');
+            $devices[$key]->location = (new General)->getIpLocation($device->ip);
+        }
+        return view('account/tfa',compact('model','devices'));
     }
+
 
     /**
      * Toggle TFA status.

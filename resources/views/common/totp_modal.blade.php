@@ -22,16 +22,50 @@
         <p id="secretKey" class="fw-semibold text-primary mt-2">
 
         </p>
-        <input type="text" class="form-control text-center"
-          name="secretKey" value="{{ $secretKey }}">
-      </div>
-      <div class="modal-footer justify-content-between px-4 pb-4 border-0">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <a onclick="app.showModalView('otp.verify?secretKey={{$secretKey}}')" for="upload" class="btn btn-primary me-3 mb-4 text-white" tabindex="0">
-          <span class="d-none d-sm-block">Next</span>
-          <i class="icon-base bx bx-upload d-block d-sm-none"></i>
-        </a>
-      </div>
+
+        <div class="input-group">
+          <input type="text" class="form-control text-center" id="secretKeyInput"
+                 name="secretKey" value="{{ $secretKey }}">
+        
+          <button class="btn btn-outline-secondary" type="button" onclick="copySecretKey()" title="Copy to clipboard">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+             <div class="modal-footer justify-content-between px-4 pb-4 border-0 pt-5">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          
+          <button 
+            type="button" 
+            class="btn btn-primary me-3 mb-4 text-white" 
+            tabindex="0" 
+            onclick="app.showModalView('otp.verify?secretKey={{ $secretKey }}')" >
+            <span class="d-none d-sm-block">Next</span>
+            <i class="icon-base bx bx-upload d-block d-sm-none"></i>
+          </button>
+        </div>
+
 
     </div>
   </div>
+  
+  <script>
+  function copySecretKey() {
+    const input = document.getElementById('secretKeyInput');
+    const secretKey = input.value;
+
+    navigator.clipboard.writeText(secretKey).then(() => {
+      $.ajax({
+        url: '/copy.secret.key', 
+        method: 'POST',
+        data: {
+          secretKey: secretKey,
+          _token: '{{ csrf_token() }}' 
+        }
+      });
+    }).catch((err) => {
+      console.error('Clipboard error:', err);
+    });
+  }
+</script>

@@ -151,15 +151,19 @@ class AuthController extends Controller
         return redirect($this->general->authRedirectUrl(config('setting.login_redirect_url')));
     }
 
-    public function getTotpModel(Request $request)
+     public function getTotpModel(Request $request)
     {
-        $id = $request->id;
-        $userData = User::find(3);
-        $data = (new TfaService())->generateTotpQrcode($userData->user_name);
+        $user = auth()->user();
+    
+        if ($user->totp_secret_key	) {
+            return response()->json(['error' => 'TOTP already enabled.'], 403);
+        }
+    
+        $data = (new TfaService())->generateTotpQrcode($user->user_name);
         $secretKey = $data['secretKey'];
         $qrCode = $data['qrCode'];
-        $qrKey = $secretKey;
-        return view('common.totp_modal', compact('secretKey', 'qrCode', 'qrKey', 'id'));
+    
+        return view('common.totp_modal', compact('secretKey', 'qrCode'));
     }
 
     public function verifyOtpModal(Request $request)
@@ -198,5 +202,15 @@ class AuthController extends Controller
         $user = auth()->user();
         $backupCode = $user->backup_code;
         return view('account/backup',compact('backupCode','user'));
+    }
+    
+    
+    public function removeTotp()
+    {
+        $user = auth()->user();
+        $user->totp_secret_key	 = null;
+        $user->save();
+    
+        return response()->json(['message' => 'TOTP removed']);
     }
 }

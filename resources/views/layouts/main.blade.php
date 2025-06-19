@@ -40,7 +40,8 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        
         <!-- Icons -->
         <link rel="stylesheet" href="theme/assets/vendor/fonts/iconify-icons.css" />
         <link rel="stylesheet" href="theme/assets/vendor/libs/pickr/pickr-themes.css">
@@ -51,7 +52,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <link rel="stylesheet" href="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
         <!-- Page CSS -->
-        <link rel="stylesheet" href="assets/css/common.css?cache=off">
+        @vite(['resources/css/app.css'])
         <!-- Helpers -->
         <script src="theme/assets/vendor/js/helpers.js"></script>
         <script src="theme/assets/vendor/js/template-customizer.js"></script>
@@ -149,18 +150,12 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <script src="theme/assets/vendor/libs/popper/popper.js"></script>
         <script src="theme/assets/vendor/js/bootstrap.js"></script>
         <script src="theme/assets/js/front-main.js"></script>
-        <!-- endbuild -->
         <!-- Main JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="assets/js/common.js"></script>
         <script src="assets/js/pjax.js"></script>
         <script src="assets/js/app.js"></script>
         @stack('scripts')
-        <script>
-            $(document).ready(function() {
-                runDocumentReady();
-            });
-        </script>
         {!! config('setting.footer_content') !!}
     </body>
 

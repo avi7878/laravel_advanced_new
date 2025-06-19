@@ -1,3 +1,10 @@
+
+<style>
+    .swal2-container.swal2-backdrop-show {
+            z-index: 999999999999 !important;
+    }
+</style>
+
 <div class="modal-dialog modal-dialog-centered" id="verifyOtpModal">
     <div class="modal-content border-0 shadow">
 
@@ -37,6 +44,9 @@ $(document).ready(function() {
     $('#otpForm').on('submit', function(e) {
         e.preventDefault();
 
+        // Hide OTP form to avoid it showing behind popup
+        $('#verifyOtpModal').hide();
+
         Swal.fire({
             title: 'Confirm OTP',
             text: 'Do you want to verify this OTP code?',
@@ -47,19 +57,18 @@ $(document).ready(function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.post($(this).attr('action'), $(this).serialize(), function(response) {
-
                     if (response.status === 1) {
-                        Swal.fire('Success', response.message, 'success');
-                        $('#verifyOtpModal').modal('hide');
-                        if (response.next === 'refresh') {
-                            location.reload();
-                        }
+                        Swal.fire('Success', response.message, 'success').then(() => {
+                            if (response.next === 'refresh') {
+                                location.reload();
+                            }
+                        });
                     } else {
-                        Swal.fire('Failed', response.message || 'Verification failed.',
-                            'error');
+                        Swal.fire('Failed', response.message || 'Verification failed.', 'error');
+                        $('#verifyOtpModal').show();
                     }
                 });
-            }
+            } 
         });
     });
 });

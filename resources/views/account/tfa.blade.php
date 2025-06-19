@@ -10,38 +10,75 @@
                     <div class="card-header">
                         <h5 class="mb-6">Two-steps verification</h5>
                         @if($model && $model->status_tfa)
-                        <h5 class="mb-4 text-body">Two factor authentication is not enabled yet.</h5>
+                        <h5 class="mb-4 text-body">Two factor authentication is enabled.</h5>
+                        <button
+                            data-action="{{ route('account/tfa-status-change') }}"
+                            onclick="app.confirmAction(this);"
+                            class="btn btn-primary mt-2">
+                             Enable Two-Factor Authentication
+                        </button>
+                        @else
+                        <h5 class="mb-4 text-body">Two factor authentication is disabled.</h5>
                         <button
                             data-action="{{ route('account/tfa-status-change') }}"
                             onclick="app.confirmAction(this);"
                             class="btn btn-primary mt-2">
                             Disable Two-Factor Authentication
                         </button>
-                        @else
-                        <h5 class="mb-4 text-body">Two factor authentication is not disabled yet.</h5>
-                        <button
-                            data-action="{{ route('account/tfa-status-change') }}"
-                            onclick="app.confirmAction(this);"
-                            class="btn btn-primary mt-2">
-                            Enable Two-Factor Authentication
-                        </button>
                         @endif
-                       <a onclick="app.showModalView('{{ route('get-qr-modal', $model->id) }}')" for="upload" class="btn btn-primary mt-2 text-white pjax" tabindex="0">
-                            <span class="d-none d-sm-block">Add Authenticator App</span>
-                             <i class="icon-base bx bx-upload d-block d-sm-none"></i>
-                        </a>
-                        <a onclick="app.showModalView('backup-code')" class="btn btn-primary mt-2 text-white pjax" tabindex="0">
-                            <span class="d-none d-sm-block">Backup Code</span>
-                            <i class="icon-base bx bx-upload d-block d-sm-none"></i>
-                        </a>
                     </div>
                 </div>
+                
+               <div class="main-card mb-3 card">
+                    <div class="card-header">
+                        <h5 class="mb-6">Authenticator App & Backup Code</h5>
+                        <div class="d-flex flex-wrap gap-3 align-items-center">
+                
+                            @if(auth()->user()->totp_secret_key)
+                                <a onclick="removeAuthenticator()" class="btn btn-danger text-white pjax" tabindex="0">
+                                    <span class="d-none d-sm-block">Remove Authenticator</span>
+                                    <i class="icon-base bx bx-x d-block d-sm-none"></i>
+                                </a>
+                            @else
+                                <a onclick="app.showModalView('{{ route('get-qr-modal', $model->id) }}')" class="btn btn-primary text-white pjax" tabindex="0">
+                                    <span class="d-none d-sm-block">Add Authenticator App</span>
+                                    <i class="icon-base bx bx-upload d-block d-sm-none"></i>
+                                </a>
+                            @endif
+                            @if(auth()->user()->totp_secret_key && auth()->user()->backup_code)
+                                <a onclick="app.showModalView('backup-code')" class="btn btn-primary text-white pjax" tabindex="0">
+                                    <span class="d-none d-sm-block">Backup Code</span>
+                                    <i class="icon-base bx bx-download d-block d-sm-none"></i>
+                                </a>
+                            @endif
+                
+                        </div>
+                    </div>
+                </div>
+
                 <div class="main-card mb-3 card">
                     <div class="card-header">
                          <h5 class="mb-6">Devices That Don't Need a Second Step</h5>
                          <h5 class="mb-4 text-body">You can skip the second step on devices you trust, such as your own computer.</h5>
                         <div class="row">
                             <div class="col-md-12">
+                                 <table class="datatable-list-table table border-top" id="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Client</th>
+                                            <th>Location</th>
+                                        </tr>
+                                    </thead>
+                                      <tbody>
+                                        @foreach($devices as $device)
+                                            <tr>
+                                                <td>{{ $device->client }}</td>
+                                                <td>{{ $device->location }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                </div>
                                 <div class="bg-lighter rounded p-4 mb-4 position-relative">
                                     <div class="d-flex align-items-center2">
                                         <div class="flex-shrink-0">
@@ -66,7 +103,7 @@
                                                                 class="btn btn-primary text-white"
                                                                 title="Revoke All">
                                                                 REVOKE ALL
-                                                            </button>
+                                                 </button>
                                             </div>
                                         </div>
                                     </div>
@@ -80,3 +117,32 @@
     </div>
 </div>
 @endsection
+<script>
+function removeAuthenticator() {
+    if (confirm("Are you sure you want to remove your Authenticator App?")) {
+        fetch('{{ route('remove-totp') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+                location.reload(); 
+            } else {
+                alert("Something went wrong.");
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Request failed.");
+        });
+    }
+}
+
+</script>
+
+

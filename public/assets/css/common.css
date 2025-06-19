@@ -60,9 +60,6 @@ section.panel.panel-info {
     width: 75%;
 }
 
-/*.login-box, .register-box {*/
-/*    width: 400px;*/
-/*}*/
 
 .profile-left .pro-quote {
     padding: 20px 15px 15px;
@@ -124,7 +121,6 @@ section.panel.panel-info {
     background-color: #fff;
 }
 
-/*crop image*/
 #image-crop {
     max-width: 100%;
 }
@@ -151,7 +147,6 @@ section.panel.panel-info {
 
 
 
-/*dropbox*/
 .drop-file {
     width: 100%;
     height: 180px;
@@ -176,11 +171,7 @@ section.panel.panel-info {
     padding: 0.5rem 4rem !important;
 }
 
-.btn-primary {
-    /* color: #fff;
-    background-color: #607980;
-    border-color: #607980; */
-}
+
 
 .btn-primary:hover {
     color: #fff;
@@ -225,7 +216,6 @@ img.image-preview {
 
 .file-preview-item button .fa-xmark {
     font-size: 19px;
-    /* background: black; */
     color: white;
     width: 20px;
     height: 20px;
@@ -300,8 +290,6 @@ img.image-preview {
     position: fixed;
     bottom: 0;
     background: #2f3349;
-    ;
-    /* top: 0; */
     width: 77%;
     padding: 12px 35px;
 }
@@ -314,7 +302,7 @@ img.image-preview {
 }
 
 .h-px-44 {
-  height: 44px !important
+  height: 44px !important;
 }
 
 .w-30 {

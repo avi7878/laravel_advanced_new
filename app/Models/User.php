@@ -24,9 +24,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'password_reset_token',
-        'remember_token',
         'email_verified',
-        'type',
         'role',
         'status',
         'country',
@@ -42,19 +40,28 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'password_reset_token',
-        'remember_token',
         'email_verified',
         'otp',
     ];
 
+
+    public $userRole = [4];
+    public $superAdminRole = 1;
+    public $adminRole = [1,2,3];
+
+    public function isUser()
+    {
+        return in_array($this->role, $this->userRole) ? true : false;
+    }
+
     public function isAdmin()
     {
-        return $this->type == 0 ? true : false;
+        return in_array($this->role, $this->adminRole) ? true : false;
     }
 
     public function isSuperAdmin()
     {
-        return $this->type == 0 && $this->role == 1 ? true : false;
+        return $this->role == $this->superAdminRole ? true : false;
     }
     public function getPermissionListData(): array
     {
@@ -73,7 +80,6 @@ class User extends Authenticatable
     {
         return $status == 1 ? '<span class="badge rounded-pill bg-label-success">Active</span>' : '<span class="badge rounded-pill bg-label-danger">Inactive</span>';
     }
-
 
     public function listAdmin($postData)
     {
@@ -106,6 +112,7 @@ class User extends Authenticatable
             $result['data'][$key]->status = $userObj->getStatusBadge($row->status);
             // Format the creation date based on the application's date format setting
             $result['data'][$key]->created_at = date(config('setting.date_format'), $row->created_at);
+            
             // Assign action buttons based on the role and permissions
             if (auth()->user()->role == 0) {
                 $result['data'][$key]->action = '<div class="act-btns">
@@ -126,6 +133,12 @@ class User extends Authenticatable
                     $result['data'][$key]->action .= '
                     <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/admin/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button>';
                 }
+                 if ($sessionUser->hasPermission('admin/user/autologin')) {
+                $result['data'][$key]->action .= '
+                    <button style="border:none; background:none;" onclick="app.confirmAction(this);" data-action="' . $autologinUrl . '" class="text-body" title="Autologin">
+                        <i class="bx bx-log-out icon-base"></i>
+                    </button>';
+            }
             }
         }
         return $result;
@@ -163,7 +176,12 @@ class User extends Authenticatable
             $result['data'][$key]->phone = $row->phone;
             $result['data'][$key]->status = $userObj->getStatusBadge($row->status);
             $result['data'][$key]->created_at = date(config('setting.date_format'), $row->created_at);
+
+
             $result['data'][$key]->updated_at = date(config('setting.date_format'), $row->updated_at);
+                    $autologinUrl = url('admin/user/autologin?id=' . $row->id);
+
+            
             if (auth()->user()->role == 0) {
                 $result['data'][$key]->action = '
             <div class="act-btns"><a href="admin/user/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>;
@@ -183,11 +201,17 @@ class User extends Authenticatable
                     $result['data'][$key]->action .= '
                     <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/user/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button>';
                 }
+                 if ($sessionUser->hasPermission('admin/user/autologin')) {
+                $result['data'][$key]->action .= '
+                    <button style="border:none; background:none;" onclick="app.confirmAction(this);" data-action="' . $autologinUrl . '" class="text-body" title="Autologin">
+                        <i class="bx bx-log-out icon-base"></i>
+                    </button>';
+            }
+                
             }
         }
         return $result;
     }
-
 
     public function storeAdmin(array $postData): array
     {

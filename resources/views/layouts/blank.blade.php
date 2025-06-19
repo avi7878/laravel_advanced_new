@@ -50,7 +50,6 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="theme/assets/vendor/libs/node-waves/node-waves.css" />
-    <link rel="stylesheet" href="theme/assets/vendor/libs/typeahead-js/typeahead.css" />
     <!-- Vendor -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.css" integrity="sha512-Of+yU7HlIFqXQcG8Usdd67ejABz27o7CRB1tJCvzGYhTddCi4TZLVhh9tGaJCwlrBiodWCzAx+igo9oaNbUk5A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -113,12 +112,8 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <script src="theme/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="theme/assets/vendor/libs/popper/popper.js"></script>
     <script src="theme/assets/vendor/js/bootstrap.js"></script>
-    <script src="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="theme/assets/vendor/libs/node-waves/node-waves.js"></script>
-    <script src="theme/assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="theme/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="theme/assets/js/front-main.js"></script>
     <!-- endbuild -->
-    <!-- Main JS -->
     <script src="theme/assets/js/main.js"></script>
     <!-- Page JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

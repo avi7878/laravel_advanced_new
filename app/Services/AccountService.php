@@ -320,10 +320,11 @@ class AccountService
      * @param User $user
      * @return array
      */
-    public function revokeAllTFADevices(User $user): array
+    public function revokeAll2FADevices(User $user): array
     {
         $user->ignore_tfa_device = '';
         $user->save();
+        // dd($user);
         return ['status' => 1, 'message' => 'Your Devices Revoked Successfully.', 'next' => 'refresh'];
     }
 }

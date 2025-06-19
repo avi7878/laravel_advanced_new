@@ -50,3 +50,4 @@ composer.lock
 *.zip
 /public/sitemap.xml
 /public/theme_old
+package-lock.json
