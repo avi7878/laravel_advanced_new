@@ -2,7 +2,6 @@
     @csrf
     <input type="hidden" name="id" value="{{ @$model->id }}">
     <input type="hidden" name="pass" value="{{ @$model->password }}">
-    <input type="hidden" name="role" value="1">
     <div class="row">
         <div class="col-md-12">
             <div class="row">

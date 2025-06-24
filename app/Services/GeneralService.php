@@ -98,10 +98,11 @@ class GeneralService
         $startDate = date('Y-m-d', strtotime('-6 days'));
         $endDate = date('Y-m-d');
 
+        
         $result = DB::select("
         SELECT COUNT(*) AS total, DATE(FROM_UNIXTIME(created_at)) AS date
         FROM `user`
-        WHERE role = 2 AND DATE(FROM_UNIXTIME(created_at)) BETWEEN '$startDate' AND '$endDate'
+        WHERE role IN (4) AND DATE(FROM_UNIXTIME(created_at)) BETWEEN '$startDate' AND '$endDate'
         GROUP BY DATE(FROM_UNIXTIME(created_at))
     ");
 

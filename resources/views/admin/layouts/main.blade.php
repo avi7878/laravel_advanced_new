@@ -163,14 +163,9 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="assets/js/common.js"></script>
-    <script src="assets/js/pjax.js"></script>
     <script src="assets/js/app.js"></script>
     @stack('scripts')
-    <script>
-    $(document).ready(function() {
-        runDocumentReady();
-    });
-    </script>
+    <script src="assets/js/pjax.js"></script>
 </body>
 
 </html>

@@ -70,6 +70,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
       var APP_UID = '{{config("setting.app_uid")}}';
       var CSRF_NAME = '_token';
       var CSRF_TOKEN = "{{ Session::token() }}";
+      var APP_URL = "{{ URL::to('/') }}/";
       var dataTableObj = false;
       var documentReadyFunctions = [];
 
@@ -119,15 +120,10 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="assets/js/common.js"></script>
-    <script src="assets/js/pjax.js"></script>
     <script src="assets/js/app.js"></script>
     @stack('scripts')
-    <script>
-      $(document).ready(function() {
-        runDocumentReady();
-      });
-    </script>
     {!! config('setting.footer_content') !!}
+    <script src="assets/js/pjax.js"></script>
   </body>
   </html>
 <?php } ?>

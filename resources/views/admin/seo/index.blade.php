@@ -17,7 +17,7 @@ Seo meta
     </nav>
 </div>
 <!--  List Table -->
-<div class="card">
+<div class="card"></div>
     <div class="card-datatable text-nowrap">
         <div id="DataTables_Table_0_wrapper" class="dt-container dt-bootstrap5 dt-empty-footer">
             <div class="row card-header flex-column flex-md-row pb-0">
@@ -49,14 +49,6 @@ Seo meta
                 <div class="d-md-flex justify-content-between align-items-center col-12 dt-layout-full col-md">
                     <table class="datatables-basic table table-bordered table-responsive dataTable dtr-column"
                         id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" style="width: 100%;">
-                        <colgroup>
-                            <col data-dt-column="1" style="width: 72.7292px;">
-                            <col data-dt-column="3" style="width: 359.812px;">
-                            <col data-dt-column="4" style="width: 343.792px;">
-                            <col data-dt-column="5" style="width: 147.958px;">
-                            <col data-dt-column="7" style="width: 170.229px;">
-                            <col data-dt-column="8" style="width: 145.562px;">
-                        </colgroup>
                         <thead>
                             <tr>
                                 <th>#</th>

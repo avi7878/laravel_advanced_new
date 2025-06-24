@@ -12,7 +12,7 @@ User Update
                 <a href="admin/dashboard" class="pjax">Dashboard</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="admin/users" class="pjax">Users</a>
+                <a href="admin/user" class="pjax">Users</a>
             </li>
             <li class="breadcrumb-item active">User Update</li>
         </ol>

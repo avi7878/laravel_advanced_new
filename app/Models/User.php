@@ -83,7 +83,9 @@ class User extends Authenticatable
 
     public function listAdmin($postData)
     {
-        $query = DB::table('user')->select('*')->where('role', 1);
+        $userObj = new User();
+
+        $query = DB::table('user')->select('*')->whereIn('role', $userObj->adminRole);
         $searchText = isset($postData['search']['value']) ? $postData['search']['value'] : '';
         if (strlen($searchText) > 2) {
             $searchText = '%' . $searchText . '%';
@@ -93,7 +95,6 @@ class User extends Authenticatable
             });
         }
         /**/
-        $userObj = new User();
         $result = (new Pagination())->getDataTable($query, $postData);
         // Get current authenticated user for permission checks
         $sessionUser = auth()->user();
@@ -133,20 +134,21 @@ class User extends Authenticatable
                     $result['data'][$key]->action .= '
                     <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/admin/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button>';
                 }
-                 if ($sessionUser->hasPermission('admin/user/autologin')) {
-                $result['data'][$key]->action .= '
-                    <button style="border:none; background:none;" onclick="app.confirmAction(this);" data-action="' . $autologinUrl . '" class="text-body" title="Autologin">
-                        <i class="bx bx-log-out icon-base"></i>
-                    </button>';
             }
-            }
+                //   $result['data'][$key]->action .= '
+                // <a href="' . route('admin/user/autologin', ['id' => $row->id]) . '" class="text-body" title="Login as User">
+                //     <i class="bx bx-log-in icon-base"></i>
+                // </a>';
         }
         return $result;
     }
 
     public function list($postData)
     {
-        $query = DB::table('user')->select('*')->where('role', 2);
+        $userObj = new User();
+
+        $query = DB::table('user')->select('*')->whereIn('role', $userObj->userRole)
+            ->where('id', '!=', auth()->user()->id); // Exclude current user from the list
         /**/
         $searchText = isset($postData['search']['value']) ? $postData['search']['value'] : '';
         if (strlen($searchText) > 2) {
@@ -162,7 +164,6 @@ class User extends Authenticatable
             });
         }
         /**/
-        $userObj = new User();
         $result = (new Pagination())->getDataTable($query, $postData);
         $sessionUser = auth()->user();
         foreach ($result['data'] as $key => $row) {
@@ -181,7 +182,6 @@ class User extends Authenticatable
             $result['data'][$key]->updated_at = date(config('setting.date_format'), $row->updated_at);
                     $autologinUrl = url('admin/user/autologin?id=' . $row->id);
 
-            
             if (auth()->user()->role == 0) {
                 $result['data'][$key]->action = '
             <div class="act-btns"><a href="admin/user/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>;
@@ -201,14 +201,16 @@ class User extends Authenticatable
                     $result['data'][$key]->action .= '
                     <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/user/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button>';
                 }
-                 if ($sessionUser->hasPermission('admin/user/autologin')) {
-                $result['data'][$key]->action .= '
-                    <button style="border:none; background:none;" onclick="app.confirmAction(this);" data-action="' . $autologinUrl . '" class="text-body" title="Autologin">
-                        <i class="bx bx-log-out icon-base"></i>
-                    </button>';
             }
-                
-            }
+            $result['data'][$key]->action .= '
+            <a href="' . route('admin/user/autologin', ['id' => $row->id]) . '" class="text-body" title="Login as User">
+                <i class="bx bx-log-in icon-base"></i>
+            </a>';
+            
+            $result['data'][$key]->action .= '
+                <a href="' . route('admin/user/send-tfa-mail', ['id' => $row->id]) . '" class="btn btn-sm btn-outline-primary mx-3" title="Verify Two-Factor Authentication">
+                    Re-send Verification Mail
+                </a>';
         }
         return $result;
     }
@@ -308,7 +310,7 @@ class User extends Authenticatable
         $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|unique:user,email|max:255',
             'phone' => 'required|digits:10|numeric',
             'status' => 'required|boolean',
         ];
@@ -343,6 +345,7 @@ class User extends Authenticatable
                 $model->image = $image;
             }
         }
+    
         // Assign IP and other properties
         $model->first_name = $postData['first_name'];
         $model->last_name = $postData['last_name'];
@@ -360,12 +363,13 @@ class User extends Authenticatable
         }
         // Save the model
         $model->save();
+
         // Return response message
         return [
             'status' => 1,
             'message' => $id ? 'User updated successfully.' : 'User created successfully.',
             'next' => 'load',
-            'url' => 'admin/users',
+            'url' => 'admin/user',
         ];
     }
 }

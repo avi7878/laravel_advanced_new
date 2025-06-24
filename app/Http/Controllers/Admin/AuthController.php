@@ -68,6 +68,7 @@ class AuthController extends Controller
     
     // ----------------- Two-Factor Authentication (TFA) Methods -------------------
 
+    
     /**
      * Show the TFA verification page.
      *
@@ -80,7 +81,6 @@ class AuthController extends Controller
         $code = $request->get('code', '');
         return view('admin/auth/verify', compact('type', 'code'));
     }
-
     /** 
      * Process TFA OTP verification.
      *

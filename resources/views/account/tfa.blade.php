@@ -10,7 +10,7 @@
                     <div class="card-header">
                         <h5 class="mb-6">Two-steps verification</h5>
                         @if($model && $model->status_tfa)
-                        <h5 class="mb-4 text-body">Two factor authentication is enabled.</h5>
+                        <h5 class="mb-4 text-body">Two factor authentication is disabled.</h5>
                         <button
                             data-action="{{ route('account/tfa-status-change') }}"
                             onclick="app.confirmAction(this);"
@@ -18,7 +18,7 @@
                              Enable Two-Factor Authentication
                         </button>
                         @else
-                        <h5 class="mb-4 text-body">Two factor authentication is disabled.</h5>
+                        <h5 class="mb-4 text-body">Two factor authentication is enabled.</h5>
                         <button
                             data-action="{{ route('account/tfa-status-change') }}"
                             onclick="app.confirmAction(this);"
@@ -31,27 +31,25 @@
                 
                <div class="main-card mb-3 card">
                     <div class="card-header">
-                        <h5 class="mb-6">Authenticator App & Backup Code</h5>
+                        <h5 class="mb-6">Authenticator App</h5>
                         <div class="d-flex flex-wrap gap-3 align-items-center">
-                
-                            @if(auth()->user()->totp_secret_key)
-                                <a onclick="removeAuthenticator()" class="btn btn-danger text-white pjax" tabindex="0">
+                            @if($model->totp_secret_key)
+                                <a onclick="app.confirmAction(this)" data-action="{{ route('remove-totp') }}" class="btn btn-danger text-white pjax" tabindex="0">
                                     <span class="d-none d-sm-block">Remove Authenticator</span>
                                     <i class="icon-base bx bx-x d-block d-sm-none"></i>
                                 </a>
+                                @if($model->backup_code)
+                                <a onclick="app.showModalView('backup-code')" class="btn btn-primary text-white pjax" tabindex="0">
+                                    <span class="d-none d-sm-block">Backup Code</span>
+                                    <i class="icon-base bx bx-download d-block d-sm-none"></i>
+                                </a>
+                                @endif
                             @else
                                 <a onclick="app.showModalView('{{ route('get-qr-modal', $model->id) }}')" class="btn btn-primary text-white pjax" tabindex="0">
                                     <span class="d-none d-sm-block">Add Authenticator App</span>
                                     <i class="icon-base bx bx-upload d-block d-sm-none"></i>
                                 </a>
                             @endif
-                            @if(auth()->user()->totp_secret_key && auth()->user()->backup_code)
-                                <a onclick="app.showModalView('backup-code')" class="btn btn-primary text-white pjax" tabindex="0">
-                                    <span class="d-none d-sm-block">Backup Code</span>
-                                    <i class="icon-base bx bx-download d-block d-sm-none"></i>
-                                </a>
-                            @endif
-                
                         </div>
                     </div>
                 </div>
@@ -117,32 +115,4 @@
     </div>
 </div>
 @endsection
-<script>
-function removeAuthenticator() {
-    if (confirm("Are you sure you want to remove your Authenticator App?")) {
-        fetch('{{ route('remove-totp') }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.message) {
-                alert(data.message);
-                location.reload(); 
-            } else {
-                alert("Something went wrong.");
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            alert("Request failed.");
-        });
-    }
-}
-
-</script>
-
 

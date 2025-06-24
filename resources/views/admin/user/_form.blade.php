@@ -8,7 +8,7 @@
         @csrf
         <input type="hidden" name="id" value="{{ @$model->id }}">
         <input type="hidden" name="pass" value="{{ @$model->password }}">
-        <input type="hidden" name="role" value="2">
+            <input type="hidden" name="role" value="4">
         <div class="row">
             <div class="col-md-6">
                 <div class="row">
@@ -117,7 +117,7 @@
 
 
         <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="admin/users" class="btn btn-dark pjax" style="color: white;">Back</a>
+        <a href="admin/user" class="btn btn-dark pjax" style="color: white;">Back</a>
     </form>
 
     @push('scripts')

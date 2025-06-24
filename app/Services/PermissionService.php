@@ -15,6 +15,9 @@ class PermissionService
         if ($permission == '') {
             $permission = \Route::getCurrentRoute()->uri;
         }
+        if (is_null($userPermission)) {
+        $userPermission = $this->permission ?? ''; 
+    }
 
         if (is_array($permission)) {
             foreach ($permission as $p) {

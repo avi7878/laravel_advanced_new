@@ -51,7 +51,7 @@ class General
             $redirectUrl = $session_auth_redirect_url;
             session()->forget('auth_redirect_url');
         }
-        return $redirectUrl;
+        return $redirectUrl?$redirectUrl:'/';
     }
 
     /**
