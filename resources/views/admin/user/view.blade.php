@@ -94,19 +94,21 @@ User View
             </li>
           </ul>
           <div class="d-flex justify-content-center">
-            <a href="admin/user/update?id={{$_GET['id']}}" class="btn btn-primary me-3 pjax">Edit</a>
-            <button onclick="app.confirmAction(this);" data-action="admin/user/delete?id={{$_GET['id']}}" class="btn btn-label-danger">Delete</button>
+            <a href="{{ route('admin/user/autologin', ['id' => $model->id]) }}" class="btn btn-sm btn-outline-primary mx-3" title="Login as User">
+                <i class="bx bx-log-in icon-base"></i> Login as User
+            </a>
+            <a href="{{ route('admin/user/send-tfa-mail', ['id' => $model->id]) }}" class="btn btn-sm btn-outline-primary mx-3" title="Verify Two-Factor Authentication">
+                Re-send Verification Mail
+            </a>
+            <a href="{{ route('admin/user/update', ['id' => $model->id]) }}" class="btn btn-primary me-3 pjax">Edit</a>
+            <button onclick="app.confirmAction(this);" data-action="{{ route('admin/user/delete', ['id' => $model->id]) }}" class="btn btn-label-danger">Delete</button>
           </div>
         </div>
       </div>
     </div>
     <!-- /User Card -->
-    <!-- Plan Card -->
-
-    <!-- /Plan Card -->
   </div>
   <!--/ User Sidebar -->
-
   <!-- User Content -->
   <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
     <!--/ User Pills -->

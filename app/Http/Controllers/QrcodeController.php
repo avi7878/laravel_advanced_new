@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\General;
 use Illuminate\Http\Request;
-use App\Models\Page;
-use App\Models\getModel;
 use App\Models\User;
+use App\Services\TfaService;
 
 class QrcodeController extends Controller
 {
@@ -20,7 +19,7 @@ class QrcodeController extends Controller
      {
          $id = $request->id;
          $userData = User::find(3);
-         $data = (new General())->generateTFAQrcode($userData->user_name);
+         $data = (new TfaService())->generateTotpQrcode($userData->user_name);
          $secretKey = $data['secretKey'];
          $qrCode = $data['qrCode'];
          $qrKey = $secretKey;

@@ -84,7 +84,7 @@
                 @endif
 
                 @if($sessionUser->hasPermission('admin_page'))
-                <li class="menu-item active-menu" data-active_menu_links="admin/page,admin/page/update">
+                <li class="menu-item active-menu" data-active_menu_links="admin/pages,admin/page/update">
                     <a href="{{ route('admin/page') }}" class="menu-link pjax" data-pjax-cache="true">
                         <div data-i18n="Pages">Pages</div>
                     </a>

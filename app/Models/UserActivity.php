@@ -153,7 +153,7 @@ class UserActivity extends Model
                 $query->where("client", 'like', $searchText)
                     ->orwhereRaw("concat(first_name,' ' ,last_name) like ?", $searchText)
                     ->orWhere("email", 'like', $searchText)
-                    ->orWhere(DB::raw("FROM_UNIXTIME(user_activity.created_at, '%d-%m-%Y')"), 'LIKE', '%' . $searchText . '%')
+                    ->orWhere('user_activity.created_at', 'LIKE', '%' . $searchText . '%')
                     ->orWhere(function ($query) use ($searchText) {
                         if (stripos($searchText, '%fai%') !== false) {
                             $query->where('user_activity.type', '=', 0);
@@ -213,7 +213,7 @@ class UserActivity extends Model
             $row->location = $general->getIpLocation($row->ip);
             $row->client = $general->deviceName($row->client);
             $row->type = $this->getType($row->type);
-            $row->created_at = $row->created_at;
+            $row->created_at = $general->dateFormat($row->created_at);
         }
 
         return $result;
@@ -262,7 +262,7 @@ class UserActivity extends Model
             $query->where(function ($query) use ($searchText) {
                 $query->where('client', 'like', $searchText)
                     ->orWhere('ip', 'like', $searchText)
-                    ->orWhereRaw("FROM_UNIXTIME(log.created_at, '%d-%m-%Y') LIKE ?", [$searchText]);
+                    ->orWhere("log.created_at", 'LIKE', $searchText);
             });
         }
     }

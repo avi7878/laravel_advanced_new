@@ -95,30 +95,24 @@ class User extends Authenticatable
         }
         /**/
         $result = (new Pagination())->getDataTable($query, $postData);
-        // Get current authenticated user for permission checks
         $sessionUser = auth()->user();
-        // Process each user record
+        $general = new General();
         foreach ($result['data'] as $key => $row) {
-            // Get profile image URL if available
-            $imageUrl = (new General())->getFileUrl($row->image, 'profile');
+            $imageUrl = $general->getFileUrl($row->image, 'profile');
             if ($row->image) {
                 $result['data'][$key]->image = '<a href="upload/profile/' . $row->image . '" data-toggle="lightbox" data-title="Image" class = "noroute pjax" target = "_blank">
                 <img style="width:30px;height:30px" src="' . $imageUrl . '" class="h-auto rounded-circle" alt="blog image"></a>';
             }
-            // Concatenate first and last names
             $result['data'][$key]->first_name = $row->first_name . ' ' . $row->last_name;
             $result['data'][$key]->permission = $row->permission;
-            // Set user status badge
             $result['data'][$key]->status = $userObj->getStatusBadge($row->status);
-            // Format the creation date based on the application's date format setting
-            $result['data'][$key]->created_at = $row->created_at;
-            
-            // Assign action buttons based on the role and permissions
+            $result['data'][$key]->updated_at = $general->dateFormat($row->updated_at);
+
             if (auth()->user()->role == 0) {
                 $result['data'][$key]->action = '<div class="act-btns">
-            <a href="admin/admin/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;
-            <a href="admin/admin/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>
-            <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/admin/delete" data-id="' . $row->id . '" class="text-body pjax" title="Delete"><i class="bx bxs-trash icon-base"></i></button></div>';
+                <a href="admin/admin/view?id=' . $row->id . '" class="text-body pjax" title="View"><i class="bx bxs-show icon-base"></i></a>&nbsp;
+                <a href="admin/admin/update?id=' . $row->id . '" class="text-body pjax" title="Update"><i class="bx bxs-edit icon-base"></i></a>
+                <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/admin/delete" data-id="' . $row->id . '" class="text-body pjax" title="Delete"><i class="bx bxs-trash icon-base"></i></button></div>';
             } else {
                 $result['data'][$key]->action = '';
                 if ($sessionUser->hasPermission('admin/admin/view')) {
@@ -134,10 +128,6 @@ class User extends Authenticatable
                     <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/admin/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button>';
                 }
             }
-                //   $result['data'][$key]->action .= '
-                // <a href="' . route('admin/user/autologin', ['id' => $row->id]) . '" class="text-body" title="Login as User">
-                //     <i class="bx bx-log-in icon-base"></i>
-                // </a>';
         }
         return $result;
     }
@@ -198,15 +188,7 @@ class User extends Authenticatable
                     <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/user/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button>';
                 }
             }
-            $result['data'][$key]->action .= '
-            <a href="' . route('admin/user/autologin', ['id' => $row->id]) . '" class="text-body" title="Login as User">
-                <i class="bx bx-log-in icon-base"></i>
-            </a>';
             
-            $result['data'][$key]->action .= '
-                <a href="' . route('admin/user/send-tfa-mail', ['id' => $row->id]) . '" class="btn btn-sm btn-outline-primary mx-3" title="Verify Two-Factor Authentication">
-                    Re-send Verification Mail
-                </a>';
         }
         return $result;
     }

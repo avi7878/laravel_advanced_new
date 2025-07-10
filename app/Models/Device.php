@@ -258,7 +258,8 @@ class Device extends Model
             $result['data'][$key]->first_name = $row->first_name . ' ' . $row->last_name;
             $result['data'][$key]->location = $general->getIpLocation($row->ip);
             $result['data'][$key]->client = (new General())->deviceName($row->client) . ' ' . ($row->device_uid == @$_COOKIE[config("setting.app_uid") . '_token'] ? ' (This Device)' : '');
-            $result['data'][$key]->last_activity = date(config('setting.date_time_format'), @$row->last_activity ? $row->last_activity : $row->updated_at);
+            $timestamp = strtotime(@$row->last_activity ?: $row->updated_at);
+            $result['data'][$key]->last_activity = date(config('setting.date_time_format'), $timestamp);
 
             $result['data'][$key]->action = '';
             if ($sessionUser->hasPermission('admin/device/logout')) {
