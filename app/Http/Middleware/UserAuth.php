@@ -27,6 +27,14 @@ class UserAuth
                 return redirect('login')->with('error', 'You are not authorized');
             }
         }else{
+            $user=Auth::user();
+            if(!$user->isUser()){
+                if ($request->ajax()) {
+                    return Response::make("unauthorized");
+                } else {
+                    return redirect('/')->with('error', 'You are not authorized');
+                }
+            } 
             if(session('verify_tfa')){
                 return redirect('auth/verify');
             }

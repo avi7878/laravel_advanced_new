@@ -54,15 +54,6 @@ class Device extends Model
     public $timestamps = true;
 
     /**
-     * The format of model timestamps.
-     *
-     * @var string
-     */
-
-    protected $dateFormat = 'U';
-
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -103,7 +94,7 @@ class Device extends Model
     public function login($userId, $remember = 1)
     {
         $deviceUid = @$_COOKIE[config("setting.app_uid") . '_token'];
-        
+
         if (!$deviceUid) {
             return false;
         }
@@ -225,9 +216,9 @@ class Device extends Model
             $result['data'][$key]->location = $general->getIpLocation($row->ip);
             $result['data'][$key]->client = (new General())->deviceName($row->client) . ' ' . ($row->device_uid == @$_COOKIE[config("setting.app_uid") . '_token'] ? ' (This Device)' : '');
             $result['data'][$key]->last_activity = date(config('setting.date_format'), @$row->last_activity ? $row->last_activity : $row->updated_at);
-            $result['data'][$key]->action = '<button style="border: none; background: none;"  onclick="app.confirmAction(this);" data-action="account/device-logout?id='.$row->id .'"  class="text-body pjax" title="logout">                    <svg class="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:22px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            $result['data'][$key]->action = '<button style="border: none; background: none;"  onclick="app.confirmAction(this);" data-action="account/device-logout?id=' . $row->id . '"  class="text-body pjax" title="logout">                    <svg class="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:22px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
 </button>';
-        } 
+        }
         return $result;
     }
 
@@ -240,7 +231,7 @@ class Device extends Model
 
     public function listAdmin($postData)
     {
-       
+
         $query = DB::table('device')->select(['device.updated_at as updated_at', 'device.id', 'device.ip', 'device.device_uid', 'device.client', 'device.id as deviceId', 'user.first_name', 'user.last_name', 'user.email'])
             ->join('user', 'user.id', '=', 'device.user_id')
             ->leftJoin('sessions', 'sessions.id', 'device.session_id')

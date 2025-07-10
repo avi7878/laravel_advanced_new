@@ -274,4 +274,13 @@ class TfaService
 
         return false;
     }
+    
+     public function tfaStatusChange()
+    {
+        $user = auth()->user();
+        $status_tfa = !$user->status_tfa;
+        $user->status_tfa = $status_tfa;
+        $user->save();
+        return response()->json(['status' => 1, 'next' => 'refresh', 'message' => $status_tfa ? 'Two Factor Authentication is enabled' : 'Two Factor Authentication is disabled']);
+    }
 }

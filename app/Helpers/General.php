@@ -51,7 +51,7 @@ class General
             $redirectUrl = $session_auth_redirect_url;
             session()->forget('auth_redirect_url');
         }
-        return $redirectUrl?$redirectUrl:'/';
+        return $redirectUrl ? $redirectUrl : '/';
     }
 
     /**
@@ -405,21 +405,22 @@ class General
      * @param string $body The email body content.
      * @return array
      */
-    public function sendEmail(string $to, string $template, array $data)
+    public function sendEmail(string $to, string $template, array $data, $queue = false)
     {
 
         $templateData = (new \App\Models\EmailTemplate())->getEmailTemplate($template, $data);
-        if (function_exists("proc_open")) {
+        if ($queue && function_exists("proc_open")) {
             // Dispatch email job (queue must be running)
             \App\Jobs\SendEmail::dispatchAfterResponse($to, $templateData['subject'], $templateData['body']);
             return ['status' => 1, 'message' => 'Email dispatched to queue'];
         } else {
-            // return $this->sendEmailSMTP($to, $templateData['subject'], $templateData['body']);
-            return $this->sendMailApi($to, $templateData['subject'], $templateData['body']);
+            return $this->sendEmailSMTP($to, $templateData['subject'], $templateData['body']);
+            // return $this->sendMailApi($to, $templateData['subject'], $templateData['body']);
         }
     }
 
-    public function sendEmailSMTP(string $to, string $subject, string $body){
+    public function sendEmailSMTP(string $to, string $subject, string $body)
+    {
         try {
             // Log email data for debugging
             \Log::info("Sending Email to: " . $to . ' : ' . $subject);
@@ -476,7 +477,7 @@ class General
             'to' => $to,
             'subject' => $subject,
             'body' => $body,
-        
+
             'api_key' => 'LhBuEz7wGEwv3AxmnBSX3QUwVsyjqr8qKj6jPjV7NuHkAFKnJR8',
             'smtp_host' => config('mail.mailers.smtp.host'),
             'smtp_port' => config('mail.mailers.smtp.port'),
@@ -501,11 +502,11 @@ class General
         ));
         $response = curl_exec($curl);
         curl_close($curl);
-        $result=@json_decode($response, true);
-        if($result['status']){
+        $result = @json_decode($response, true);
+        if ($result['status']) {
             \Log::info('Email Sent : ' . $to . ' : ' . $subject);
             return ['status' => 1, 'message' => 'Email sent successfully'];
-        }else{
+        } else {
             \Log::error("Email Failed : " . $to . " : " . $subject . " : " . $result['message']);
             return ['status' => 0, 'message' => $result['message']];
         }
@@ -553,8 +554,147 @@ class General
         return $result;
     }
 
-    public function getTimezooneList()
+    public function dateUTC($date, $type = 1)
+    {
+        return \Carbon\Carbon::createFromFormat($type ? 'Y-m-d H:i:s' : 'Y-m-d', $date, $this->getClientTimezone())
+            ->setTimezone('UTC');
+    }
+
+    public function dateFormat($dateOrField, $type = 1)
+    {
+        //$type  for date, 1 for datetime
+        $format = $type ? config('setting.date_time_format', 'Y-m-d H:i:s') : config('setting.date_format', 'Y-m-d');
+        if(!config('setting.timezone_enabled')) {
+            $clientTimezone = 'UTC';
+        } else {
+            $clientTimezone = $this->getClientTimezone();
+        }
+        if ($dateOrField instanceof \Carbon\Carbon) {
+            return $dateOrField->timezone($clientTimezone)
+                ->format($format);
+        } else {
+            return \Carbon\Carbon::createFromFormat($type ? 'Y-m-d H:i:s' : 'Y-m-d', $dateOrField, $clientTimezone)
+                ->format($format);
+        }
+    }
+
+    public function getTimezoneList()
     {
         return json_decode('{"Pacific/Midway":"(UTC-11:00) Pacific/Midway","US/Samoa":"(UTC-11:00) US/Samoa","US/Hawaii":"(UTC-10:00) US/Hawaii","US/Alaska":"(UTC-09:00) US/Alaska","US/Pacific":"(UTC-08:00) US/Pacific","America/Tijuana":"(UTC-08:00) America/Tijuana","US/Arizona":"(UTC-07:00) US/Arizona","US/Mountain":"(UTC-07:00) US/Mountain","America/Chihuahua":"(UTC-07:00) America/Chihuahua","America/Mazatlan":"(UTC-07:00) America/Mazatlan","America/Mexico_City":"(UTC-06:00) America/Mexico_City","America/Monterrey":"(UTC-06:00) America/Monterrey","Canada/Saskatchewan":"(UTC-06:00) Canada/Saskatchewan","US/Central":"(UTC-06:00) US/Central","US/Eastern":"(UTC-05:00) US/Eastern","US/East-Indiana":"(UTC-05:00) US/East-Indiana","America/Bogota":"(UTC-05:00) America/Bogota","America/Lima":"(UTC-05:00) America/Lima","America/Caracas":"(UTC-04:30) America/Caracas","Canada/Atlantic":"(UTC-04:00) Canada/Atlantic","America/La_Paz":"(UTC-04:00) America/La_Paz","America/Santiago":"(UTC-04:00) America/Santiago","Canada/Newfoundland":"(UTC-03:30) Canada/Newfoundland","America/Buenos_Aires":"(UTC-03:00) America/Buenos_Aires","Greenland":"(UTC-03:00) Greenland","Atlantic/Stanley":"(UTC-02:00) Atlantic/Stanley","Atlantic/Azores":"(UTC-01:00) Atlantic/Azores","Atlantic/Cape_Verde":"(UTC-01:00) Atlantic/Cape_Verde","Africa/Casablanca":"(UTC) Africa/Casablanca","Europe/Dublin":"(UTC) Europe/Dublin","Europe/Lisbon":"(UTC) Europe/Lisbon","Europe/London":"(UTC) Europe/London","Africa/Monrovia":"(UTC) Africa/Monrovia","Europe/Amsterdam":"(UTC+01:00) Europe/Amsterdam","Europe/Belgrade":"(UTC+01:00) Europe/Belgrade","Europe/Berlin":"(UTC+01:00) Europe/Berlin","Europe/Bratislava":"(UTC+01:00) Europe/Bratislava","Europe/Brussels":"(UTC+01:00) Europe/Brussels","Europe/Budapest":"(UTC+01:00) Europe/Budapest","Europe/Copenhagen":"(UTC+01:00) Europe/Copenhagen","Europe/Ljubljana":"(UTC+01:00) Europe/Ljubljana","Europe/Madrid":"(UTC+01:00) Europe/Madrid","Europe/Paris":"(UTC+01:00) Europe/Paris","Europe/Prague":"(UTC+01:00) Europe/Prague","Europe/Rome":"(UTC+01:00) Europe/Rome","Europe/Sarajevo":"(UTC+01:00) Europe/Sarajevo","Europe/Skopje":"(UTC+01:00) Europe/Skopje","Europe/Stockholm":"(UTC+01:00) Europe/Stockholm","Europe/Vienna":"(UTC+01:00) Europe/Vienna","Europe/Warsaw":"(UTC+01:00) Europe/Warsaw","Europe/Zagreb":"(UTC+01:00) Europe/Zagreb","Europe/Athens":"(UTC+02:00) Europe/Athens","Europe/Bucharest":"(UTC+02:00) Europe/Bucharest","Africa/Cairo":"(UTC+02:00) Africa/Cairo","Africa/Harare":"(UTC+02:00) Africa/Harare","Europe/Helsinki":"(UTC+02:00) Europe/Helsinki","Europe/Istanbul":"(UTC+02:00) Europe/Istanbul","Asia/Jerusalem":"(UTC+02:00) Asia/Jerusalem","Europe/Kiev":"(UTC+02:00) Europe/Kiev","Europe/Minsk":"(UTC+02:00) Europe/Minsk","Europe/Riga":"(UTC+02:00) Europe/Riga","Europe/Sofia":"(UTC+02:00) Europe/Sofia","Europe/Tallinn":"(UTC+02:00) Europe/Tallinn","Europe/Vilnius":"(UTC+02:00) Europe/Vilnius","Asia/Baghdad":"(UTC+03:00) Asia/Baghdad","Asia/Kuwait":"(UTC+03:00) Asia/Kuwait","Africa/Nairobi":"(UTC+03:00) Africa/Nairobi","Asia/Riyadh":"(UTC+03:00) Asia/Riyadh","Europe/Moscow":"(UTC+03:00) Europe/Moscow","Asia/Tehran":"(UTC+03:30) Asia/Tehran","Asia/Baku":"(UTC+04:00) Asia/Baku","Europe/Volgograd":"(UTC+04:00) Europe/Volgograd","Asia/Muscat":"(UTC+04:00) Asia/Muscat","Asia/Tbilisi":"(UTC+04:00) Asia/Tbilisi","Asia/Yerevan":"(UTC+04:00) Asia/Yerevan","Asia/Kabul":"(UTC+04:30) Asia/Kabul","Asia/Karachi":"(UTC+05:00) Asia/Karachi","Asia/Tashkent":"(UTC+05:00) Asia/Tashkent","Asia/Kolkata":"(UTC+05:30) Asia/Kolkata","Asia/Kathmandu":"(UTC+05:45) Asia/Kathmandu","Asia/Yekaterinburg":"(UTC+06:00) Asia/Yekaterinburg","Asia/Almaty":"(UTC+06:00) Asia/Almaty","Asia/Dhaka":"(UTC+06:00) Asia/Dhaka","Asia/Novosibirsk":"(UTC+07:00) Asia/Novosibirsk","Asia/Bangkok":"(UTC+07:00) Asia/Bangkok","Asia/Jakarta":"(UTC+07:00) Asia/Jakarta","Asia/Krasnoyarsk":"(UTC+08:00) Asia/Krasnoyarsk","Asia/Chongqing":"(UTC+08:00) Asia/Chongqing","Asia/Hong_Kong":"(UTC+08:00) Asia/Hong_Kong","Asia/Kuala_Lumpur":"(UTC+08:00) Asia/Kuala_Lumpur","Australia/Perth":"(UTC+08:00) Australia/Perth","Asia/Singapore":"(UTC+08:00) Asia/Singapore","Asia/Taipei":"(UTC+08:00) Asia/Taipei","Asia/Ulaanbaatar":"(UTC+08:00) Asia/Ulaanbaatar","Asia/Urumqi":"(UTC+08:00) Asia/Urumqi","Asia/Irkutsk":"(UTC+09:00) Asia/Irkutsk","Asia/Seoul":"(UTC+09:00) Asia/Seoul","Asia/Tokyo":"(UTC+09:00) Asia/Tokyo","Australia/Adelaide":"(UTC+09:30) Australia/Adelaide","Australia/Darwin":"(UTC+09:30) Australia/Darwin","Asia/Yakutsk":"(UTC+10:00) Asia/Yakutsk","Australia/Brisbane":"(UTC+10:00) Australia/Brisbane","Australia/Canberra":"(UTC+10:00) Australia/Canberra","Pacific/Guam":"(UTC+10:00) Pacific/Guam","Australia/Hobart":"(UTC+10:00) Australia/Hobart","Australia/Melbourne":"(UTC+10:00) Australia/Melbourne","Pacific/Port_Moresby":"(UTC+10:00) Pacific/Port_Moresby","Australia/Sydney":"(UTC+10:00) Australia/Sydney","Asia/Vladivostok":"(UTC+11:00) Asia/Vladivostok","Asia/Magadan":"(UTC+12:00) Asia/Magadan","Pacific/Auckland":"(UTC+12:00) Pacific/Auckland","Pacific/Fiji":"(UTC+12:00) Pacific/Fiji"}', true);
+    }
+
+    function getClientTimezone()
+    {
+        $defaultTimezone = env('APP_TIMEZONE', 'UTC');
+        if (!isset($_COOKIE[env('APP_UID') . '_tz'])) {
+            return $defaultTimezone;
+        }
+        $tz = $_COOKIE[env('APP_UID') . '_tz'];
+        if (in_array($tz, timezone_identifiers_list())) {
+            return $tz;
+        }
+        $tzMap = [
+            'Asia/Calcutta' => 'Asia/Kolkata',
+            'Asia/Katmandu' => 'Asia/Kathmandu',
+            'Asia/Rangoon' => 'Asia/Yangon',
+            'Asia/Saigon' => 'Asia/Ho_Chi_Minh',
+            'America/Argentina/ComodRivadavia' => 'America/Argentina/Buenos_Aires',
+            'America/Atka' => 'America/Adak',
+            'America/Buenos_Aires' => 'America/Argentina/Buenos_Aires',
+            'America/Ensenada' => 'America/Tijuana',
+            'America/Fort_Wayne' => 'America/Indiana/Indianapolis',
+            'America/Indianapolis' => 'America/Indiana/Indianapolis',
+            'America/Knox_IN' => 'America/Indiana/Knox',
+            'America/Louisville' => 'America/Kentucky/Louisville',
+            'America/Montreal' => 'America/Toronto',
+            'America/Porto_Acre' => 'America/Rio_Branco',
+            'America/Rosario' => 'America/Argentina/Buenos_Aires',
+            'America/Virgin' => 'America/Puerto_Rico',
+            'Antarctica/South_Pole' => 'Pacific/Auckland',
+            'Asia/Istanbul' => 'Europe/Istanbul',
+            'Asia/Phnom_Penh' => 'Asia/Bangkok',
+            'Asia/Tel_Aviv' => 'Asia/Jerusalem',
+            'Atlantic/Faeroe' => 'Atlantic/Faroe',
+            'Atlantic/Jan_Mayen' => 'Europe/Oslo',
+            'Australia/ACT' => 'Australia/Sydney',
+            'Australia/Canberra' => 'Australia/Sydney',
+            'Australia/LHI' => 'Australia/Lord_Howe',
+            'Australia/NSW' => 'Australia/Sydney',
+            'Australia/North' => 'Australia/Darwin',
+            'Australia/Queensland' => 'Australia/Brisbane',
+            'Australia/South' => 'Australia/Adelaide',
+            'Australia/Tasmania' => 'Australia/Hobart',
+            'Australia/Victoria' => 'Australia/Melbourne',
+            'Australia/West' => 'Australia/Perth',
+            'Australia/Yancowinna' => 'Australia/Broken_Hill',
+            'Brazil/Acre' => 'America/Rio_Branco',
+            'Brazil/DeNoronha' => 'America/Noronha',
+            'Brazil/East' => 'America/Sao_Paulo',
+            'Brazil/West' => 'America/Manaus',
+            'Canada/Atlantic' => 'America/Halifax',
+            'Canada/Central' => 'America/Winnipeg',
+            'Canada/Eastern' => 'America/Toronto',
+            'Canada/Mountain' => 'America/Edmonton',
+            'Canada/Newfoundland' => 'America/St_Johns',
+            'Canada/Pacific' => 'America/Vancouver',
+            'Canada/Saskatchewan' => 'America/Regina',
+            'Canada/Yukon' => 'America/Whitehorse',
+            'Chile/Continental' => 'America/Santiago',
+            'Chile/EasterIsland' => 'Pacific/Easter',
+            'Cuba' => 'America/Havana',
+            'Egypt' => 'Africa/Cairo',
+            'Eire' => 'Europe/Dublin',
+            'Europe/Belfast' => 'Europe/London',
+            'Europe/Tiraspol' => 'Europe/Chisinau',
+            'GB' => 'Europe/London',
+            'GB-Eire' => 'Europe/London',
+            'Greenwich' => 'Etc/GMT',
+            'Hongkong' => 'Asia/Hong_Kong',
+            'Iceland' => 'Atlantic/Reykjavik',
+            'Iran' => 'Asia/Tehran',
+            'Israel' => 'Asia/Jerusalem',
+            'Jamaica' => 'America/Jamaica',
+            'Japan' => 'Asia/Tokyo',
+            'Kwajalein' => 'Pacific/Kwajalein',
+            'Libya' => 'Africa/Tripoli',
+            'Mexico/BajaNorte' => 'America/Tijuana',
+            'Mexico/BajaSur' => 'America/Mazatlan',
+            'Mexico/General' => 'America/Mexico_City',
+            'NZ' => 'Pacific/Auckland',
+            'NZ-CHAT' => 'Pacific/Chatham',
+            'Navajo' => 'America/Denver',
+            'PRC' => 'Asia/Shanghai',
+            'Pacific/Johnston' => 'Pacific/Honolulu',
+            'Pacific/Ponape' => 'Pacific/Pohnpei',
+            'Pacific/Samoa' => 'Pacific/Pago_Pago',
+            'Pacific/Truk' => 'Pacific/Chuuk',
+            'Pacific/Yap' => 'Pacific/Chuuk',
+            'Poland' => 'Europe/Warsaw',
+            'Portugal' => 'Europe/Lisbon',
+            'ROC' => 'Asia/Taipei',
+            'ROK' => 'Asia/Seoul',
+            'Singapore' => 'Asia/Singapore',
+            'Turkey' => 'Europe/Istanbul',
+            'UCT' => 'Etc/UTC',
+            'US/Alaska' => 'America/Anchorage',
+            'US/Aleutian' => 'America/Adak',
+            'US/Arizona' => 'America/Phoenix',
+            'US/Central' => 'America/Chicago',
+            'US/East-Indiana' => 'America/Indiana/Indianapolis',
+            'US/Eastern' => 'America/New_York',
+            'US/Hawaii' => 'Pacific/Honolulu',
+            'US/Indiana-Starke' => 'America/Indiana/Knox',
+            'US/Michigan' => 'America/Detroit',
+            'US/Mountain' => 'America/Denver',
+            'US/Pacific' => 'America/Los_Angeles',
+            'US/Samoa' => 'Pacific/Pago_Pago',
+            'Universal' => 'Etc/UTC',
+            'W-SU' => 'Europe/Moscow',
+            'Zulu' => 'Etc/UTC'
+        ];
+        if (isset($tzMap[$tz])) {
+            return $tzMap[$tz];
+        }
+        return $defaultTimezone;
     }
 }

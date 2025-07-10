@@ -42,13 +42,17 @@ class UserActivity extends Model
 
     /**
      * @var bool $timestamps Indicates if the model should be timestamped.
+     *
+     * @var bool
      */
     public $timestamps = true;
 
     /**
-     * @var string $dateFormat The storage format of the model's date columns.
+     * The name of the "updated at" column.
+     *
+     * @var string|null
      */
-    protected $dateFormat = 'U';
+    const UPDATED_AT = null;
 
     /**
      * @var array $fillable The attributes that are mass assignable.
@@ -94,7 +98,6 @@ class UserActivity extends Model
         $activity->type = $type;
         $activity->device_id = $device->id;
 
-        $activity->created_at = time();
 
         $activity->save();
     }
@@ -173,12 +176,12 @@ class UserActivity extends Model
         $result = (new Pagination())->getDataTable($query, $postData);
         $general = new General();
         foreach ($result['data'] as $key => $row) {
-            $deviceName = (new General())->deviceName($row->client);
+            $deviceName = $general->deviceName($row->client);
             $result['data'][$key]->first_name = $row->first_name . ' ' . $row->last_name;
             $result['data'][$key]->location = $general->getIpLocation($row->ip);
             $result['data'][$key]->device = $deviceName;
             $result['data'][$key]->type = $this->getType($row->type);
-            $result['data'][$key]->created_at = date(config('setting.date_time_format'), $row->created_at);
+            $result['data'][$key]->created_at = $general->dateFormat($row->created_at);
             $result['data'][$key]->action = '<button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
             <div class="dropdown-menu">
                 <label class="dropdown-item">Ip: ' . $row->ip . '</label>
@@ -210,7 +213,7 @@ class UserActivity extends Model
             $row->location = $general->getIpLocation($row->ip);
             $row->client = $general->deviceName($row->client);
             $row->type = $this->getType($row->type);
-            $row->created_at = date(config('setting.date_time_format'), $row->created_at);
+            $row->created_at = $row->created_at;
         }
 
         return $result;

@@ -13,6 +13,7 @@
 
     'login_redirect_url'=>'dashboard',
 
+    'timezone_enabled'=>true,
     'user_email_verify'=>true,
     'google_recaptcha'=>true,
     'google_recaptcha_secret_key'=>'',

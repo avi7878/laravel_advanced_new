@@ -27,6 +27,7 @@ Login with Otp
         {{ view('common/message_alert') }}
         <p class="mb-0 fw-semibold">Type your 6 digit OTP</p>
         <form class="ajax-form" action="{{route('auth/verify-process')}}" method="post">
+          <input type="hidden" name="type" value="{{$type}}">
           {{ csrf_field() }}
           <div class="mb-3">
             <label class="form-label">OTP<span class="text-danger">*</span></label>

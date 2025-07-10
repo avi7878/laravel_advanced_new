@@ -76,10 +76,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'web'], function () {
     Route::post('auth/login-process', '\App\Http\Controllers\Admin\AuthController@loginProcess')->name('admin/auth/login-process');
     Route::get('auth/logout', '\App\Http\Controllers\Admin\AuthController@logout')->name('admin/auth/logout');
 
-    Route::get('auth/tfa-verify', '\App\Http\Controllers\Admin\AuthController@tfaVerify')->name('admin/auth/tfa-verify');
-    Route::post('auth/tfa-verify-process', '\App\Http\Controllers\Admin\AuthController@tfaVerifyProcess')->name('admin/auth/tfa-verify-process');
-    Route::post('auth/tfa-resend-otp', '\App\Http\Controllers\Admin\AuthController@tfaResendOTP')->name('admin/auth/tfa-resend-otp');
-    Route::post('auth/resend-otp', '\App\Http\Controllers\Admin\AuthController@resendOtp')->name('admin/auth/resend-otp');
+    Route::get('auth/verify', '\App\Http\Controllers\Admin\AuthController@verify')->name('admin/auth/verify');
+    Route::post('auth/verify-process', '\App\Http\Controllers\Admin\AuthController@verifyProcess')->name('admin/auth/verify-process');
+    Route::post('auth/resend-otp', '\App\Http\Controllers\Admin\AuthController@resendOTP')->name('admin/auth/resend-otp');
 
     Route::get('site/password-forgot', '\App\Http\Controllers\Admin\SiteController@passwordForgot')->name('admin/site/password-forgot');
     Route::post('site/password-forgot-process', '\App\Http\Controllers\Admin\SiteController@passwordForgotProcess')->name('admin/site/password-forgot-process');

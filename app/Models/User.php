@@ -16,7 +16,6 @@ class User extends Authenticatable
     protected $table = 'user';
     protected $primaryKey = 'id';
     public $timestamps = true;
-    protected $dateFormat = 'U';
     protected $fillable = [
         'first_name',
         'last_name',
@@ -112,7 +111,7 @@ class User extends Authenticatable
             // Set user status badge
             $result['data'][$key]->status = $userObj->getStatusBadge($row->status);
             // Format the creation date based on the application's date format setting
-            $result['data'][$key]->created_at = date(config('setting.date_format'), $row->created_at);
+            $result['data'][$key]->created_at = $row->created_at;
             
             // Assign action buttons based on the role and permissions
             if (auth()->user()->role == 0) {
@@ -166,8 +165,9 @@ class User extends Authenticatable
         /**/
         $result = (new Pagination())->getDataTable($query, $postData);
         $sessionUser = auth()->user();
+        $general= new General();
         foreach ($result['data'] as $key => $row) {
-            $imageUrl = (new General())->getFileUrl($row->image, 'profile');
+            $imageUrl = $general->getFileUrl($row->image, 'profile');
             if ($row->image) {
                 $result['data'][$key]->image = '<a href="upload/profile/' . $row->image . '" data-toggle="lightbox" data-title="Image" class = "noroute pjax" target = "_blank">
                 <img style="width:30px;height:30px" src="' . $imageUrl . '" class="h-auto rounded-circle" alt="blog image"></a>';
@@ -176,11 +176,7 @@ class User extends Authenticatable
             $result['data'][$key]->email = $row->email;
             $result['data'][$key]->phone = $row->phone;
             $result['data'][$key]->status = $userObj->getStatusBadge($row->status);
-            $result['data'][$key]->created_at = date(config('setting.date_format'), $row->created_at);
-
-
-            $result['data'][$key]->updated_at = date(config('setting.date_format'), $row->updated_at);
-                    $autologinUrl = url('admin/user/autologin?id=' . $row->id);
+            $result['data'][$key]->created_at = $general->dateFormat($row->created_at);
 
             if (auth()->user()->role == 0) {
                 $result['data'][$key]->action = '

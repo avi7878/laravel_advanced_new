@@ -13,20 +13,20 @@
                     <div class="card-header">
                         <h5 class="mb-6">Two-steps verification</h5>
                         @if($model && $model->status_tfa)
-                        <h5 class="mb-4 text-body">Two factor authentication is not enabled yet.</h5>
+                        <h5 class="mb-4 text-body">Two factor authentication is disabled.</h5>
+                        <button
+                            data-action="{{ route('admin/account/tfa-status-change') }}"
+                            onclick="app.confirmAction(this);"
+                            class="btn btn-primary mt-2">
+                           Enable Two-Factor Authentication
+                        </button>
+                        @else
+                        <h5 class="mb-4 text-body">Two factor authentication is enabled.</h5>
                         <button
                             data-action="{{ route('account/tfa-status-change') }}"
                             onclick="app.confirmAction(this);"
                             class="btn btn-primary mt-2">
                             Disable Two-Factor Authentication
-                        </button>
-                        @else
-                        <h5 class="mb-4 text-body">Two factor authentication is not disabled yet.</h5>
-                        <button
-                            data-action="{{ route('account/tfa-status-change') }}"
-                            onclick="app.confirmAction(this);"
-                            class="btn btn-primary mt-2">
-                            Enable
                         </button>
                         @endif
                     </div>
