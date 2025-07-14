@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Device;
+use App\Models\UserAuth;
 use App\Models\User;
 use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Jobs\SendTfaMail;
-use App\Helpers\General;
 use App\Services\TfaService;
-use Illuminate\Support\Facades\Mail;
 
 /**
  * Class UserController
@@ -93,16 +90,16 @@ class UserController extends Controller
     {
         $id = $request->input('id');
         $logData = UserActivity::where('user_id', $id)
-            ->orderBy('id', 'desc')
+            ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();
-        $deviceData = Device::where('user_id', $id)
-            ->orderBy('id', 'desc')
+        $userAuthList = UserAuth::where('user_id', $id)
+            ->orderBy('updated_at', 'desc')
             ->limit(10)
             ->get();
         $model = User::where('id', $id)->first();
 
-        return view('admin/user/view', compact('model', 'logData', 'deviceData'));
+        return view('admin/user/view', compact('model', 'logData', 'userAuthList'));
     }
 
     /**

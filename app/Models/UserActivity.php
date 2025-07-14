@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use App\Helpers\Pagination;
 use App\Helpers\General;
 use Illuminate\Support\Facades\DB;
-use App\Models\Device;
+use App\Models\UserAuth;
 
 /**
  * Class UserActivity
@@ -82,7 +82,7 @@ class UserActivity extends Model
         if (!$deviceUid) {
         }
 
-        $device = Device::where(['device_uid' => $deviceUid])->first();
+        $device = UserAuth::where(['device_uid' => $deviceUid])->first();
         if (!$device) {
             return false;
         }

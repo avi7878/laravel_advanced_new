@@ -23,7 +23,7 @@
                         @else
                         <h5 class="mb-4 text-body">Two factor authentication is enabled.</h5>
                         <button
-                            data-action="{{ route('account/tfa-status-change') }}"
+                            data-action="{{ route('admin/account/tfa-status-change') }}"
                             onclick="app.confirmAction(this);"
                             class="btn btn-primary mt-2">
                             Disable Two-Factor Authentication
@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="text-end">
                                                 <button onclick="app.confirmAction(this);"
-                                                        data-action="{{ route('account/revoke-all') }}"
+                                                        data-action="{{ route('admin/account/revoke-all') }}"
                                                         class="btn btn-primary text-white"
                                                         style="background-color: #685dd8;"
                                                         title="Revoke All">

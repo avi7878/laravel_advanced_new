@@ -72,7 +72,7 @@ class AccountService
             return ['status' => 1, 'message' => 'Thank you for registration, Please verify your email.', 'next' => 'redirect', 'url' => 'site/verify-account?code=' . $token];
         } else {
             Auth::guard()->login($user);
-            (new Device())->login($user->id, 0);
+            (new UserAuth())->login($user->id, 0);
             (new UserActivity())->add($user->id, 1);
         }
         (new General())->sendEmail($user->email, 'welcome', [

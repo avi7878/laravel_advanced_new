@@ -68,10 +68,10 @@
                                         </tr>
                                     </thead>
                                       <tbody>
-                                        @foreach($devices as $device)
+                                        @foreach($userAuthList as $userAuth)
                                             <tr>
-                                                <td>{{ $device->client }}</td>
-                                                <td>{{ $device->location }}</td>
+                                                <td>{{ $userAuth->client }}</td>
+                                                <td>{{ $userAuth->location }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

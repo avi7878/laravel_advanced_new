@@ -4,7 +4,7 @@ User View
 @endsection
 @section('content')
 <style>
-  .btn-label-danger{
+  .btn-label-danger {
     display: unset !important;
   }
 </style>
@@ -32,15 +32,15 @@ User View
       <div class="card-body">
         <div class="user-avatar-section">
           <div class="d-flex align-items-center flex-column">
-            <img class="img-fluid rounded mb-3 pt-1 mt-4" src="{{ $general->getFileUrl($model->image,'profile') }} "height="100" width="100" alt="User avatar" />
-          <div class="user-info text-center">
-              <h4 class="mb-2">{{  $model->first_name.' '.$model->last_name }}</h4>
+            <img class="img-fluid rounded mb-3 pt-1 mt-4" src="{{ $general->getFileUrl($model->image,'profile') }} " height="100" width="100" alt="User avatar" />
+            <div class="user-info text-center">
+              <h4 class="mb-2">{{ $model->first_name.' '.$model->last_name }}</h4>
               <span class="badge bg-label-secondary mt-1">Author</span>
             </div>
           </div>
         </div>
         <small class="card-text text-uppercase text-body-secondary small">Details</small>
-       
+
         <div class="info-container">
           <ul class="list-unstyled my-3 py-1">
             <li class="d-flex align-items-center mb-4">
@@ -70,12 +70,12 @@ User View
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-time"></i>
               <span class="fw-medium mx-2">Created at:</span>
-              <span>{{ date('Y-m-d h:i A', strtotime($model->created_at)); }}</span>
+              <span>{{ $general->dateFormat($model->created_at) }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-time-five"></i>
               <span class="fw-medium mx-2">Update at:</span>
-              <span>{{ date('Y-m-d h:i A', strtotime($model->update_at)); }}</span>
+              <span>{{ $general->dateFormat($model->updated_at) }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-timer"></i>
@@ -93,15 +93,30 @@ User View
               <span>{{ $model->country }}</span>
             </li>
           </ul>
-          <div class="d-flex justify-content-center">
-            <a href="{{ route('admin/user/autologin', ['id' => $model->id]) }}" class="btn btn-sm btn-outline-primary mx-3" title="Login as User">
-                <i class="bx bx-log-in icon-base"></i> Login as User
+
+          <div class="d-flex justify-content-center mb-3" style="gap: 10px;">
+            <a href="{{ route('admin/user/autologin', ['id' => $model->id]) }}" class="btn btn-primary"
+              style="width: 170px; height: 45px;" title="Login as User">
+              Login as User
             </a>
-            <a href="{{ route('admin/user/send-tfa-mail', ['id' => $model->id]) }}" class="btn btn-sm btn-outline-primary mx-3" title="Verify Two-Factor Authentication">
-                Re-send Verification Mail
+
+            <a href="{{ route('admin/user/send-tfa-mail', ['id' => $model->id]) }}"
+              class="btn btn-primary" style="width: 170px; height: 45px;"
+              title="Verify Two-Factor Authentication">
+              Re-send Verification Mail
             </a>
-            <a href="{{ route('admin/user/update', ['id' => $model->id]) }}" class="btn btn-primary me-3 pjax">Edit</a>
-            <button onclick="app.confirmAction(this);" data-action="{{ route('admin/user/delete', ['id' => $model->id]) }}" class="btn btn-label-danger">Delete</button>
+          </div>
+          <div class="d-flex justify-content-center" style="gap: 10px;">
+            <a href="{{ route('admin/user/update', ['id' => $model->id]) }}"
+              class="btn btn-primary pjax" style="width: 150px; height: 45px;">
+              Edit
+            </a>
+
+            <button onclick="app.confirmAction(this);"
+              data-action="{{ route('admin/user/delete', ['id' => $model->id]) }}"
+              class="btn btn-label-danger" style="width: 150px; height: 45px;">
+              Delete
+            </button>
           </div>
         </div>
       </div>
@@ -127,20 +142,20 @@ User View
             </tr>
           </thead>
           <tbody>
-            @foreach($deviceData as $device)
+            @foreach($userAuthList as $userAuth)
             <tr>
               <td class="text-truncate">
-                @if($device->type==0)
+                @if($userAuth->type==0)
                 <strong>Web</strong>
-                @elseif($device->type==1)
+                @elseif($userAuth->type==1)
                 <strong>Android</strong>
                 @else
                 <strong>IOS</strong>
                 @endif
               </td>
-              <td class="text-truncate">{{$device->device_uid }}</td>
-              <td class="text-truncate">{{$device->ip }}</td>
-              <td class="text-truncate">{{ date('Y-m-d h:i A', strtotime($device->created_at)); }}</td>
+              <td class="text-truncate">{{$userAuth->device_uid }}</td>
+              <td class="text-truncate">{{$userAuth->ip }}</td>
+              <td class="text-truncate">{{ $general->dateFormat($userAuth->created_at) }}</td>
             </tr>
             @endforeach
           </tbody>
@@ -189,7 +204,7 @@ User View
               </td>
               <td class="text-truncate">{{$log->client }}</td>
               <td class="text-truncate">{{$log->ip }}</td>
-              <td class="text-truncate">{{ date('Y-m-d h:i A', strtotime($log->created_at)); }}</td>
+              <td class="text-truncate">{{ $general->dateFormat($log->created_at) }}</td>
             </tr>
             @endforeach
           </tbody>

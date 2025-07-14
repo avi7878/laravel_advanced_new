@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 use App\Services\PermissionService;
 use App\Services\AuthService;
+use Illuminate\Validation\Rule;
 
 class User extends Authenticatable
 {
@@ -133,7 +134,7 @@ class User extends Authenticatable
     }
 
     public function list($postData)
-    {
+    { 
         $userObj = new User();
 
         $query = DB::table('user')->select('*')->whereIn('role', $userObj->userRole)
@@ -167,6 +168,7 @@ class User extends Authenticatable
             $result['data'][$key]->phone = $row->phone;
             $result['data'][$key]->status = $userObj->getStatusBadge($row->status);
             $result['data'][$key]->created_at = $general->dateFormat($row->created_at);
+            $result['data'][$key]->updated_at = $general->dateFormat($row->updated_at);
 
             if (auth()->user()->role == 0) {
                 $result['data'][$key]->action = '
@@ -339,6 +341,7 @@ class User extends Authenticatable
         } else {
             $model->password = $pass;
         }
+       
         // Save the model
         $model->save();
 

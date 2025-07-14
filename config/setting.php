@@ -12,6 +12,7 @@
     'login_ban_time' => env('LOGIN_BAN_TIME', 60),
 
     'login_redirect_url'=>'dashboard',
+    'admin_login_redirect_url'=>'admin/dashboard',
 
     'timezone_enabled'=>true,
     'user_email_verify'=>true,

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Device;
+use App\Models\UserAuth;
 use App\Models\User;
 use App\Models\UserActivity;
 use App\Services\AccountService;
@@ -95,18 +95,17 @@ class AccountController extends Controller
        public function tfa()
     {
         $model = auth()->user();
-        //  $devices = Device::where('user_id', $model->id)->where('device_uid', @$_COOKIE[config("setting.app_uid") . '_token'])->get();
-          $devices = DB::table('device')
-                ->leftjoin('user', 'device.device_uid', '=', 'user.ignore_tfa_device')
+        $userAuthList = DB::table('user_auth')
+                ->leftjoin('user', 'user_auth.device_uid', '=', 'user.ignore_tfa_device')
                 ->where('user.ignore_tfa_device', $model->ignore_tfa_device)
-                ->select('device.*','user.ignore_tfa_device')
+                ->select('user_auth.*','user.ignore_tfa_device')
                 ->get();
 
-         foreach ($devices as $key => $device) {
-            $devices[$key]->client =  (new General())->deviceName($device->client) . ' ' . ($device->device_uid == @$_COOKIE[config("setting.app_uid") . '_token'] ? ' (This Device)' : '');
-            $devices[$key]->location = (new General)->getIpLocation($device->ip);
+         foreach ($userAuthList as $key => $userAuth) {
+            $userAuthList[$key]->client =  (new General())->deviceName($userAuth->client) . ' ' . ($userAuth->device_uid == @$_COOKIE[config("setting.app_uid") . '_token'] ? ' (This Device)' : '');
+            $userAuthList[$key]->location = (new General)->getIpLocation($userAuth->ip);
         }
-        return view('account/tfa',compact('model','devices'));
+        return view('account/tfa',compact('model','userAuthList'));
     }
 
 
@@ -164,7 +163,7 @@ class AccountController extends Controller
      */
     public function deviceLogout(Request $request)
     {
-        (new Device())->forceLogout($request->input('id'));
+        (new UserAuth())->forceLogout($request->input('id'));
 
         return response()->json(['status' => 1, 'message' => 'Device Logout Successfully', 'next' => 'reload']);
     }

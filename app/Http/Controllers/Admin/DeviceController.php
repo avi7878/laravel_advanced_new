@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Device;
+use App\Models\UserAuth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
@@ -36,7 +36,7 @@ class DeviceController extends Controller
      */
     public function list(Request $request): JsonResponse
     {
-        return response()->json((new Device())->listAdmin($request->all()));
+        return response()->json((new UserAuth())->listAdmin($request->all()));
     }
 
     /**
@@ -47,7 +47,7 @@ class DeviceController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        (new Device())->forceLogout($request->input('id'));
+        (new UserAuth())->forceLogout($request->input('id'));
 
         return response()->json(['status' => 1, 'message' => 'Device Logout Successfully', 'next' => 'reload']);
     }

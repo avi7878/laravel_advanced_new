@@ -74,7 +74,7 @@ class AuthController extends Controller
     {
         if (Auth::check()) {
             Auth::logout();
-            (new \App\Models\Device())->logout();
+            (new \App\Models\UserAuth())->logout();
         }
         return redirect('login')->withCookie(cookie()->forget(config('setting.app_uid') . '_user_token'));
     }

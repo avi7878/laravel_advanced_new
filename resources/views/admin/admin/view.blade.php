@@ -77,12 +77,12 @@ Admin View
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-time"></i>
               <span class="fw-medium mx-2">Created at:</span>
-              <span>{{ date('Y-m-d h:i A', strtotime($model->created_at)); }}</span>
+                              <span>{{ $general->dateFormat($model->created_at) }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-time-five"></i>
               <span class="fw-medium mx-2">Update at:</span>
-              <span>{{ date('Y-m-d h:i A', strtotime($model->updated_at)); }}</span>
+                <span>{{ $general->dateFormat($model->updated_at) }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-timer"></i>
@@ -120,7 +120,13 @@ Admin View
 
     <!-- Change Password -->
     <div class="card mb-4">
-      <h5 class="card-header">Recent Devices</h5>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-header mb-0">Recent Devices</h5>
+
+             <a href="admin/device" class="btn btn-sm btn-primary me-3 pjax">
+                        View All
+            </a>
+        </div>
       <div class="table-responsive">
         <table class="table border-top">
           <thead>
@@ -153,7 +159,13 @@ Admin View
 
     <!-- Recent Devices -->
     <div class="card mb-4">
-      <h5 class="card-header">Activity</h5>
+       <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-header mb-0">Activity</h5>
+
+                <a href="admin/user-activity" class="btn btn-sm btn-primary me-3 pjax">
+                View All
+            </a>
+         </div>
       <div class="table-responsive">
         <table class="table border-top">
           <thead>

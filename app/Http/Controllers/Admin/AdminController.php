@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Device;
+use App\Models\UserAuth;
 use App\Models\UserActivity;
 
 class AdminController extends Controller
@@ -97,7 +97,7 @@ class AdminController extends Controller
             ->orderBy('id', 'desc')
             ->limit(10)
             ->get();
-        $deviceData = Device::where('user_id', $id)
+        $deviceData = UserAuth::where('user_id', $id)
             ->orderBy('id', 'desc')
             ->limit(10)
             ->get();

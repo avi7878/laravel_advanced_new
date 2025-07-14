@@ -10,7 +10,7 @@
         <ul class="navbar-nav flex-row align-items-center ms-md-auto">
             <!-- User -->
             <li class="nav-item lh-1 me-4"></li>
-            <!-- Style Switcher -->
+            <!-- Style Switcher pro feature-->
             <li class="nav-item dropdown me-2 me-xl-0">
                 <a class="nav-link dropdown-toggle hide-arrow"  id="nav-theme" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <i class="icon-base bx bx-sun icon-md theme-icon-active"></i>

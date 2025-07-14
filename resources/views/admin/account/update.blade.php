@@ -60,27 +60,6 @@ Profile
               </form>
           </div>
         </div>
-          <div class="card">
-            <div class="card-header">
-              <h5>Delete Account</h5>
-            </div>
-            <div class="card-body">
-              <div class="mb-6 col-12 mb-0">
-                <div class="alert alert-warning">
-                  <h5 class="alert-heading mb-1">Are you sure you want to delete your account?</h5>
-                  <p>Once you delete your account, there is no going back. Please be certain.</p>
-                </div>
-              </div>
-              <form action="{{route('admin/account/deactivate')}}" id="formAccountDeactivation" method="POST">
-                @csrf
-                <div class="form-check my-8 ms-2">
-                  <input type="checkbox" class="form-check-input" name="accountActivation" id="accountActivation">
-                  <label for="accountActivation" class="form-check-label">I confirm my account deactivation</label>
-                </div>
-                <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
-              </form>
-            </div>
-          </div>
     </div>
 </div>
 @endsection

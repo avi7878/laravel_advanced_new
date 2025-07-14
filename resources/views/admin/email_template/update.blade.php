@@ -12,7 +12,7 @@ Email Template Update
                 <a href="admin/dashboard" class="pjax">Dashboard</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="admin/email_template" class="pjax">Email</a>
+                <a href="admin/email-template" class="pjax">Email</a>
             </li>
             <li class="breadcrumb-item active">Email Update</li>
         </ol>

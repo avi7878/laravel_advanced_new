@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Device;
+use App\Models\UserAuth;
 use App\Models\UserActivity;
 use App\Services\AccountService;
-use App\Services\TfaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -113,10 +112,14 @@ class AccountController extends Controller
      *
      * @return JsonResponse
      */
-    public function tfaStatusChange()
+    
+     public function tfaStatusChange()
     {
-        $result = (new TfaService())->tfaStatusChange(auth()->user());
-        return response()->json($result);
+        $user = auth()->user();
+        $status_tfa = !$user->status_tfa;
+        $user->status_tfa = $status_tfa;
+        $user->save();
+        return response()->json(['status' => 1, 'next' => 'refresh', 'message' => $status_tfa ? 'Two Factor Authentication is enabled' : 'Two Factor Authentication is disabled']);
     }
     /**
      * Revoke all trusted devices for the current user.
@@ -125,7 +128,7 @@ class AccountController extends Controller
      */
     public function revokeAll()
     {
-        return response()->json((new UserActivity())->listAdmin($request->all(), auth()->user()));
+         return response()->json((new AccountService())->revokeAll2FADevices(auth()->user()));
     }
 
 
@@ -147,7 +150,7 @@ class AccountController extends Controller
      */
     public function deviceList(Request $request)
     {
-        return response()->json((new Device())->list($request->all(), auth()->id()));
+        return response()->json((new UserAuth())->list($request->all(), auth()->id()));
     }
 
     /**
@@ -158,7 +161,7 @@ class AccountController extends Controller
      */
     public function deviceLogout(Request $request)
     {
-        (new Device())->forceLogout($request->input('id'));
+        (new UserAuth())->forceLogout($request->input('id'));
 
         return response()->json(['status' => 1, 'message' => 'Device Logout Successfully', 'next' => 'reload']);
     }

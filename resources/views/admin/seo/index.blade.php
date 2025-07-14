@@ -19,22 +19,22 @@ Seo meta
 
 <!-- Seo Meta List Table -->
 <div class="card">
-  <div class="card-header justify-content-between d-flex">
-    <h4 class="align-middle d-sm-inline-block d-none">Seo Meta</h4>
-    <div class="btn-group">
-      @if($sessionUser->hasPermission('admin/seo/sitemap-generate'))
-      <button class="btn btn-outline-primary me-2" onclick="$('#sitemapmodel').modal('show')">
-        Sitemap
-      </button>
-      @endif
-      @if($sessionUser->hasPermission('admin/seo/create'))
-      <button class="btn btn-primary " onclick="document.getElementById('cust_a').click();">
-        <i class="bx bx-plus"></i> Create
-      </button>
-      <a href="admin/seo/create" id="cust_a" class=" pjax d-none"></a>
-      @endif
-    </div>
-  </div>
+  <div class="card-header justify-content-between">
+                <h4 class="align-middle d-sm-inline-block d-none">Seo Meta</h4>
+            @if ($sessionUser->hasPermission('admin/seo/create')) 
+                <a href="admin/seo/create" class="btn btn-primary d-sm-inline-block d-none pjax ms-3"
+                    style="float: inline-end;" aria-label="Create SEO Meta">Create</a>
+            @endif
+
+            @if ($sessionUser->hasPermission('admin/seo/sitemap-generate'))
+                <button class="btn buttons-collection btn-label-primary float-end" aria-label="Generate Sitemap"
+                    onclick="$('#sitemapmodel').modal('show')">
+                    <span class="d-flex align-items-center gap-2">
+                        <span class="d-none d-sm-inline-block">Sitemap</span>
+                    </span>
+                </button>
+            @endif
+        </div>
 
   <div class="card-datatable table-responsive">
     <table class="datatable-list-table table border-top" id="seo-data-table">

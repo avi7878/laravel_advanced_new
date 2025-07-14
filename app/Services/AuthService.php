@@ -5,10 +5,11 @@ namespace App\Services;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 use App\Helpers\General;
 use App\Models\User;
-use App\Models\Device;
+use App\Models\UserAuth;
 use App\Models\UserActivity;
 use Illuminate\Support\Str;
 
@@ -74,9 +75,9 @@ class AuthService
             return ['status' => 0, 'message' => 'Login failed'];
         }
 
-        $deviceObj = new Device();
-        $device = $deviceObj->where(['remember_token' => $authToken, 'device_uid' => @$_COOKIE[config("setting.app_uid") . '_token']])
-            ->where('remember_expire_at', '>', time())
+        $deviceObj = new UserAuth();
+        $device = $deviceObj->where(['token' => $authToken, 'device_uid' => @$_COOKIE[config("setting.app_uid") . '_token']])
+            ->where('token_expire_at', '>', Carbon::now())
             ->first();
 
         if ($device && $device->user_id) {
@@ -84,7 +85,7 @@ class AuthService
             if ($user) {
                 auth()->login($user);
                 (new Log)->add($user->id, 2);
-                (new Device())->login($user->id);
+                (new UserAuth())->login($user->id);
                 return ['status' => 1, 'message' => 'Login success'];
             }
         }
@@ -126,15 +127,16 @@ class AuthService
             return ['status' => 0, 'message' => 'Your Account is blocked'];
         }
 
-        if ($user->login_failed >= config('setting.login_max_attempt') && $user->login_failed_at > (time() - config('setting.login_ban_time'))) {
-            return ['status' => 0, 'message' => 'Max login attempt exceed. Please Try after ' . ceil((config('setting.login_ban_time') - (time() - $user->login_failed_at)) / 60) . ' Minutes'];
+        if ($user->login_failed >= config('setting.login_max_attempt') && $user->login_failed_at && $user->login_failed_at->addSeconds(config('setting.login_ban_time'))->isFuture()) {
+            $remainingSeconds = Carbon::now()->diffInSeconds($user->login_failed_at->addSeconds(config('setting.login_ban_time')));
+            return ['status' => 0, 'message' => 'Max login attempt exceed. Please Try after ' . ceil($remainingSeconds / 60) . ' Minutes'];
         }
 
         $LogObj = new UserActivity();
         if (!$this->checkPassword($postData['password'], $user->password)) {
 
             $user->login_failed = $user->login_failed + 1;
-            $user->login_failed_at = time();
+            $user->login_failed_at = Carbon::now();
             $user->save();
 
             $LogObj->add($user->id, 0);
@@ -154,7 +156,7 @@ class AuthService
         Auth::guard()->login($user);
         $LogObj->add($user->id, 1);
 
-        (new Device())->login($user->id, @$postData['remember']);
+        (new UserAuth())->login($user->id, @$postData['remember']);
         $LogObj->sendNewDeviceMail($user);
 
         if ($user->status_tfa == 1) {
@@ -230,7 +232,7 @@ class AuthService
         Auth::login($user);
 
         (new UserActivity())->add($user->id, 4);
-        (new Device())->login($user->id);
+        (new UserAuth())->login($user->id);
 
         return ['status' => 1, 'message' => 'Login successful', 'next' => 'redirect', 'url' => $general->authRedirectUrl(config('setting.login_redirect_url'))];
     }
