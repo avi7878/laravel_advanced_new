@@ -22,16 +22,16 @@ Device
 
 <!-- Invoice List Table -->
 <div class="card">
-  <div class="card-header justify-content-between">
-    <h4 class="align-middle d-sm-inline-block d-none">Device </h4>
+  <div class="card-header justify-content-between pb-0">
+    <h4 class="align-middle mb-0">Device </h4>
   </div>
   <div class="card-datatable table-responsive">
-    <table class="datatable-list-table table border-top " id="data-table">
+    <table class="datatable-list-table table border-top" id="data-table">
       <thead>
         <tr>
           <th>#</th>
           <th>Name</th>
-          <th class="text-break">Email</th>
+          <th>Email</th>
           <th>Client</th>
           <th>IP</th>
           <th>Location</th>
@@ -67,7 +67,7 @@ Device
         },
         {
           data: "email",
-           class:'wrap-td',
+          class:'wrap-td',
           responsivePriority: 2
         },
         {

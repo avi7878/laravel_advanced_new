@@ -22,13 +22,12 @@ Users
 <div class="card">
     <div class="card-datatable text-nowrap">
         <div id="DataTables_Table_0_wrapper" class="dt-container dt-bootstrap5 dt-empty-footer">
-            <div class="row card-header flex-column flex-md-row pb-0">
-                <div
-                    class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
-                    <h5 class="card-title mb-0 text-md-start text-center">Users</h5>
+            <div class="row card-header flex-column flex-sm-row pb-0">
+                <div class="d-flex justify-content-between align-items-center dt-layout-start col-sm-auto me-auto mt-0">
+                    <h4 class="card-title mb-0 text-sm-start text-center">Users</h4>
                 </div>
                 <div
-                    class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                    class="d-flex justify-content-between align-items-center dt-layout-end col-auto ms-auto mt-0">
                     <div class="dt-buttons btn-group flex-wrap mb-0">
                         <div class="btn-group">
                             @if($sessionUser->hasPermission('admin/user/create'))
@@ -36,7 +35,7 @@ Users
                                 aria-controls="DataTables_Table_0" type="button"><span><span
                                         class="d-flex align-items-center gap-2"><i
                                             class="icon-base bx bx-plus icon-sm"></i> <span
-                                            class="d-none d-sm-inline-block">Create</span></span></span></a>
+                                            class="">Create</span></span></span></a>
                             @endif
                         </div>
                     </div>

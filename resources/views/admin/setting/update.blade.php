@@ -18,8 +18,8 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-start">
-                    <h5 class="">Setting Update</h5>
+                <div class="card-header d-flex justify-content-between align-items-start flex-wrap">
+                    <h4 class="mb-0">Setting Update</h4>
                     <div>
                         <button type="submit" class="btn btn-primary"
                             onclick="app.ajaxGet('{{ route('admin/setting/cache-clear') }}')">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="card-body">
                     <div class="nav-align-top nav-tabs-shadow mb-6">
-                        <ul class="nav nav-tabs" role="tablist">
+                        <ul class="nav nav-tabs overflow-auto" role="tablist">
                             <li class="nav-item">
                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                     data-bs-target="#navs-top-general" aria-controls="navs-top-general"
@@ -93,13 +93,14 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Admin Contact Email <span
                                                         class="text-danger">*</span></label>
-                                                <div class="input-group input-group-merge">
-                                                    <span class="input-group-text cursor-pointer"><i
+                                                <div class=" input-group-merge position-relative">
+                                                    <span class="input-group-text-email cursor-pointer"><i
                                                             class="icon-base bx bx-envelope"></i></span>
-                                                    <input type="email" id="setting_admin_email" class="form-control"
+                                                    <input type="email" id="setting_admin_email" class="form-control p-35"
                                                         placeholder="Admin Contact Email" name="setting_admin_email"
                                                         value="{{ $setting['setting.admin_email'] }}" required />
                                                 </div>
+                                                <label id="setting_admin_email-error" for="setting_admin_email" class="error"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -225,6 +226,7 @@
                                                                         class="form-control" accept="image/*"
                                                                         id="applogo">
                                                                 </div>
+                                                                <label id="applogo-error" for="applogo" class="error"></label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -319,6 +321,7 @@
                                                         name="mail_mailers_smtp_port" value="{{ $setting['mail.mailers.smtp.port'] }}"
                                                         required />
                                                 </div>
+                                                <label id="mail_mailers_smtp_port-error" for="mail_mailers_smtp_port" class="error"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -341,6 +344,7 @@
                                                         name="mail_mailers_smtp_password"
                                                         value="{{ $setting['mail.mailers.smtp.password'] }}" required />
                                                 </div>
+                                                <label id="mail_mailers_smtp_password-error" for="mail_mailers_smtp_password" class="error"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -352,6 +356,7 @@
                                                         name="mail_from_name"
                                                         value="{{ $setting['mail.from.name'] }}" required />
                                                 </div>
+                                                <label id="mail_from_name-error" for="mail_from_name" class="error"></label>
 
                                             </div>
                                         </div>
@@ -359,14 +364,15 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Mail From Address <span
                                                         class="text-danger">*</span></label>
-                                                <div class="input-group input-group-merge">
-                                                    <span class="input-group-text"><i
+                                                <div class=" input-group-merge position-relative">
+                                                    <span class="input-group-text-email"><i
                                                             class="icon-base bx bx-envelope"></i></span>
-                                                    <input type="text" class="form-control"
+                                                    <input type="text" class="form-control p-35 "
                                                         placeholder="Mail From Address"
                                                         name="mail_from_address"
                                                         value="{{ $setting['mail.from.address'] }}" required />
                                                 </div>
+                                                <label id="mail_from_address-error" for="mail_from_address" class="error"></label>
                                             </div>
                                         </div>
 
@@ -412,6 +418,7 @@
                                                         name="setting_google_recaptcha_secret_key" id="secret_key"
                                                         placeholder="google_recaptcha_secret_key">
                                                 </div>
+                                                <label id="secret_key-error" for="secret_key" class="error"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -424,6 +431,7 @@
                                                         name="setting_google_recaptcha_public_key" id="public_key"
                                                         placeholder="google recaptcha public key">
                                                 </div>
+                                                <label id="public_key-error" for="public_key" class="error"></label>
                                             </div>
                                         </div>
 
@@ -466,6 +474,7 @@
                                                         name="services_google_client_id"
                                                         placeholder="Google client id">
                                                 </div>
+                                                <label id="services_google_client_id-error" class="error" for="services_google_client_id"></label>
                                                 <label id="client_id-error" class="error" for="client_id"
                                                     style="display:none;"></label>
                                             </div>
@@ -479,6 +488,7 @@
                                                         value="{{ $setting['services.google_client_secret'] }}"
                                                         name="services_google_client_secret" placeholder="Google client secret">
                                                 </div>
+                                                <label id="services_google_client_secret-error" class="error" for="services_google_client_secret"></label>
                                                 <label id="client_secret-error" class="error" for="client_secret"
                                                     style="display:none;"></label>
                                             </div>
@@ -533,7 +543,7 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="{{ route('admin/setting/mail-process') }}" class="ajax-form-mail-test" method="POST">
+                <form action="{{ route('admin/setting/mailprocess') }}" class="ajax-form-mail-test" method="POST">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Mail</h5>
@@ -562,43 +572,177 @@
         $('.ajax-file-form-logo').validate({
             submitHandler: function(form) {
                 app.ajaxFileForm(form);
+            },
+             rules: {
+                image: {
+                    required: true
+                }
+            },
+            messages: {
+                image: {
+                    required: "Please enter the app logo"
+                }
             }
         })
         $('.ajax-file-form-favicon').validate({
             submitHandler: function(form) {
                 app.ajaxFileForm(form);
             },
+            rules: {
+                image: {
+                    required: true
+                }
+            },
+            messages: {
+                image: {
+                    required: "Please enter the app favicon"
+                }
+            }
         })
         $('.ajax-form').validate({
             submitHandler: function(form) {
                 app.ajaxForm(form);
-            }
+            },
+             rules: {
+                setting_app_name: {
+                    required: true
+                },
+                setting_admin_email:{
+                    required:true
+                }
+            },
+            messages: {
+                setting_app_name: {
+                    required: "Please enter the app name"
+                },
+                setting_admin_email:{
+                    required: "Please enter the admin contact email"
+                }
+             }
         })
         $('.ajax-form-mail').validate({
             submitHandler: function(form) {
                 app.ajaxForm(form);
             },
+             rules: {
+                mail_mailers_smtp_host: {
+                    required: true
+                },
+                mail_mailers_smtp_username: {
+                    required: true
+                },
+                mail_mailers_smtp_password: {
+                    required: true
+                },
+                mail_from_name: {
+                    required: true
+                },
+                mail_from_address: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                mail_mailers_smtp_host: {
+                    required: "Please enter the mail host"
+                },
+                mail_mailers_smtp_username: {
+                    required: "Please enter the mail username"
+                },
+                mail_mailers_smtp_password: {
+                    required: "Please enter the  password"
+                },
+                mail_from_name: {
+                    required: "Please enter the mail from name"
+                },
+                mail_from_address: {
+                    required: "Please enter the mail from address",
+                    email: "Please enter a valid email address"
+                }
+            }
         })
         $('.ajax-form-captcha').validate({
             submitHandler: function(form) {
                 app.ajaxForm(form);
             },
+             rules: {
+                setting_google_recaptcha_secret_key: {
+                    required: true
+                },
+                setting_google_recaptcha_public_key: {
+                    required:true
+                }
+            },
+            messages: {
+                setting_google_recaptcha_secret_key: {
+                    required: "Please enter the secret key"
+                },
+                setting_google_recaptcha_public_key: {
+                    required: "Please enter the public key"
+                }
+            }
         })
         $('.ajax-form-social').validate({
             submitHandler: function(form) {
                 app.ajaxForm(form);
             },
+            rules: {
+                services_google_client_id: {
+                    required: true
+                },
+                services_google_client_secret: {
+                    required:true
+                }
+            },
+            messages: {
+                services_google_client_id: {
+                    required: "Please enter the google client id"
+                },
+                services_google_client_secret: {
+                    required: "Please enter the google client secret"
+                }
+            }
         })
         $('.ajax-form-content').validate({
             submitHandler: function(form) {
                 app.ajaxForm(form);
             },
+            rules: {
+                setting_header_content: {
+                    required: true
+                },
+                setting_footer_content: {
+                    required:true
+                }
+            },
+            messages: {
+                setting_header_content: {
+                    required: "Please enter the header content"
+                },
+                setting_footer_content: {
+                    required: "Please enter the footer content"
+                }
+            }
         })
         $('.ajax-form-mail-test').validate({
             submitHandler: function(form) {
                 app.ajaxForm(form);
+            },
+             rules: {
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                email: {
+                     required: "Please enter the email address",
+                    email: "Enter a valid email address."
+                }
             }
         })
+        
     });
+    
 </script>
 @endpush

@@ -61,9 +61,8 @@ class UserController extends Controller
         $model = User::find($request->id);
         $user = auth()->user();
         $permission = explode(',', $user->permission);
-        // dd($model);
         if ($user->type == 1 && !in_array('admin/user/update', $permission)) {
-            return redirect('admin/users')->with('error', 'No permission To Update User');
+            return redirect('admin/user')->with('error', 'No permission To Update User');
         }
 
         return view('admin/user/update', compact('permission', 'model'));
@@ -141,7 +140,7 @@ class UserController extends Controller
             return response()->json(['status' => 0, 'message' => 'User not found']);
         }
 
-        $model->update(['status' => !$model->status]);  // Toggle the status
+        $model->update(['status' => !$model->status]);  
         return response()->json(['status' => 1, 'message' => 'User status updated successfully.', 'next' => 'refresh']);
     }
 

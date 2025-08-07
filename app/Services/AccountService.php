@@ -61,7 +61,8 @@ class AccountService
             'country' => $general->getIpInfoCountry($ip),
             'status'      => 1,
             'timezone' => config('app.timezone'),
-            'registered_ip' => $ip
+            'registered_ip' => $ip,
+            'role' => 4,
         ]);
 
         (new UserActivity())->add($user->id, 3);
@@ -324,7 +325,6 @@ class AccountService
     {
         $user->ignore_tfa_device = '';
         $user->save();
-        // dd($user);
         return ['status' => 1, 'message' => 'Your Devices Revoked Successfully.', 'next' => 'refresh'];
     }
 }

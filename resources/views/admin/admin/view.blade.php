@@ -58,7 +58,7 @@ Admin View
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-envelope"></i>
               <span class="fw-medium mx-2">Email:</span>
-              <span>{{ $model->email }}</span>
+              <span class="text-break">{{ $model->email }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-phone"></i>

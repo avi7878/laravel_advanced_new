@@ -49,8 +49,8 @@ Change password
                         <ul class="ps-8 mb-0">
                             <li class="mb-4">Password must be at least 6 characters long.</li>
                         </ul>
-                        <div class="mt-6">
-                            <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                        <div class="mt-6 d-flex gap-3 flex-wrap">
+                            <button type="submit" class="btn btn-primary">Save changes</button>
                             <button type="reset" class="btn btn-dark">Cancel</button>
                         </div>
                     </div>

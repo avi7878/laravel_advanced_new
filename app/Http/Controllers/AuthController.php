@@ -166,7 +166,7 @@ class AuthController extends Controller
         return view('common.totp_modal', compact('secretKey', 'qrCode'));
     }
 
-    public function verifyOtpModal(Request $request)
+    public function verifyOtpModal(Request $request) 
     {
         $secretKey = $request->secretKey;
         $id = auth()->user()->id;

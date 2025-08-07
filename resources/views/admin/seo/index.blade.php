@@ -19,7 +19,7 @@ Seo meta
 
 <!-- Seo Meta List Table -->
 <div class="card">
-  <div class="card-header justify-content-between">
+    <div class="card-header justify-content-between">
                 <h4 class="align-middle d-sm-inline-block d-none">Seo Meta</h4>
             @if ($sessionUser->hasPermission('admin/seo/create')) 
                 <a href="admin/seo/create" class="btn btn-primary d-sm-inline-block d-none pjax ms-3"
@@ -37,7 +37,7 @@ Seo meta
         </div>
 
   <div class="card-datatable table-responsive">
-    <table class="datatable-list-table table border-top" id="seo-data-table">
+    <table class="datatable-list-table table border-top" id="data-table">
       <thead>
         <tr>
           <th>#</th>
@@ -67,35 +67,76 @@ Seo meta
       </div>
       <div class="modal-body">
         SiteMap URL: 
-        <a href="{{ url('sitemap.xml') }}" class="noroute pjax" target="_blank">{{ url('sitemap.xml') }}</a>
+        <a href="{{ url('sitemap.xml') }}" class="noroute pjax text-break" target="_blank">{{ url('sitemap.xml') }}</a>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
           onclick="app.ajaxGet('admin/seo/sitemap-update');">Update SiteMap</button>
       </div>
+<!-- Modal -->
+<div class="modal fade" id="sitemapmodel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sitemapmodellabel">SiteMap</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                SiteMap Url : <a href="{{url('sitemap.xml')}}" class="noroute pjax text-break "
+                    target="_blank">{{url('sitemap.xml')}}</a>
+                <!-- <button class="btn btn-primary" onclick="app.ajaxGet('admin/seo/sitemap-update');">Update SiteMap</button> -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary " data-bs-dismiss="modal"
+                    onclick="app.ajaxGet('admin/seo/sitemap-update');">Update SiteMap</button>
+            </div>
+        </div>
+>>>>>>> Stashed changes
     </div>
   </div>
 </div>
 
 <!-- DataTable Init -->
 <script>
-  documentReady(function () {
-    datatableObj = $('#seo-data-table').DataTable({
-      ajax: dataTableAjax({
-        url: '{{ route("admin/seo/list") }}',
-        method: 'post'
-      }),
-      columns: [
-        { data: "id", responsivePriority: 6 },
-        { data: "url", responsivePriority: 6 },
-        { data: "title", responsivePriority: 6 },
-        { data: "keyword", responsivePriority: 4 },
-        { data: "sitemap_enable", responsivePriority: 4 },
-        { data: "action", sortable: false, responsivePriority: 2 }
-      ],
-      responsive: true,
-      serverSide: true,
-      order: [[0, "desc"]]
+
+documentReady(function() {
+    datatableObj = $('#data-table').DataTable({
+        ajax: dataTableAjax({
+            url: '{{ route("admin/seo/list") }}',
+            method: 'post'
+        }),
+        columns: [{
+                data: "id",
+                responsivePriority: 6
+            }, //,visible:false
+            {
+                data: "url",
+                responsivePriority: 6
+            }, //,visible:false
+            {
+                data: "title",
+                responsivePriority: 6
+            }, //,visible:false
+            {
+                data: "keyword",
+                responsivePriority: 4
+            },
+            {
+                data: "sitemap_enable",
+                responsivePriority: 4
+            },
+            {
+                data: "action",
+                bSortable: false,
+                responsivePriority: 2
+            }
+        ],
+        responsive: true,
+        serverSide: true,
+        "order": [
+            [0, "desc"]
+        ],
     });
   });
 </script>

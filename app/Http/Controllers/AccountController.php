@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserAuth;
 use App\Models\User;
+use App\Models\Device;
 use App\Models\UserActivity;
 use App\Services\AccountService;
 use Illuminate\Http\Request;

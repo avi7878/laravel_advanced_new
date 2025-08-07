@@ -15,7 +15,7 @@ Register Your Account
                             <span class="app-brand-logo demo">
                                 <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 50px;">
                             </span>
-                            <span class="app-brand-text demo text-body fw-bold ms-1">{{ Config::get('setting.app_name') }}</span>
+                            <!-- <span class="app-brand-text demo text-body fw-bold ms-1">{{ Config::get('setting.app_name') }}</span> -->
                         </a>
                     </div>
                     <!-- /Logo -->
@@ -23,24 +23,24 @@ Register Your Account
                     <p class="mb-4" style="text-align: center;">Create your account</p>
                     <form class="mb-3" action="{{route('site/register-process')}}" method="POST" id="ajax-form">
                         @csrf
-                        <div class="mb-3">
+                        <div class="mb-6">
                             <label for="username" class="form-label">First Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="first_name" name="first_name" value="{{old('first_name')}}" required placeholder="Enter your first name" maxlength="255" autofocus />
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-6">
                             <label for="username" class="form-label">Last Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="last_name" maxlength="255" name="last_name" required placeholder="Enter your last name"  />
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-6">
                             <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="phone" maxlength="255" name="phone" required placeholder="Enter your Phone Number"  />
                         </div>
                         
-                        <div class="mb-3">
+                        <div class="mb-6">
                             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email" />
                         </div>
-                        <div class="mb-3 form-password-toggle form-control-validation">
+                        <div class="mb-6 form-password-toggle form-control-validation">
                             <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="password" id="password" class="form-control" required name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
@@ -50,7 +50,7 @@ Register Your Account
                              <label id="password-error" class="error" for="password" style="display:none;"></label>
                         </div>
 
-                        <div class="mb-3 form-password-toggle form-control-validation">
+                        <div class="mb-6 form-password-toggle form-control-validation">
                             <label class="form-label" for="password_confirm">Confirm Password <span class="text-danger">*</span></label>
                             <div class="input-group input-group-merge has-validation">
                                 <input type="password" id="password_confirm" class="form-control" required  name="password_confirm" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password_confirm" />
@@ -60,11 +60,11 @@ Register Your Account
                               <label id="password_confirm-error" class="error" for="password_confirm" style="display:none;"></label>
                         </div>
 
-                        <div class="col-12">
+                        <div class="col-12 mb-6">
                             {{view('common/recaptcha')}}
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-6">
                             <div class="form-check">
                                 <label class="form-check-label" for="terms-conditions">
                                     I agree to
@@ -76,7 +76,7 @@ Register Your Account
                                 You must agree to the privacy policy and terms.
                             </div>
                         </div>
-                        <button class="btn btn-primary d-grid w-100">Sign up</button>
+                        <button class="btn btn-primary d-grid w-100 mb-6">Sign up</button>
                     </form>
 
                     <p class="text-center">
@@ -99,6 +99,13 @@ jQuery.validator.addMethod("noDisposableEmail", v => !["mailinator.com","tempmai
         $('#ajax-form').validate({
             rules: 
             {
+                first_name :{
+                    required: true, 
+                },
+                last_name :{
+                    required: true, 
+                    minlength: 10,
+                },
                 phone :{
                     required: true, 
                     minlength: 10,
@@ -121,7 +128,12 @@ jQuery.validator.addMethod("noDisposableEmail", v => !["mailinator.com","tempmai
                 }
             },
             messages: {
-                
+                 first_name: {
+                    required: "Please enter your first name.",
+                },
+                 last_name: {
+                    required: "Please enter your last name.",
+                },
                 phone: {
                     required: "Please enter your phone number.",
                     minlength: "Please enter at least 10 digits."
@@ -135,6 +147,11 @@ jQuery.validator.addMethod("noDisposableEmail", v => !["mailinator.com","tempmai
                 },
                 password: {
                     required: "Please Enter Your Password",
+                    minlength: "Please enter at least 6 characters.",
+                    maxlength: "Please enter no more than 32 characters."
+                },
+                  password_confirm: {
+                    required: "Please enter your confirm password",
                     minlength: "Please enter at least 6 characters.",
                     maxlength: "Please enter no more than 32 characters."
                 },

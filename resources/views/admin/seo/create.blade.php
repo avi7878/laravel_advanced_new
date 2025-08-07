@@ -23,12 +23,12 @@ Seo Meta Create
         <div class="row ">
         <div class="col-md-6">
             <div class="mb-3">
-               <h4 class="align-middle d-sm-inline-block d-none">Seo Meta Create</h4>
+               <h4 class="align-middle mb-0">Seo Meta Create</h4>
             </div>
         </div>
         <div class="col-md-6">
             <div class="mb-3">
-               <h4 class="align-middle d-sm-inline-block d-none">Site Map</h4>
+               <h4 class="align-middle mb-0">Site Map</h4>
             </div>
         </div>
     </div>

@@ -26,4 +26,6 @@
     'cookie_consent'=>1,
     'dark_mode'=>1,
     'breadcrumb'=>1,
+    'SUPPORT_API_URL' => env('SUPPORT_API_URL', ''),
+    'SUPPORT_API_TOKEN' => env('SUPPORT_API_TOKEN', ''),
 ];

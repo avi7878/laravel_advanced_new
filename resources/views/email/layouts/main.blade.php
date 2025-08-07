@@ -225,23 +225,21 @@ $primaryColor = 'green';
                         <td class="td" style="width:100%; max-width:650px; font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal;">
                             <!-- Header -->
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                <tr>
-                                    <td class="p30-15" style="padding: 40px 0px 20px 0px;">
+                                
+                                <!-- END Top bar -->
+                                 <tr>
+                                    <td class="text-nav-white bg-primary" style="color:#85b33a;font-size:12px; line-height:22px; text-align:center; text-transform:uppercase; padding:3px 0px;">
                                     </td>
                                 </tr>
-                                <!-- END Top bar -->
                                 <!-- Logo -->
                                 <tr>
-                                    <td bgcolor="#ffffff" class="p30-15 img-center" style="padding: 30px; border-radius: 20px 20px 0px 0px; text-align:center;">
+                                    <td bgcolor="#ffffff" class="p30-15 img-center" style="padding: 30px 30px 0; border-radius: 0px 0px; text-align:center;">
                                         <img src="{{$general->getFileUrl(config('setting.app_logo'),'setting')}}" height="50" border="0" alt="" />
                                     </td>
                                 </tr>
                                 <!-- END Logo -->
                                 <!-- Nav -->
-                                <tr>
-                                    <td class="text-nav-white bg-primary" style="color:#85b33a;font-size:12px; line-height:22px; text-align:center; text-transform:uppercase; padding:3px 0px;">
-                                    </td>
-                                </tr>
+                                
                                 <!-- END Nav -->
                             </table>
                             <!-- END Header -->

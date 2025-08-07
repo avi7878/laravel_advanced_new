@@ -10,7 +10,7 @@ Log
         {{-- <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Log /</span> List</h4> --}}
         <!-- Ajax Sourced Server-side -->
         <div class="card">
-            <div class="card-body">
+            <div class="card-body pb-0">
                 <h5 class="mb-1"><span class="text-muted fw-light">Log /</span> List</h5>
             </div>
             <div class="card-datatable table-responsive">

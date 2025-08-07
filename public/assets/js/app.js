@@ -290,7 +290,7 @@ const app = {
 
     showMessage: function (message, type) {
         var toastHtml = `
-        <div class="bs-toast toast toast-placement-ex m-2 fade bg-__type__ top-0 end-0 show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+        <div class="bs-toast toast toast-placement-ex m-5 fade bg-__type__ top-0 end-0 show " role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
             <div class="toast-header">
                 <i class="icon-base bx bx-bell me-2"></i>
                 <div class="me-auto fw-medium">__title__</div>

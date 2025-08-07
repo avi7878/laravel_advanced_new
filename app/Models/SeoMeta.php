@@ -89,7 +89,7 @@ class SeoMeta extends Model
      * @return array Paginated list of SEO metadata with action buttons.
      */
     public function listAdmin(array $postData): array
-    {
+    { dd(1);
         $query = DB::table($this->table);
         $searchText = $postData['search']['value'] ?? '';
 
@@ -161,6 +161,7 @@ class SeoMeta extends Model
     }
     public function store(array $postData)
     {
+        $general = new General();
         $validator = Validator::make($postData, [
             'title' => 'required',
             'url' => 'required',

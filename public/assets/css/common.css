@@ -38,6 +38,8 @@
 .form-submail {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
 .pull-right {
@@ -294,17 +296,12 @@ img.image-preview {
     padding: 12px 35px;
 }
 
-
-@media only screen and (max-width: 575px) {
-    .cookies-use {
-        display: block;
-    }
-}
-
 .h-px-44 {
   height: 44px !important;
 }
-
+.w-px-44{
+    width: 44px !important;
+}
 .w-30 {
     width: 30% !important;
 }
@@ -316,7 +313,77 @@ img.image-preview {
   white-space: normal;
   max-width: 260px;
 }
+div.dt-container .table.table-bordered.dataTable td:last-child{
+    white-space: nowrap !important;
+}
+div.dt-container .table.border-top.dataTable td:last-child{
+     white-space: nowrap !important;
+}
+[data-bs-theme=dark] .note-frame{
+    color: var(--bs-heading-color);
+}
+.user-view-btn{
+    font-size: 12px;
+}
+.input-group-text-email{
+    position: absolute;
+    top: 8px;
+    left: 12px;
+}
+.p-35{
+    padding-left: 35px;
+}
+.form-control.p-35:focus{
+    padding-inline: calc(2.3rem - 2px) !important;
+}
+/* .app-logo-icon {
+    display: none;
+}
+.app-logo-full {
+    display: inline;
+}
 
+.layout-menu-collapsed .app-logo-full {
+    display: none !important;
+    transition:  0.5s ease-in-out ;
+}
+.layout-menu-collapsed .app-logo-icon {
+    display: inline !important;
+    transition:  0.5s ease-in-out ;
+}
 
+.layout-menu-collapsed .layout-menu:hover .app-logo-full {
+    display: inline !important;
+    transition:  0.5s ease-in-out ;
+}
+.layout-menu-collapsed .layout-menu:hover .app-logo-icon {
+    display: none !important;
+    transition:  0.5s ease-in-out ;
+}
+.menu .app-brand{
+    padding-inline: calc(var(--bs-menu-vertical-link-padding-x) * 1.1333) !important;
+}
+.avatar img.app-logo-full{
+        padding-inline: calc(var(--bs-menu-vertical-link-padding-x) * 1.1333) !important;
+} */
+@media only screen and (max-width: 575px) {
+    .cookies-use {
+        display: block;
+    }
+    div.dt-container div.dt-length, div.dt-container div.dt-search{
+        margin-block: 0.5rem;
+    }
+    .image-crop-box{
+        width: 100%;
+    }
+}
 
+@media only screen and (max-width: 450px) {
+    .breadcrumb-box {
+        display: block;
+    }
+    .drop-text{
+        margin-top: 45px;
+    }
+}
 

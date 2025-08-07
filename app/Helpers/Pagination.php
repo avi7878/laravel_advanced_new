@@ -19,7 +19,7 @@ class Pagination
      * @return array The paginated response.
      */
     public function getDataTable(Builder $query, array $postData): array
-    {
+    { 
         $response = [];
         $result = $this->setDataTable($postData);
         $total = $query->count();
@@ -81,7 +81,6 @@ class Pagination
     {
         $response = [];
         $response['limit'] = min((int)($postData['limit'] ?? 20), 100);
-
         // Calculate total records only for type 1 pagination
         if ($type === 1) {
             $response['total'] = $query->count();

@@ -16,11 +16,11 @@ Login To Your Account
               <span class="app-brand-logo demo">
                     <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo " style="height: 50px;">
                 </span>
-              <span class="app-brand-text demo text-heading fw-bold">{{ Config::get('setting.app_name') }}</span>
+              <!-- <span class="app-brand-text demo text-heading fw-bold">{{ Config::get('setting.app_name') }}</span> -->
             </a>
           </div>
           <!-- /Logo -->
-          <h4 class="mb-1">Welcome to {{ Config::get('setting.app_name') }} 👋</h4>
+          <h4 class="mb-1">Welcome to {{ Config::get('setting.app_name') }} </h4>
           <p class="mb-6">Please Log-in to your account</p>
           <form id="login-form" class="mb-4" action="{{ route('admin/auth/login-process') }}" method="POST">
             @csrf
@@ -43,7 +43,7 @@ Login To Your Account
               </div>
               <label id="password-error" class="error" for="password" style="display:none;"></label>
             </div>
-            <div class="my-8">
+            <div class="mb-8">
               <div class="d-flex justify-content-between">
                 <div class="form-check mb-0 ms-2">
                   <input class="form-check-input" type="checkbox" id="remember-me" name="remember" checked/>

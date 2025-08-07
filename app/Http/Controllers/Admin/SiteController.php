@@ -22,11 +22,10 @@ class SiteController extends Controller
      * @return \Illuminate\View\View
      */
     public function dashboard()
-    {
-        $userModel = new User();
-        $totalUser = User::whereIn('role', $userModel->userRole)->count();
-        $activeUser = User::whereIn('role', $userModel->userRole)->where('status', 1)->count();
-        $deactiveUser = User::whereIn('role', $userModel->userRole)->where('status', 0)->count();
+    { 
+        $totalUser = User::where('role', 2)->count();
+        $activeUser = User::where('role', 2)->where('status', 1)->count();
+        $deactiveUser = User::where('role', 2)->where('status', 0)->count();
         return view('admin.site.dashboard', compact('totalUser', 'activeUser', 'deactiveUser'));
     }
 

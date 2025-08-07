@@ -8,7 +8,7 @@ Home
     <h4 class="fw-bold py-3 mb-4">Home</h4>
   
     <div class="row mb-12 g-6">
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-6 col-md-6 col-lg-4">
             <div class="card h-100">
                 <img class="card-img-top" src="theme/assets/img/elements/2.png" alt="Card image cap">
                 <div class="card-body">
@@ -20,7 +20,7 @@ Home
                 </div>
             </div>
             </div>
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-6 col-md-6 col-lg-4">
                 <div class="card h-100">
                 <img class="card-img-top" src="theme/assets/img/elements/5.png" alt="Card image cap">
                 <div class="card-body">
@@ -32,7 +32,7 @@ Home
                 </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-6 col-md-6 col-lg-4">
                 <div class="card h-100">
                 <img class="card-img-top" src="theme/assets/img/elements/4.png" alt="Card image cap">
                 <div class="card-body">

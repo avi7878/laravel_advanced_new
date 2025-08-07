@@ -79,8 +79,14 @@
         }, "Please enter only alphabetic characters");
 
         $('#ajax-form').validate({
-            rules: {
+             rules: {
+                 url: {
+                    required: true,
+                },
                 title: {
+                    required: true,
+                },
+                description: {
                     required: true,
                 },
                 keyword: {
@@ -89,8 +95,14 @@
 
             },
             messages: {
+                url: {
+                    required: "Please enter the URL",
+                },
                 title: {
                     required: "Please enter the title",
+                },
+                description: {
+                    required: "Please enter the description",
                 },
                 keyword: {
                     required: "Please enter the keyword"

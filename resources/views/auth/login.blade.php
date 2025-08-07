@@ -15,11 +15,12 @@ Login To Your Account
               <span class="app-brand-logo demo">
                     <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo " style="height: 50px;">
                 </span>
-              <span class="app-brand-text demo text-heading fw-bold">{{ Config::get('setting.app_name') }}</span>
+              <!-- <span class="app-brand-text demo text-heading fw-bold">{{ Config::get('setting.app_name') }}</span> -->
             </a>
           </div>
           <!-- /Logo -->
-          <h4 class="mb-1">Welcome to {{ Config::get('setting.app_name') }} 👋</h4>
+          <!-- <h4 class="mb-1">Welcome to {{ Config::get('setting.app_name') }} 👋</h4> -->
+          <h4 class="mb-1">Welcome to {{ Config::get('setting.app_name') }} </h4>
           <p class="mb-6">Please Log-in to your account</p> 
           <form id="login-form" class="mb-4" action="{{ route('auth/login-process') }}" method="POST">
             @csrf
@@ -49,7 +50,9 @@ Login To Your Account
             </div>
             <div class="mb-6">
               <button class="btn btn-primary d-grid w-100 mb-4" type="submit">Login</button>
-              <button type="button" class="btn btn-primary d-grid w-100 mb-4" onclick="$('#login-otp-form').show();$('#login-form').hide();">Login with OTP</button>
+               @if (Config::get('setting.user_login_with_otp') == 1)
+                  <button type="button" class="btn btn-primary d-grid w-100 mb-4" onclick="$('#login-otp-form').show();$('#login-form').hide();">Login with OTP</button>
+                @endif
           </div>
           </form>
           <form id="login-otp-form" action="{{ route('auth/login-otp-process') }}" method="POST" style="display: none;">

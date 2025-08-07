@@ -52,8 +52,8 @@ Profile
 
                  </div>
 
-                  <div class="mt-6">
-                    <button type="submit" class="btn btn-primary me-3">Save changes</button>
+                  <div class="mt-6 d-flex gap-3 flex-wrap">
+                    <button type="submit" class="btn btn-primary ">Save changes</button>
                     <button type="reset" class="btn btn-dark">Cancel</button>
                   </div>            
               

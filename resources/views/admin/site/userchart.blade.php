@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row g-6">
   <div class="col-md-6 col-12 mb-0">
     <div class="card fgcard" style="height: 100%;">
       <div class="card-header d-flex align-items-center justify-content-between">

@@ -3,7 +3,7 @@ $model = auth()->user();
 ?>
 <!-- Navbar pills -->
         <div class="nav-align-top">
-            <ul class="nav nav-pills flex-column flex-sm-row mb-6 gap-sm-0 gap-2">
+            <ul class="nav nav-pills flex-column flex-sm-row mb-6 gap-sm-0 gap-2 flex-wrap">
                 <li class="nav-item">
                     <a class="nav-link pjax {{ $general->routeMatchClass('admin/account/update')}}" href="{{ route('admin/account/update') }}"><i class="icon-base bx bx-user icon-sm me-1_5"></i> Account</a>
                 </li>

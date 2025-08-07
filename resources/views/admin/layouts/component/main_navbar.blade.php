@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="flex-grow-1">
                                     <h6 class="mb-0">{{ $sessionUser->first_name.' '.$sessionUser->last_name }}</h6>
-                                    <small class="text-body-secondary">{{ $sessionUser->email }}</small>
+                                    <small class="text-body-secondary  text-wrap text-break">{{ $sessionUser->email }}</small>
                                 </div>
                             </div>
                         </a>

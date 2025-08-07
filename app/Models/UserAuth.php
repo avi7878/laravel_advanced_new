@@ -52,7 +52,9 @@ class UserAuth extends Model
      *
      * @var bool
      */
-    public $timestamps = true;
+        //  public $timestamps = true;
+
+    // public $timestamps = true;
 
     /**
      * The attributes that should be mutated to dates.

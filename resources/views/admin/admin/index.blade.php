@@ -21,12 +21,19 @@ Admin
 
 <!-- Invoice List Table -->
 <div class="card">
-  <div class="card-header justify-content-between">
-    <h4 class="align-middle d-sm-inline-block d-none">Admin</h4>
-    @if($sessionUser->hasPermission('admin/admin/create'))
-    <a href="admin/admin/create" class="btn btn-primary d-sm-inline-block d-none pjax" style="float: inline-end;">Create</a>
-    @endif
-  </div>
+    <div class="row card-header flex-column flex-sm-row pb-0">
+      <div class="d-flex justify-content-between align-items-center dt-layout-start col-sm-auto me-auto mt-0">
+          <h4 class="card-title mb-0 text-md-start text-center">Admin</h4>
+      </div>
+      <!-- <h4 class="align-middle">Admin</h4> -->
+      <div class="d-flex justify-content-between align-items-center dt-layout-end col-auto ms-auto mt-0">
+        <div class="dt-buttons btn-group flex-wrap mb-0">
+          @if($sessionUser->hasPermission('admin/admin/create'))
+          <a href="admin/admin/create" class="btn btn-primary pjax" style="float: inline-end;">Create</a>
+          @endif
+        </div>
+      </div>
+    </div>
   <div class="card-datatable table-responsive">
     <table class="datatable-list-table table border-top" id="data-table">
       <thead>

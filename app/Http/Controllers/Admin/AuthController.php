@@ -88,7 +88,7 @@ class AuthController extends Controller
      * @return RedirectResponse
      */
     public function verifyProcess(Request $request)
-    {
+    {dd($request);
         return response()->json((new TfaService())->verifyProcess($request->only(['otp', 'type', 'code', 'skip_tfa'])));
     }
 

@@ -41,7 +41,7 @@
                                  <div class="bg-lighter rounded p-4 mb-4 position-relative">
                                     <div class="d-flex align-items-center2">
                                         <div class="flex-shrink-0">
-                                            <i class="me-4">
+                                            <i class="me-2 me-sm-4">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-devices-check" width="50" height="50" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" >
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                     <path d="M13 15.5v-6.5a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v4" />
@@ -51,8 +51,8 @@
                                                 </svg>
                                             </i>
                                         </div>
-                                        <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                            <div class="mb-sm-0 mb-2 ">
+                                        <div class="flex-grow-1 d-lg-flex align-items-center justify-content-between">
+                                            <div class="mb-md-0 mb-2 ">
                                                 <h5 class="mb-0 me-3">Device You Trust</h5>
                                                 <p class="me-3 mb-0 fw-medium">Revoke trusted status from your device that skips 2-Step Verification.</p>
                                             </div>

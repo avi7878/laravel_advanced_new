@@ -28,31 +28,34 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
         <base href="{{ URL::to('/') }}/">
         <meta http-equiv="Content-Language" content="{{ Config::get('app.locale') }}">
-        @if($metaData['title'])
+        @if($metaData['title'] = null)
         <title>{{$metaData['title']}}</title>
         <meta name="keywords" content="{{$metaData['keyword']}}">
         <meta name="description" content="{{$metaData['description']}}">
         @else
         <title>@yield('title') | {{config('setting.app_name')}}</title>
         @endif
-        <link rel="shortcut icon" href="{{ config('setting.app_favicon') }}" type="image/x-icon">
+        <link rel="shortcut icon" href="{{ $general->getFileUrl(config('setting.app_favicon'),'logo') }}" type="image/x-icon">
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        
+
         <!-- Icons -->
         <link rel="stylesheet" href="theme/assets/vendor/fonts/iconify-icons.css" />
         <link rel="stylesheet" href="theme/assets/vendor/libs/pickr/pickr-themes.css">
         <link rel="stylesheet" href="theme/assets/vendor/css/core.css" class="template-customizer-core-css  " />
         <link rel="stylesheet" href="theme/assets/css/demo.css" />
+        {{-- <link rel="stylesheet" href="assets/css/chat.css" /> --}}
+        <link rel="stylesheet" href="theme/assets/vendor/libs/maxLength/maxLength.css">
+        <link rel="stylesheet" href="theme/assets/vendor/css/pages/app-chat.css" />
+        <link rel="stylesheet" href="theme/assets/vendor/css/pages/front-page.css" />
         <!-- Core CSS -->
         <!-- Vendors CSS -->
         <link rel="stylesheet" href="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
         <!-- Page CSS -->
-        @vite(['resources/css/app.css'])
+        <link rel="stylesheet" href="assets/css/common.css?cache=off">
         <!-- Helpers -->
         <script src="theme/assets/vendor/js/helpers.js"></script>
         <script src="theme/assets/vendor/js/template-customizer.js"></script>
@@ -114,8 +117,9 @@ if (isset($_GET['partial']) && $_GET['partial']) {
                                         ©{{date('Y')}} , made by <a href="{{route('home')}}" target="_blank" class="fw-semibold footer-link">{{ config('setting.app_name') }}</a>
                                     </div>
                                     <div class="d-none d-lg-inline-block">
-                                        <a target="_blank" href="page/terms-condition" class="footer-link me-4 pjax">Terms & Condition</a>
-                                        <a target="_blank" href="page/privacy-policy" class="footer-link pjax">Privacy Policy</a>
+                                        <a target="_blank" href="page/terms-condition" class="footer-link me-4">Terms & Condition</a>
+                                        <a target="_blank" href="page/Cullen-Patrick" class="footer-link me-4">Cullen Patrick</a>
+                                        <a target="_blank" href="page/privacy-policy" class="footer-link">Privacy Policy</a>
                                     </div>
                                 </div>
                             </div>
@@ -149,12 +153,29 @@ if (isset($_GET['partial']) && $_GET['partial']) {
         <script src="theme/assets/vendor/libs/jquery/jquery.js"></script>
         <script src="theme/assets/vendor/libs/popper/popper.js"></script>
         <script src="theme/assets/vendor/js/bootstrap.js"></script>
+        <script src="theme/assets/js/main.js"></script>
         <script src="theme/assets/js/front-main.js"></script>
+
+        <script src="theme/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+        <!-- endbuild -->
         <!-- Main JS -->
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" integrity="sha512-KFHXdr2oObHKI9w4Hv1XPKc898mE4kgYx58oqsc/JqqdLMDI4YjOLzom+EMlW8HFUd0QfjfAvxSL6sEq/a42fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.9.5.2.min.js"></script>
         <script src="assets/js/common.js"></script>
         <script src="assets/js/app.js"></script>
+        {{-- <script src="assets/js/chat.js"></script> --}}
+       
+
         @stack('scripts')
+        <script>
+            // $(document).ready(function() {
+            //     runDocumentReady();
+            // });
+            // @if(auth()->user())
+            // chatApp.connect("{{auth()->id()}}");
+            // @endif
+        </script>
         {!! config('setting.footer_content') !!}
         
         <script src="assets/js/pjax.js"></script>

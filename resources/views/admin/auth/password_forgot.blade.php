@@ -15,11 +15,12 @@ Forgot Password
                             <span class="app-brand-logo demo">
                                 <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 50%;">
                             </span>
-                            <span class="app-brand-text demo text-heading fw-bold">{{ Config::get('setting.app_name') }}</span>
+                            <!-- <span class="app-brand-text demo text-heading fw-bold">{{ Config::get('setting.app_name') }}</span> -->
                         </a>
                     </div>
                     <!-- /Logo -->
-                    <h4 class="mb-1">Forgot Password?? 🔒</h4>
+                    <!-- <h4 class="mb-1">Forgot Password?? 🔒</h4> -->
+                    <h4 class="mb-1">Forgot Password?? </h4>
                     <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
                     {{ view('common/message_alert') }}
                     <form id="ajax-form" action="{{ route('admin/auth/password-forgot-process') }}" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">

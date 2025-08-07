@@ -12,7 +12,7 @@ Login with Otp
         <div class="app-brand justify-content-center mb-4 mt-2">
           <a href="index.html" class="app-brand-link gap-2 pjax">
             <span class="app-brand-logo demo">
-              <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 200%;">
+              <img src="{{$general->getFileUrl(config('setting.app_logo'))}}" class="brand-image img-circle elevation-3 preview-app-logo" style="height: 50px;">
             </span>
             <!--<span class="app-brand-text demo text-body fw-bold ms-1">{{ Config::get('setting.app_name') }}</span>-->
           </a>

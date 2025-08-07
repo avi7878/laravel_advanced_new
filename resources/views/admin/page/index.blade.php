@@ -22,11 +22,11 @@ Pages
 
 <!-- Invoice List Table -->
 <div class="card">
-    <div class="card-header justify-content-between">
-        <h4 class="align-middle d-sm-inline-block d-none">Pages</h4>
+    <div class="card-header justify-content-between pb-0">
+        <h4 class="align-middle mb-0">Pages</h4>
     </div>
     <div class="card-datatable table-responsive">
-        <table class=" table table-bordered table-responsive" id="data-table">
+        <table class=" table table-bordered" id="data-table">
             <thead>
                 <tr>
                     <th>#</th>
@@ -45,6 +45,7 @@ Pages
 @endsection
 @push('scripts')
 <script>
+
 documentReady(function() {
     datatableObj = $('#data-table').DataTable({
         stateSave: true,

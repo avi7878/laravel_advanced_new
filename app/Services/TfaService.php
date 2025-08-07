@@ -177,8 +177,6 @@ class TfaService
             return ['status' => 0, 'message' => 'Invalid OTP.'];
         }
 
-
-
         if ($postData['type'] == 'tfa') {
             if (@$postData['skip_tfa']) {
                 $ignoredDevices = explode(',', $user->ignore_tfa_device);

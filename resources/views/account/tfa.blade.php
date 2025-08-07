@@ -90,12 +90,12 @@
                                                 </svg>
                                             </i>
                                         </div>
-                                        <div class="flex-grow-1 d-flex align-items-center justify-content-between">
+                                        <div class="flex-grow-1  d-lg-flex align-items-center justify-content-between">
                                             <div class="mb-sm-0 mb-2 ">
-                                                <h5 class="mb-0 me-3">Device You Trust</h5>
-                                                <p class="me-3 mb-0 fw-medium">Revoke trusted status from your device that skips 2-Step Verification.</p>
+                                                <h5 class="mb-0 me-3 me-md-0">Device You Trust</h5>
+                                                <p class="me-3 me-md-0 mb-0 fw-medium">Revoke trusted status from your device that skips 2-Step Verification.</p>
                                             </div>
-                                            <div class="text-end">
+                                            <div class="text-end mt-2 mt-lg-0">
                                                 <button onclick="app.confirmAction(this);"
                                                                 data-action="{{ route('account/revoke-all') }}"
                                                                 class="btn btn-primary text-white"

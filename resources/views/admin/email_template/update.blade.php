@@ -20,7 +20,7 @@ Email Template Update
 </div>
 <div class="card card-default color-palette-box">
     <div class="card-header justify-content-between">
-        <h4 class="align-middle d-sm-inline-block d-none">Email Update</h4>
+        <h4 class="align-middle mb-0">Email Update</h4>
     </div>
     <div class="card-body">
         <?= view('admin/email_template/_form', compact('model','example')) ?>

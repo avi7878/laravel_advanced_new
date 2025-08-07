@@ -20,7 +20,7 @@ User Update
 </div>
 <div class="card card-default color-palette-box">
     <div class="card-header justify-content-between">
-        <h4 class="align-middle d-sm-inline-block d-none">Users Update</h4>
+        <h4 class="align-middle mb-0">Users Update</h4>
     </div>
     <div class="card-body">
         <?= view('admin/user/_form', compact('model')) ?>

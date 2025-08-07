@@ -82,10 +82,8 @@ class User extends Authenticatable
     }
 
     public function listAdmin($postData)
-    {
-        $userObj = new User();
-
-        $query = DB::table('user')->select('*')->whereIn('role', $userObj->adminRole);
+    { 
+        $query = DB::table('user')->select('*')->where('role', 1);
         $searchText = isset($postData['search']['value']) ? $postData['search']['value'] : '';
         if (strlen($searchText) > 2) {
             $searchText = '%' . $searchText . '%';
@@ -95,6 +93,8 @@ class User extends Authenticatable
             });
         }
         /**/
+        $userObj = new User();
+        $general = new General();
         $result = (new Pagination())->getDataTable($query, $postData);
         $sessionUser = auth()->user();
         $general = new General();
@@ -134,11 +134,9 @@ class User extends Authenticatable
     }
 
     public function list($postData)
-    { 
+    {
         $userObj = new User();
-
-        $query = DB::table('user')->select('*')->whereIn('role', $userObj->userRole)
-            ->where('id', '!=', auth()->user()->id); // Exclude current user from the list
+        $query = DB::table('user')->select('*')->where('role', $userObj->userRole);
         /**/
         $searchText = isset($postData['search']['value']) ? $postData['search']['value'] : '';
         if (strlen($searchText) > 2) {
@@ -152,13 +150,14 @@ class User extends Authenticatable
                     }
                 });
             });
-        }
+        }        
         /**/
         $result = (new Pagination())->getDataTable($query, $postData);
+        //  dd($result);
+        $general = new General();
         $sessionUser = auth()->user();
-        $general= new General();
         foreach ($result['data'] as $key => $row) {
-            $imageUrl = $general->getFileUrl($row->image, 'profile');
+            $imageUrl = (new General())->getFileUrl($row->image, 'profile');
             if ($row->image) {
                 $result['data'][$key]->image = '<a href="upload/profile/' . $row->image . '" data-toggle="lightbox" data-title="Image" class = "noroute pjax" target = "_blank">
                 <img style="width:30px;height:30px" src="' . $imageUrl . '" class="h-auto rounded-circle" alt="blog image"></a>';
@@ -189,6 +188,7 @@ class User extends Authenticatable
                     $result['data'][$key]->action .= '
                     <button style=" border:none; background:none;" onclick="app.confirmAction(this);" data-action="admin/user/delete" data-id="' . $row->id . '" class="text-body" title="Delete"><i class="bx bxs-trash icon-base"></i></button>';
                 }
+                
             }
             
         }
@@ -246,6 +246,7 @@ class User extends Authenticatable
                 $model->image = $image;
             }
         }
+        $general = new General();
         // Set model attributes
         $model->first_name = $postData['first_name'];
         $model->last_name = $postData['last_name'];
@@ -290,7 +291,7 @@ class User extends Authenticatable
         $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:user,email|max:255',
+            'email' => 'required|email|max:255',
             'phone' => 'required|digits:10|numeric',
             'status' => 'required|boolean',
         ];
@@ -325,7 +326,6 @@ class User extends Authenticatable
                 $model->image = $image;
             }
         }
-    
         // Assign IP and other properties
         $model->first_name = $postData['first_name'];
         $model->last_name = $postData['last_name'];
@@ -345,6 +345,7 @@ class User extends Authenticatable
         // Save the model
         $model->save();
 
+        $model->save();
         // Return response message
         return [
             'status' => 1,

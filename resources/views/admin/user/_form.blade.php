@@ -80,6 +80,7 @@
                                     placeholder="Country" name="country" aria-label="Country"
                                     value="{{ @$model->country }}" />
                             </div>
+                            
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -96,7 +97,7 @@
                 </div>
 
             </div>
-            <div class="col-md-6"><br>
+            <div class="col-md-6 mb-3"><br>
                 <?php if (!empty($model->image)) { ?>
                 <img src="{{ $general->getFileUrl($model->image,'profile') }}" style="width:100px;height:100px"
                     class="img-fluid" id="image"><br>
@@ -202,7 +203,7 @@
                     .removeClass('error');
             },
             errorPlacement: function(error, element) {
-                error.insertAfter(element.closest('.mb-3'));
+                error.insertAfter(element.closest('.input-group-merge'));
             },
         });
     });

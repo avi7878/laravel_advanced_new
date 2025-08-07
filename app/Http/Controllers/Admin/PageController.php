@@ -16,7 +16,12 @@ class PageController extends Controller
      */
     public function index()
     {
-        return view('admin/page/index');
+        $sessionUser = auth()->user();
+        if($sessionUser->hasPermission('admin/page')){
+            return view('admin/page/index');
+        }else{
+           return redirect('admin/dashboard')->with('error', 'You are not authorized');
+        }
     }
 
     /**

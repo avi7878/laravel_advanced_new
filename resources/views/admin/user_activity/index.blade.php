@@ -18,8 +18,8 @@ Log
 
 <!-- Invoice List Table -->
 <div class="card">
-    <div class="card-header justify-content-between">
-        <h4 class="align-middle d-sm-inline-block d-none">Log </h4>
+    <div class="card-header justify-content-between pb-0">
+        <h4 class="align-middle mb-0">Log </h4>
     </div>
     <div class="card-datatable table-responsive">
         <table class="datatable-list-table table border-top" id="data-table">

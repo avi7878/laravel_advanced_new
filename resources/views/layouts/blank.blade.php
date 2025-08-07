@@ -22,7 +22,7 @@ if (isset($_GET['partial']) && $_GET['partial']) {
     <meta charset="utf-8" />
     <base href="{{URL::to('/')}}/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    @if($metaData['title'])
+    @if($metaData['title'] = null)
     <title>{{$metaData['title']}}</title>
     <meta name="keywords" content="{{$metaData['keyword']}}">
     <meta name="description" content="{{$metaData['description']}}">

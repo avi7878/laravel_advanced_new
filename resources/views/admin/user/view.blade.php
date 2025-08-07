@@ -51,7 +51,7 @@ User View
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-envelope"></i>
               <span class="fw-medium mx-2">Email:</span>
-              <span>{{ $model->email }}</span>
+              <span class="text-break">{{ $model->email }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="icon-base bx bx-phone"></i>
@@ -95,26 +95,26 @@ User View
           </ul>
 
           <div class="d-flex justify-content-center mb-3" style="gap: 10px;">
-            <a href="{{ route('admin/user/autologin', ['id' => $model->id]) }}" class="btn btn-primary"
+            <a href="{{ route('admin/user/autologin', ['id' => $model->id]) }}" class="btn btn-primary user-view-btn"
               style="width: 170px; height: 45px;" title="Login as User">
               Login as User
             </a>
 
             <a href="{{ route('admin/user/send-tfa-mail', ['id' => $model->id]) }}"
-              class="btn btn-primary" style="width: 170px; height: 45px;"
+              class="btn btn-primary user-view-btn" style="width: 170px; height: 45px;"
               title="Verify Two-Factor Authentication">
               Re-send Verification Mail
             </a>
           </div>
           <div class="d-flex justify-content-center" style="gap: 10px;">
             <a href="{{ route('admin/user/update', ['id' => $model->id]) }}"
-              class="btn btn-primary pjax" style="width: 150px; height: 45px;">
+              class="btn btn-primary user-view-btn pjax" style="width: 150px; height: 45px;">
               Edit
             </a>
 
             <button onclick="app.confirmAction(this);"
               data-action="{{ route('admin/user/delete', ['id' => $model->id]) }}"
-              class="btn btn-label-danger" style="width: 150px; height: 45px;">
+              class="btn btn-label-danger user-view-btn" style="width: 150px; height: 45px;">
               Delete
             </button>
           </div>
